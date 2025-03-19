@@ -2,19 +2,30 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import background from '../../public/auth/auth-bg.png';
 import { Button } from "@/components/ui/button"
+import { AlertCircle } from "lucide-react"
+ 
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 import welcome from "../../public/auth/welcome-dark.png";
 
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
 
   const handleLogin = (e: React.FormEvent) => {
     if (email === "demo@email.com" && password === "demo") {
       navigate("/dashboard");
+      setError(false);
+      localStorage.setItem("isAuthenticated", "true");
     }else{
       e.preventDefault()
-      alert("Invalid Credentials");
+      setError(true);
+      localStorage.setItem("isAuthenticated", "false");
     }
   }
 
@@ -109,6 +120,15 @@ export default function Login() {
               <div className="grid mb-10">
                 <div className="text-center mt-10"></div>
               </div>
+              {error ?
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                Invalid Credentials. Please try again
+                </AlertDescription>
+              </Alert>
+              :null}          
               <div className="text-center mt-5">
                 <p>Demo Credentials:</p>
                 <p>Email: <strong>demo@email.com</strong></p>
