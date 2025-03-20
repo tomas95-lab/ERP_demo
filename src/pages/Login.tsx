@@ -18,12 +18,12 @@ export default function Login() {
   const [error, setError] = useState(false);
 
   const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
     if (email === "demo@email.com" && password === "demo") {
-      navigate("/dashboard");
       setError(false);
       localStorage.setItem("isAuthenticated", "true");
-    }else{
-      e.preventDefault()
+      navigate("/dashboard");
+    } else {
       setError(true);
       localStorage.setItem("isAuthenticated", "false");
     }
@@ -74,6 +74,7 @@ export default function Login() {
                 className="form w-full"
                 id="kt_login_signin_form"
                 method="post"
+                action={''}
                 onSubmit={handleLogin}
               >
                 <div className="mb-5 w-100">
