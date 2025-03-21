@@ -77,7 +77,8 @@ export default function Dashboard() {
         {/* Gráfico de costos */}
         <ReusableChart type="bar" data={barData} config={barConfig} title="Project Costs by Month" xKey="month" yKeys={["materials", "labor"]} />
       </div>
-      <div className="h-full flex-1 rounded-xl bg-muted md:min-h-min">
+      <div className="h-full flex-1 rounded-xl bg-muted md:min-h-min p-4">
+        <h2 className="text-xl font-bold mb-2">Main Costs</h2>
         <DataTable data={costData} columns={columns} filterPlaceholder="Filter users..." filterColumn="provider" />
       </div>
     </div>
