@@ -14,20 +14,21 @@ interface CardComponentProps {
   description: string;
   action: string;
   children: ReactNode;
+  full: boolean
 }
 
-export default function CardComponent ({title, description, action, children}: CardComponentProps) {
+export default function CardComponent ({title, description, action, children, full}: CardComponentProps) {
   return (
-    <Card>
+    <Card className="justify-between">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="">
         {children}
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button className="cursor-pointer">{action}</Button>
+      <CardFooter className="flex justify-end">
+        <Button className={`${full ? 'w-full' : ''} h-[40px] cursor-pointer`}>{action}</Button>
       </CardFooter>
     </Card>
   )
