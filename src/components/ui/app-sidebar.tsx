@@ -21,7 +21,13 @@ const data = {
         title: "Dashboard",
         url: "/dashboard",
         isActive: true,
-        items: [],
+        items: [
+          {
+            title: "Dashboard",
+            url: "/dashboard",
+            isActive: false,
+          }
+        ],
       },
       {
         title: "Projects",
@@ -31,11 +37,6 @@ const data = {
           {
             title: "All Projects",
             url: "/projects/all",
-            isActive: false,
-          },
-          {
-            title: "Create New Project",
-            url: "/projects/new",
             isActive: false,
           },
         ],

@@ -50,7 +50,7 @@ const barData = [
 
 export default function Dashboard() {
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4">
+    <>
       <h1 className="text-xl font-bold">Welcome!</h1>
       <div className="grid auto-rows-min gap-4 md:grid-cols-3">
         {/* Crear un nuevo proyecto */}
@@ -81,6 +81,7 @@ export default function Dashboard() {
         <h2 className="text-xl font-bold mb-2">Main Costs</h2>
         <DataTable data={costData} columns={columns} filterPlaceholder="Filter users..." filterColumn="provider" />
       </div>
-    </div>
+    </>
+
   );
 }

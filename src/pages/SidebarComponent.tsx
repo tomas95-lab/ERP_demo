@@ -13,16 +13,18 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { IndentIcon } from "lucide-react";
 
 import { useLocation } from "react-router-dom";
-import Dashboard from "./Dashboard";
 
-export default function SideBarComponent() {
+export default function SideBarComponent({children}: {children: React.ReactNode}) {
     const location = useLocation(); // Detecta la URL actual
     const url = location.pathname; // Guarda la URL actual en una variable
-    const urlArray = url.split("/"); // Divide la URL en un array
-    const currentUrl = (urlArray[urlArray.length - 1]).charAt(0).toUpperCase() + urlArray[urlArray.length - 1].slice(1); // Obtiene la última parte de la URL
+    const urlArray = url.split("/"); // Divide la URL en un array    
 
+    const urlParts = urlArray.slice(1); // Obtiene las partes de la URL
+    const urlPartsArray = urlParts.map((part) => part.charAt(0).toUpperCase() + part.slice(1)); // Convierte las partes de la URL en un array 
+    
     return (
     <SidebarProvider>
       <AppSidebar />
@@ -31,20 +33,24 @@ export default function SideBarComponent() {
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">
-                  Demo Erp Contructions
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>{currentUrl}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+          <BreadcrumbList>
+            {urlPartsArray.map((path,index)=>{
+              return (
+                  <>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/" key={index}>{path}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                  {index !== urlPartsArray.length - 1 ? <BreadcrumbSeparator /> : "" }
+                  </>
+              )
+            })}
+          </BreadcrumbList>
+        </Breadcrumb>
+
         </header>
-      <Dashboard></Dashboard>
+        <div className="flex flex-1 flex-col gap-4 p-4">
+          {children}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   )
