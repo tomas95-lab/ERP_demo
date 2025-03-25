@@ -66,7 +66,7 @@ export default function Dashboard() {
         </CardComponent>
 
         {/* Proyectos activos - Mejorado */}
-        <CardComponent title="Active Projects" description="" action="View All projects" full>
+        <CardComponent title="Active Projects" description="" action="View All projects" full path="/projects/all">
           <div className="flex flex-col items-center justify-center space-y-2">
             <Briefcase size={32} className="text-gray-600" />
             <span className="text-4xl font-bold">66</span>

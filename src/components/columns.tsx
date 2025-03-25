@@ -32,7 +32,7 @@ export const columns: ColumnDef<Cost>[] = [
   {
     id: "actions",
     cell: ({ row }) => (
-      <Button className="cursor-pointer" onClick={() =>alert(`Editing ${row.original.type}`) }>Edit</Button>
+      <Button className="cursor-pointer h-8 px-4" onClick={() =>alert(`Editing ${row.original.type}`) }>Edit</Button>
     ),
   },
 ];
