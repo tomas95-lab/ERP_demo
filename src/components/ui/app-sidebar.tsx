@@ -18,7 +18,7 @@ const data = {
     versions: ["1.0.0", "1.1.0", "2.0.0-beta"],
     navMain: [
       {
-        title: "Dashboard",
+        title: "Home",
         url: "/dashboard",
         isActive: true,
         items: [
