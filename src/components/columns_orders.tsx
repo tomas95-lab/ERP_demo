@@ -60,7 +60,7 @@ export const columns: ColumnDef<OrdersData>[] = [
     cell: ({ row }) => {
         const status = row.getValue("status") as string;
         return ( 
-            <Badge className={`w-20 ${status === "Completed" ? "bg-green-800" : status === "In progress" ? "bg-blue-800" : status == 'Cancelled' ? "bg-red-600": "bg-yellow-400"}`}>{status}</Badge>
+            <Badge className={`w-20 ${status === "Completed" ? "bg-green-800" : status === "In Progress" ? "bg-blue-800" : status == 'Cancelled' ? "bg-red-600": "bg-yellow-400"}`}>{status}</Badge>
             )
     }
   },
