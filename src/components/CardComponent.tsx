@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card"
 import { ReactNode } from 'react';
 import { Link } from "react-router-dom";
+
 interface CardComponentProps {
   title: string;
   description: string;
@@ -16,13 +17,14 @@ interface CardComponentProps {
   children: ReactNode;
   full: boolean;
   path?: string;
+  center?: boolean
 }
 
-export default function CardComponent ({title, description, action, children, full, path}: CardComponentProps) {
+export default function CardComponent ({title, description, action, children, full, path, center}: CardComponentProps) {
   return (
     <Card className="justify-between">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle className={`${center ? 'text-center':''}`}>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="">
@@ -34,7 +36,9 @@ export default function CardComponent ({title, description, action, children, fu
             <Button className={`${full ? 'w-full' : ''} h-[40px] cursor-pointer`}>{action}</Button>
           </Link>
         ) : (
-          <Button className={`${full ? 'w-full' : ''} h-[40px] cursor-pointer`}>{action}</Button>
+          action === "false" ? null : (
+            <Button className={`${full ? 'w-full' : ''} h-[40px] cursor-pointer`}>{action}</Button>
+          )
         )}
       </CardFooter>
     </Card>
