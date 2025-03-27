@@ -1,5 +1,4 @@
 import CardComponent from "@/components/CardComponent";
-import { Progress } from "@/components/ui/progress";
 import { CheckCircle, RefreshCcw, Users } from "lucide-react";
 import React from "react";
 import logo from "../../public/avatars/300-18.jpg"
