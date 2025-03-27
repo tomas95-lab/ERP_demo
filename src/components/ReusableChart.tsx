@@ -6,13 +6,11 @@ import {
   CartesianGrid,
   Pie,
   PieChart,
-  Tooltip,
   XAxis,
-  YAxis,
   Label,
+  Line, 
+  LineChart
 } from "recharts"
-import React from "react"
-import { Button } from "@/components/ui/button"
 
 import {
   ChartConfig,
@@ -21,7 +19,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-type ChartType = "bar" | "pie"
+type ChartType = "bar" | "pie" | "mini"
 
 interface ReusableChartProps {
   type: ChartType
@@ -37,7 +35,12 @@ interface ReusableChartProps {
   height?: number
   total?: number
   TotalDescriptionPie?: string
-  // Agrega más props si quieres controlar colores, leyendas, etc.
+  mini?: boolean,
+  color?: string,
+  dataKey?: string
+  card?: boolean,
+  description?: string,
+  dataKeyLine?: string
 }
 
 export function ReusableChart({
@@ -52,16 +55,22 @@ export function ReusableChart({
   height = 250,
   total,
   TotalDescriptionPie,
+  mini,
+  color,
+  dataKey,
+  card = true,
+  description,
+  dataKeyLine
 }: ReusableChartProps) {
 
   
   return (
     <ChartContainer
       config={config}
-      className="h-full w-full border-2 rounded-xl bg-card text-card-foreground flex flex-col gap-6 pb-8 pt-6 shadow-sm "
+      className={`h-full w-full  rounded-xl ${card ? "bg-card shadow-sm border-2 ": ''} text-card-foreground flex flex-col gap-6 pb-8 pt-6 `}
     >
       {title && <h2 className="mx-auto text-lg text-center ont-semibold px-4 pb-2">{title}</h2>}
-      <p className="text-center text-sm text-muted-foreground">Total visitors: 100</p>
+      <p className="text-center text-sm text-muted-foreground">{description}</p>
       {type === "bar" && (
         <BarChart width={width} height={height} data={data} accessibilityLayer>
           {showGrid && <CartesianGrid vertical={false} />}
@@ -107,6 +116,36 @@ export function ReusableChart({
             </Pie>
             </PieChart>
       )}
+      {mini === true && type === "mini" && (
+        <LineChart
+            accessibilityLayer
+            data={data}
+            margin={{
+              left: 12,
+              right: 12,
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey={dataKey}
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Line
+              dataKey= {dataKeyLine}
+              type="natural"
+              stroke={color}
+              strokeWidth={2}
+              dot={false}
+            />
+          </LineChart>
+        )}
     </ChartContainer>
   )
 }
