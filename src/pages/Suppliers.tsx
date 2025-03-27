@@ -96,9 +96,9 @@ export function Suppliers() {
       <Card>
         <CardHeader>
           <CardTitle className="text-center">
-            Fast & Easy Deliveries
+            Add New Supplier
             <br />
-            <b>Start a New Delivery</b>
+            <span className="font-bold">Register a new supplier to the system.</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -107,7 +107,7 @@ export function Suppliers() {
           </picture>
         </CardContent>
         <CardFooter className="w-full">
-          <Button className="w-full h-[40px]">New Delivery</Button>
+          <Button className="w-full h-[40px]">Register Supplier</Button>
         </CardFooter>
       </Card>
       </div>
