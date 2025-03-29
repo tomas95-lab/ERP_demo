@@ -8,13 +8,23 @@ import { ReusableChart } from "@/components/ReusableChart";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-const chartData = [
-  { name: "SteelCoLtd", value: 22, fill:"#f59e0b" },       // proveedor confiable, más usado
-  { name: "WorkerUnion", value: 15, fill: "#3b82f6" },
-  { name: "MachineryPro", value: 12, fill: "#10b981" },
-  { name: "TransportMax", value: 9, fill: "#6366f1" },
-  { name: "CityGov", value: 6, fill: "#ef4444" },
-];
+import data from "../data/systemData.json"
+
+const chartData = data.suppliers.chartSupplier
+
+const totalSuppliers = chartData.length
+
+const activeSuppliers = chartData.reduce((total, supplier) => {
+  return supplier.active ? total + 1 : total;
+}, 0);
+
+const onboardedSuppliers = chartData.reduce((total, supplier) => {
+  return !supplier.active ? total + 1 : total;
+}, 0);
+
+const topSupplier = chartData.reduce((top, supplier) => {
+  return supplier.value > top.value ? supplier : top;
+}, chartData[0]);
 
 const chartConfig = {
   SteelCoLtd: { label: "SteelCo Ltd.", color: "#3b82f6" },     // azul
@@ -43,7 +53,7 @@ export function Suppliers() {
         full>
         <div className="flex flex-col items-center justify-center space-y-2">
           <Users size={28} className="text-blue-600" />
-          <span className="text-2xl font-bold">5</span>
+          <span className="text-2xl font-bold">{totalSuppliers}</span>
         </div>
         </CardComponent>
         <CardComponent   
@@ -53,7 +63,7 @@ export function Suppliers() {
         full>
         <div className="flex flex-col items-center justify-center space-y-2">
           <CheckCircle size={28} className="text-green-600" />
-          <span className="text-2xl font-bold">2</span>
+          <span className="text-2xl font-bold">{activeSuppliers}</span>
         </div>
         </CardComponent>
         <CardComponent   
@@ -63,7 +73,7 @@ export function Suppliers() {
         full>
         <div className="flex flex-col items-center justify-center space-y-2">
           <RefreshCcw size={28} className="text-gray-600" />
-          <span className="text-2xl font-bold">3</span>
+          <span className="text-2xl font-bold">{onboardedSuppliers}</span>
         </div>
         </CardComponent>
       </div>    
@@ -77,7 +87,7 @@ export function Suppliers() {
         <div className="flex items-center gap-4">
           <img src={logo} className="w-20 h-20 rounded-full" />
           <div>
-            <div className="font-semibold text-foreground">SteelCo Ltd.</div>
+            <div className="font-semibold text-foreground">{topSupplier.name}</div>
             <div className="text-sm text-muted-foreground">Avg. Delivery: 3.8 days</div>
             <div className="text-sm text-muted-foreground">Orders this month: 12</div>
           </div>

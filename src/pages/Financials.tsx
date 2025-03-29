@@ -3,6 +3,7 @@ import { DataTable } from "@/components/DataTable";
 import {columns}  from "@/components/columns_financials";
 import { ReusableChart } from "@/components/ReusableChart";
 import { CalendarDays, CircleDollarSign, Clock, Building2 } from "lucide-react";
+import data from "../data/systemData.json"
 
 interface ChartConfig {
   [key: string]: {
@@ -21,59 +22,37 @@ const barConfig = {
   },
 } satisfies ChartConfig;
 
-const barData = [
-  { category: "Materials", value: 55000 },
-  { category: "Labor", value: 32000 },
-  { category: "Permits", value: 7000 },
-];
+const barData = data.financials.expenseChart
 
 
-
-const ExpenseData: { category: string; amount: number; project: string; }[] = [
-  {
-    category: "Materials",
-    amount: 12500,
-    project: "Residential Complex A",
-  },
-  {
-    category: "Labor",
-    amount: 8000,
-    project: "Bridge Renovation X12",
-  },
-  {
-    category: "Permits",
-    amount: 2200,
-    project: "Warehouse Expansion Z",
-  },
-  {
-    category: "Logistics",
-    amount: 3100,
-    project: "Shopping Center 45",
-  },
-  {
-    category: "Equipment",
-    amount: 14500,
-    project: "Residential Complex A",
-  },
-  {
-    category: "Materials",
-    amount: 6200,
-    project: "Hospital Refurbishment B",
-  },
-  {
-    category: "Labor",
-    amount: 7800,
-    project: "Bridge Renovation X12",
-  },
-  {
-    category: "Permits",
-    amount: 1800,
-    project: "Hospital Refurbishment B",
-  },
-]
+const ExpenseData: { category: string; amount: number; project: string; }[] = data.financials.expense
 
 
 export function Financials() {
+
+  const expenses = data.financials.expense;
+
+  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+
+  const thisMonth = expenses
+    .filter(e => {
+      const date = new Date(e.date || "2025-03-15"); 
+      const now = new Date();
+      return (
+        date.getMonth() === now.getMonth() &&
+        date.getFullYear() === now.getFullYear()
+      );
+    })
+    .reduce((sum, e) => sum + e.amount, 0);
+
+  const projectTotals: { [key: string]: number } = {};
+  expenses.forEach((e) => {
+    projectTotals[e.project] = (projectTotals[e.project] || 0) + e.amount;
+  });
+  const topProject = Object.entries(projectTotals).sort((a, b) => b[1] - a[1])[0];
+
+  const pendingAmount = 35200;
+
   return (
     <div>
       <h1 className="text-xl font-bold">Expense Tracking</h1>
@@ -81,7 +60,7 @@ export function Financials() {
         Monitor and manage expenses across all active and completed projects.
       </p>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 mb-6">
         {/* Total Expenses */}
         <CardComponent
           title="Total Expenses"
@@ -91,7 +70,8 @@ export function Financials() {
         >
           <div className="flex flex-col items-center justify-center space-y-2">
             <CircleDollarSign size={28} className="text-green-600" />
-            <span className="text-2xl font-bold">$1,230,450</span>
+            <span className="text-2xl font-bold">  ${totalExpenses.toLocaleString()}
+            </span>
           </div>
         </CardComponent>
 
@@ -104,7 +84,8 @@ export function Financials() {
         >
           <div className="flex flex-col items-center justify-center space-y-2">
             <CalendarDays size={28} className="text-blue-600" />
-            <span className="text-2xl font-bold">$76,300</span>
+            <span className="text-2xl font-bold">  ${thisMonth.toLocaleString()}
+            </span>
           </div>
         </CardComponent>
 
@@ -120,8 +101,9 @@ export function Financials() {
               <Building2 size={24} className="text-orange-600" />
             </div>
             <div>
-              <div className="text-sm font-medium text-muted-foreground">Shopping Center 45</div>
-              <div className="text-lg font-bold text-foreground">$690,000.00</div>
+              <div className="text-sm font-medium text-muted-foreground">  {topProject[0]}
+              </div>
+              <div className="text-lg font-bold text-foreground">{topProject[1].toLocaleString()}</div>
             </div>
           </div>
         </CardComponent>
@@ -139,12 +121,12 @@ export function Financials() {
             </div>
             <div>
               <div className="text-sm font-medium text-muted-foreground">Pending Approvals</div>
-              <div className="text-lg font-bold text-foreground">$35,200.00</div>
+              <div className="text-lg font-bold text-foreground">  ${pendingAmount.toLocaleString()}
+              </div>
             </div>
           </div>
         </CardComponent>
       </div>
-
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <ReusableChart type="bar" data={barData} config={barConfig} title="Project Costs by Month" xKey="category" yKeys={["value"]} />

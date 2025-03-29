@@ -10,43 +10,6 @@ export type OrdersData = {
   total: number;
 };
 
-export const purchaseOrders = [
-    {
-      supplier: "SteelCo Ltd.",
-      orderId: "ORD-1042",
-      status: "Completed",
-      date: "2024-06-21",
-      total: 24300,
-    },
-    {
-      supplier: "WorkerUnion",
-      orderId: "ORD-1043",
-      status: "Pending",
-      date: "2024-07-03",
-      total: 14500,
-    },
-    {
-      supplier: "MachineryPro",
-      orderId: "ORD-1044",
-      status: "In Progress",
-      date: "2024-07-10",
-      total: 38900,
-    },
-    {
-      supplier: "TransportMax",
-      orderId: "ORD-1045",
-      status: "Cancelled",
-      date: "2024-07-12",
-      total: 6200,
-    },
-    {
-      supplier: "CityGov",
-      orderId: "ORD-1046",
-      status: "Completed",
-      date: "2024-07-15",
-      total: 17400,
-    },
-  ]
   
 
 export const columns: ColumnDef<OrdersData>[] = [

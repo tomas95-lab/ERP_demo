@@ -2,53 +2,32 @@ import CardComponent from "@/components/CardComponent";
 import { Package, LineChart, RotateCcw, CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ReusableChart } from "@/components/ReusableChart";
-import { columns,purchaseOrders } from "@/components/columns_orders";
+import { columns } from "@/components/columns_orders";
 import { DataTable } from "@/components/DataTable";
+import data from "../data/systemData.json"
 
-const totalOrdersData = [
-  { month: "January", orders: 21 },
-  { month: "February", orders: 28 },
-  { month: "March", orders: 19 },
-  { month: "April", orders: 24 },
-  { month: "May", orders: 30 },
-  { month: "June", orders: 27 },
-];
+const purchaseOrders =  data.orders.purchaseOrders
+
+const totalOrdersData = data.orders.totalOrders
+
 const totalOrdersConfig = {
   orders: { label: "Orders", color: "#3b82f6" },
 };
 
-const itemsOverTimeData = [
-  { month: "January", items: 54 },
-  { month: "February", items: 47 },
-  { month: "March", items: 61 },
-  { month: "April", items: 38 },
-  { month: "May", items: 52 },
-  { month: "June", items: 63 },
-];
+const itemsOverTimeData = data.orders.itemsOverTime
+
 const itemsOverTimeConfig = {
   items: { label: "Items", color: "#10b981" },
 };
 
-const returnsData = [
-  { month: "January", returns: 2 },
-  { month: "February", returns: 1 },
-  { month: "March", returns: 6 },
-  { month: "April", returns: 2 },
-  { month: "May", returns: 1 },
-  { month: "June", returns: 2 },
-];
+const returnsData = data.orders.returns 
+
 const returnsConfig = {
   returns: { label: "Returns", color: "#fbbf24" },
 };
 
-const fulfilledData = [
-  { month: "January", fulfilled: 15 },
-  { month: "February", fulfilled: 18 },
-  { month: "March", fulfilled: 20 },
-  { month: "April", fulfilled: 17 },
-  { month: "May", fulfilled: 22 },
-  { month: "June", fulfilled: 25 },
-];
+const fulfilledData = data.orders.fulfilled
+
 const fulfilledConfig = {
   fulfilled: { label: "Fulfilled", color: "#34d399" },
 };
@@ -74,7 +53,7 @@ export function Orders() {
         >
         <div className="flex space-x-2 justify-center items-center">
           <Package size={28} className="text-blue-600" />
-          <span className="text-2xl font-bold">112</span>
+          <span className="text-2xl font-bold">{totalOrdersData.length}</span>
         </div>
         <ReusableChart mini data={totalOrdersData} config={totalOrdersConfig} card={false} dataKey="month" dataKeyLine="orders" type="mini" color="#3b82f6" />
       </CardComponent>
@@ -87,7 +66,7 @@ export function Orders() {
       >
         <div className="flex space-x-2 justify-center items-center">
           <LineChart size={28} className="text-green-600" />
-          <span className="text-2xl font-bold">315</span>
+          <span className="text-2xl font-bold">{itemsOverTimeData.length}</span>
         </div>
           <ReusableChart mini data={itemsOverTimeData} config={itemsOverTimeConfig} card={false} dataKey="month" dataKeyLine="items" type="mini" color="#10b981" />
         </CardComponent>
@@ -100,7 +79,7 @@ export function Orders() {
         >
           <div className="flex space-x-2 justify-center items-center">
             <RotateCcw size={28} className="text-yellow-600" />
-            <span className="text-2xl font-bold">14</span>
+            <span className="text-2xl font-bold">{returnsData.length}</span>
           </div>
           <ReusableChart mini data={returnsData} config={returnsConfig} card={false} dataKey="month" dataKeyLine="returns" type="mini" color="#fbbf24" />
         </CardComponent>
@@ -113,7 +92,7 @@ export function Orders() {
         >
           <div className="flex space-x-2 justify-center items-center">
             <CheckCheck size={28} className="text-emerald-600" />
-            <span className="text-2xl font-bold">117</span>
+            <span className="text-2xl font-bold">{fulfilledData.length}</span>
           </div>
           <ReusableChart mini data={fulfilledData} config={fulfilledConfig} card={false} dataKey="month" type="mini" dataKeyLine="fulfilled" color="#34d399" />
         </CardComponent>

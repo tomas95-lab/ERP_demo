@@ -1,0 +1,299 @@
+{
+    "projects": [
+        {
+            "id": "PRJ001",
+            "name": "Residential Complex A",
+            "status": "Active",
+            "startDate": "2024-01-10",
+            "endDate": "2024-09-30",
+            "supervisor": "Carlos Méndez",
+            "budget": 450000
+        },
+        {
+            "id": "PRJ002",
+            "name": "Bridge Renovation X12",
+            "status": "Pending",
+            "startDate": "2024-07-01",
+            "endDate": "2025-02-15",
+            "supervisor": "Laura Chen",
+            "budget": 320000
+        },
+        {
+            "id": "PRJ003",
+            "name": "Warehouse Expansion Z",
+            "status": "Completed",
+            "startDate": "2023-03-20",
+            "endDate": "2023-12-01",
+            "supervisor": "Miguel Fernández",
+            "budget": 210000
+        },
+        {
+            "id": "PRJ004",
+            "name": "Shopping Center 45",
+            "status": "Active",
+            "startDate": "2024-05-05",
+            "endDate": "2025-01-20",
+            "supervisor": "Ana Torres",
+            "budget": 690000
+        },
+        {
+            "id": "PRJ005",
+            "name": "Hospital Refurbishment B",
+            "status": "Pending",
+            "startDate": "2024-10-10",
+            "endDate": "2025-06-30",
+            "supervisor": "Daniel Rojo",
+            "budget": 540000
+        }
+    ],
+    "financials": {
+        "expense": [
+        {
+            "category": "Materials",
+            "amount": 12500,
+            "project": "Residential Complex A",
+            "date": "2025-01-12"
+        },
+        {
+            "category": "Labor",
+            "amount": 20000,
+            "project": "Bridge Renovation X12",
+            "date": "2025-01-25"
+        },
+        {
+            "category": "Materials",
+            "amount": 15000,
+            "project": "Warehouse Expansion Z",
+            "date": "2025-02-04"
+        },
+        {
+            "category": "Labor",
+            "amount": 3100,
+            "project": "Shopping Center 45",
+            "date": "2025-02-19"
+        },
+        {
+            "category": "Equipment",
+            "amount": 14500,
+            "project": "Hospital Refurbishment B",
+            "date": "2025-02-28"
+        },
+        {
+            "category": "Materials",
+            "amount": 6200,
+            "project": "Hospital Refurbishment B",
+            "date": "2025-03-05"
+        },
+        {
+            "category": "Labor",
+            "amount": 18000,
+            "project": "Hospital Refurbishment B",
+            "date": "2025-03-10"
+        },
+        {
+            "category": "Permits",
+            "amount": 1800,
+            "project": "Hospital Refurbishment B",
+            "date": "2025-03-18"
+        }
+        ],
+        "expenseChart":[
+            { "category": "Materials", "value": 55000 },
+            { "category": "Labor", "value": 32000 },
+            { "category": "Permits", "value": 7000 }
+        ],
+        "invoices": [
+            {
+                "project": "Residential Complex A",
+                "status": "Paid",
+                "amount": 12500,
+                "date": "2024-03-15"
+            },
+            {
+                "project": "Bridge Renovation X12",
+                "status": "Pending",
+                "amount": 8700,
+                "date": "2024-03-20"
+            },
+            {
+                "project": "Shopping Center 45",
+                "status": "Overdue",
+                "amount": 15400,
+                "date": "2024-02-05"
+            },
+            {
+                "project": "Hospital Refurbishment B",
+                "status": "Paid",
+                "amount": 21000,
+                "date": "2024-03-01"
+            },
+            {
+                "project": "Warehouse Expansion Z",
+                "status": "Pending",
+                "amount": 9600,
+                "date": "2024-03-18"
+            },
+            {
+                "project": "Residential Complex A",
+                "status": "Paid",
+                "amount": 17800,
+                "date": "2024-02-25"
+            },
+            {
+                "project": "Bridge Renovation X12",
+                "status": "Overdue",
+                "amount": 12700,
+                "date": "2024-01-10"
+            }
+        ],
+        "invoiceChart":[
+            { "month": "Jan", "paid": 75000, "pending": 12000 },
+            { "month": "Feb", "paid": 62000, "pending": 8000 },
+            { "month": "Mar", "paid": 88000, "pending": 5000 },
+            { "month": "Apr", "paid": 79000, "pending": 7000 }
+        ]
+    },
+    "suppliers": {
+        "chartSupplier": [
+            { "name": "SteelCoLtd", "value": 22, "fill": "#f59e0b","active":true },
+            { "name": "WorkerUnion", "value": 15, "fill": "#3b82f6","active":false },
+            { "name": "MachineryPro", "value": 12, "fill": "#10b981","active":true },
+            { "name": "TransportMax", "value": 9, "fill": "#6366f1","active": true },
+            { "name": "CityGov", "value": 6, "fill": "#ef4444","active":false }
+        ]
+    },
+    "orders": {
+    "totalOrders": [
+        { "month": "January", "orders": 21 },
+        { "month": "February", "orders": 28 },
+        { "month": "March", "orders": 19 },
+        { "month": "April", "orders": 24 },
+        { "month": "May", "orders": 30 },
+        { "month": "June", "orders": 27 }
+    ],
+    "itemsOverTime": [
+        { "month": "January", "items": 54 },
+        { "month": "February", "items": 47 },
+        { "month": "March", "items": 61 },
+        { "month": "April", "items": 38 },
+        { "month": "May", "items": 52 },
+        { "month": "June", "items": 63 }
+    ],
+    "returns": [
+        { "month": "January", "returns": 2 },
+        { "month": "February", "returns": 1 },
+        { "month": "March", "returns": 6 },
+        { "month": "April", "returns": 2 },
+        { "month": "May", "returns": 1 },
+        { "month": "June", "returns": 2 }
+    ],
+    "fulfilled": [
+        { "month": "January", "fulfilled": 15 },
+        { "month": "February", "fulfilled": 18 },
+        { "month": "March", "fulfilled": 20 },
+        { "month": "April", "fulfilled": 17 },
+        { "month": "May", "fulfilled": 22 },
+        { "month": "June", "fulfilled": 25 }
+    ],
+    "purchaseOrders":[
+        {
+            "supplier": "SteelCo Ltd.",
+            "orderId": "ORD-1042",
+            "status": "Completed",
+            "date": "2024-06-21",
+            "total": 24300
+        },
+        {
+            "supplier": "WorkerUnion",
+            "orderId": "ORD-1043",
+            "status": "Pending",
+            "date": "2024-07-03",
+            "total": 14500
+        },
+        {
+            "supplier": "MachineryPro",
+            "orderId": "ORD-1044",
+            "status": "In Progress",
+            "date": "2024-07-10",
+            "total": 38900
+        },
+        {
+            "supplier": "TransportMax",
+            "orderId": "ORD-1045",
+            "status": "Cancelled",
+            "date": "2024-07-12",
+            "total": 6200
+        },
+        {
+            "supplier": "CityGov",
+            "orderId": "ORD-1046",
+            "status": "Completed",
+            "date": "2024-07-15",
+            "total": 17400
+        }
+    ]
+    },
+    "users": [
+        {
+            "id": "u001",
+            "name": "Tomas Ruiz",
+            "email": "tomas.ruiz@example.com",
+            "role": "Administrator",
+            "status": "Active",
+            "createdAt": "2024-12-15"
+        },
+        {
+            "id": "u002",
+            "name": "Lucía Fernández",
+            "email": "lucia.fernandez@example.com",
+            "role": "Project Manager",
+            "status": "Active",
+            "createdAt": "2025-01-03"
+        },
+        {
+            "id": "u003",
+            "name": "Mateo García",
+            "email": "mateo.garcia@example.com",
+            "role": "Supervisor",
+            "status": "Inactive",
+            "createdAt": "2024-11-22"
+        },
+        {
+            "id": "u004",
+            "name": "Valentina López",
+            "email": "valentina.lopez@example.com",
+            "role": "Accountant",
+            "status": "Active",
+            "createdAt": "2025-02-10"
+        },
+        {
+            "id": "u005",
+            "name": "Juan Pérez",
+            "email": "juan.perez@example.com",
+            "role": "Viewer",
+            "status": "Pending",
+            "createdAt": "2025-03-01"
+        }
+    ],
+    "costs": [
+        { "id": "1", "type": "Materials", "provider": "SteelCo Ltd.", "amount": 12500 },
+        { "id": "2", "type": "Labor", "provider": "WorkerUnion", "amount": 21000 },
+        { "id": "3", "type": "Equipment", "provider": "MachineryPro", "amount": 9500 },
+        { "id": "4", "type": "Logistics", "provider": "TransportMax", "amount": 4300 },
+        { "id": "5", "type": "Permits", "provider": "CityGov", "amount": 1800 }
+    ],
+    "yearChart": [
+        { "month": "January", "labor": 50000, "materials": 30000 },
+        { "month": "February", "labor": 65000, "materials": 42000 },
+        { "month": "March", "labor": 72000, "materials": 38000 },
+        { "month": "April", "labor": 48000, "materials": 35000 },
+        { "month": "May", "labor": 58000, "materials": 39000 },
+        { "month": "June", "labor": 60000, "materials": 41000 },
+        { "month": "July", "labor": 75000, "materials": 45000 },
+        { "month": "August", "labor": 80000, "materials": 46000 },
+        { "month": "September", "labor": 78000, "materials": 47000 },
+        { "month": "October", "labor": 69000, "materials": 44000 },
+        { "month": "November", "labor": 72000, "materials": 43000 },
+        { "month": "December", "labor": 76000, "materials": 49000 }
+    ]
+}

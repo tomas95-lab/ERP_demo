@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Briefcase } from "lucide-react"; // Icono para "Active Projects"
 import { DataTable } from "@/components/DataTable";
 import { Cost, columns } from "@/components/columns"; // Import columns from columns.tsx
+import data from "../data/systemData.json"
 
 interface ChartConfig {
   [key: string]: {
@@ -14,13 +15,7 @@ interface ChartConfig {
   };
 }
 
-const costData: Cost[] = [
-  { id: "1", type: "Materials", provider: "SteelCo Ltd.", amount: 12500 },
-  { id: "2", type: "Labor", provider: "WorkerUnion", amount: 21000 },
-  { id: "3", type: "Equipment", provider: "MachineryPro", amount: 9500 },
-  { id: "4", type: "Logistics", provider: "TransportMax", amount: 4300 },
-  { id: "5", type: "Permits", provider: "CityGov", amount: 1800 },
-];
+const costData: Cost[] = data.costs
 
 const barConfig = {
   materials: {
@@ -33,24 +28,11 @@ const barConfig = {
   },
 } satisfies ChartConfig;
 
-const barData = [
-  { month: "January", labor: 50000, materials: 30000 },
-  { month: "February", labor: 65000, materials: 42000 },
-  { month: "March", labor: 72000, materials: 38000 },
-  { month: "April", labor: 48000, materials: 35000 },
-  { month: "May", labor: 58000, materials: 39000 },
-  { month: "June", labor: 60000, materials: 41000 },
-  { month: "July", labor: 75000, materials: 45000 },
-  { month: "August", labor: 80000, materials: 46000 },
-  { month: "September", labor: 78000, materials: 47000 },
-  { month: "October", labor: 69000, materials: 44000 },
-  { month: "November", labor: 72000, materials: 43000 },
-  { month: "December", labor: 76000, materials: 49000 },
-];
+const barData = data.yearChart
 
 export default function Dashboard() {
   return (
-    <>
+    <div>
       <h1 className="text-xl font-bold">Welcome!</h1>
       <div className="grid auto-rows-min gap-4 md:grid-cols-3">
         {/* Crear un nuevo proyecto */}
@@ -81,7 +63,7 @@ export default function Dashboard() {
         <h2 className="text-xl font-bold mb-2">Main Costs</h2>
         <DataTable data={costData} columns={columns} filterPlaceholder="Filter users..." filterColumn="provider" />
       </div>
-    </>
+    </div>
 
   );
 }
