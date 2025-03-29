@@ -35,7 +35,6 @@ export default function Dashboard() {
     <div>
       <h1 className="text-xl font-bold">Welcome!</h1>
       <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        {/* Crear un nuevo proyecto */}
         <CardComponent title="Create a New Project" description="" action="Create" full>
           <form>
             <div className="grid w-full items-center gap-4">
@@ -47,7 +46,6 @@ export default function Dashboard() {
           </form>
         </CardComponent>
 
-        {/* Proyectos activos - Mejorado */}
         <CardComponent title="Active Projects" description="" action="View All projects" full path="/projects/all">
           <div className="flex flex-col items-center justify-center space-y-2">
             <Briefcase size={32} className="text-gray-600" />
@@ -56,7 +54,6 @@ export default function Dashboard() {
           </div>
         </CardComponent>
 
-        {/* Gráfico de costos */}
         <ReusableChart type="bar" data={barData} config={barConfig} title="Project Costs by Month" xKey="month" yKeys={["materials", "labor"]} />
       </div>
       <div className="h-full flex-1 rounded-xl bg-muted md:min-h-min p-4">
