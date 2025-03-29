@@ -52,7 +52,7 @@ export const ProjectData = [
 
 export function Projects() {
   return (
-    <>
+    <div>
       <h1 className="text-xl font-bold">Projects</h1>
       <p className="text-sm text-muted-foreground mb-4">
         Manage all ongoing, pending, and completed construction projects.
@@ -89,6 +89,6 @@ export function Projects() {
           <Button  className="mt-8">Export CSV</Button>  
         </div>
       </div>
-    </>
+    </div>
   );
 }

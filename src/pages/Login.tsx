@@ -29,7 +29,7 @@ export default function Login() {
   };
 
   return (
-    <>
+    <div>
       <div className="flex flex-col lg:flex-row w-screen h-screen" id="kt_app_root">
         <div
           className="order-1 lg:order-2 flex flex-row w-full lg:w-1/2 bg-cover bg-center h-auto lg:h-full"
@@ -136,6 +136,6 @@ export default function Login() {
             </div>
           </div>
         </div>
-    </>
+    </div>
   );
 }

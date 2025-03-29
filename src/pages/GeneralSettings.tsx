@@ -70,7 +70,7 @@ export function GeneralSettings() {
   };
 
   return (
-    <>
+    <div>
       <h1 className="text-xl font-bold">General Settings</h1>
       <p className="text-sm text-muted-foreground mb-4">
         Configure core system preferences such as company information, default values, and regional settings.
@@ -201,6 +201,6 @@ export function GeneralSettings() {
           </Alert>
         )}
       </form>
-    </>
+    </div>
   );
 }

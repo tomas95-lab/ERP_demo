@@ -55,7 +55,7 @@ const fulfilledConfig = {
 
 export function Orders() {
   return (
-    <>
+    <div>
       <div className="flex justify-between flex-wrap items-center">
         <div>
           <h1 className="text-xl font-bold">Orders</h1>
@@ -119,6 +119,6 @@ export function Orders() {
         </CardComponent>
       </div>
       <DataTable data={purchaseOrders} columns={columns} filterPlaceholder="Filter by Supplier" filterColumn="supplier" ></DataTable>
-    </>
+    </div>
   );
 }

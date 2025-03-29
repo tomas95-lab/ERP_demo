@@ -30,7 +30,7 @@ export function Suppliers() {
     return chartData.reduce((acc: number, curr: { value: number }) => acc + curr.value, 0)
   }, [chartData])
   return (
-    <>
+    <div>
       <h1 className="text-xl font-bold">All Suppliers</h1>
       <p className="text-sm text-muted-foreground mb-4">
       Manage and track all suppliers involved in your construction projects, including their status, activity, and contributions.
@@ -110,6 +110,6 @@ export function Suppliers() {
         </CardFooter>
       </Card>
       </div>
-    </>
+    </div>
   );
 }

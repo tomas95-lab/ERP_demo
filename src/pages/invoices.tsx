@@ -84,7 +84,7 @@ export const invoiceData:{project: string;
 
 export function Invoices() {
   return (
-    <>
+    <div>
       <h1 className="text-xl font-bold">Invoices & Payments</h1>
       <p className="text-sm text-muted-foreground mb-4">
         Monitor and manage Invoives and Payments across all active and completed projects.
@@ -158,6 +158,6 @@ export function Invoices() {
           <DataTable data={invoiceData} columns={invoiceColumns} filterPlaceholder="Filter Project..." filterColumn="project"  />
         </div>
       </div>
-    </>
+    </div>
   );
 }
