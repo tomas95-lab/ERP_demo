@@ -29,10 +29,4 @@ export const columns: ColumnDef<Cost>[] = [
       return <div className="text-left font-medium">{formatted}</div>;
     },
   },
-  {
-    id: "actions",
-    cell: ({ row }) => (
-      <Button className="cursor-pointer h-8 px-4" onClick={() =>alert(`Editing ${row.original.type}`) }>Edit</Button>
-    ),
-  },
 ];
