@@ -8,6 +8,28 @@ import { DataTable } from "@/components/DataTable";
 import { Cost, columns } from "@/components/columns"; // Import columns from columns.tsx
 import data from "../data/systemData.json"
 
+
+import { format } from "date-fns"
+import { CalendarIcon } from "lucide-react"
+ 
+import React from "react";
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 interface ChartConfig {
   [key: string]: {
     label: string;
@@ -31,16 +53,99 @@ const barConfig = {
 const barData = data.yearChart
 
 export default function Dashboard() {
+  const [startDate, setStartDate] = React.useState<Date>()
+  const [endDate, setEndDate] = React.useState<Date>()
+  
   return (
     <div>
       <h1 className="text-xl font-bold">Welcome!</h1>
       <div className="grid auto-rows-min gap-4 md:grid-cols-3">
         <CardComponent title="Create a New Project" description="" action="Create" full>
           <form>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Name of your project" />
+            <div className="grid w-full items-center gap-4 grid-cols-2">
+              <div>
+                <div className="flex flex-col space-y-1.5 gap-2 mt-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input id="name" placeholder="Name of your project" />
+                </div>
+                <div className="flex flex-col space-y-1.5 gap-2 mt-2">
+                  <Label htmlFor="supervisor">Supervisor</Label>
+                  <Input id="supervisor" placeholder="Supervisor of your project" />
+                </div>
+              </div>
+              <div>
+                <div className="flex flex-col space-y-1.5 gap-2 mt-2">
+                    <Label htmlFor="budget">Budget</Label>
+                    <Input id="budget" placeholder="Budget of your project" />
+                </div>
+                <div className="flex flex-col space-y-1.5 gap-2 mt-2">
+                  <Label htmlFor="status">Status</Label>
+                  <Select>
+                    <SelectTrigger className="w-[100%]">
+                      <SelectValue placeholder="Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                    <SelectItem value="Active">Active</SelectItem>
+                    <SelectItem value="On Hold">On Hold</SelectItem>
+                    <SelectItem value="Completed">Completed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="flex gap-4">
+              <div className="flex gap-4">
+                <div className="flex flex-col space-y-1.5 gap-2 mt-2 w-full">
+                  <Label>Start Date</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !startDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon />
+                        {startDate ? format(startDate, "PPP") : <span>Pick a start date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={startDate}
+                        onSelect={setStartDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                <div className="flex flex-col space-y-1.5 gap-2 mt-2 w-full">
+                  <Label>End Date</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !endDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon />
+                        {endDate ? format(endDate, "PPP") : <span>Pick an end date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={endDate}
+                        onSelect={setEndDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
               </div>
             </div>
           </form>
