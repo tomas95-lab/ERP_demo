@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DialogComponent } from "./DialogComponent";
 import { EditProjectForm } from "./EditProjectForm";
+import { Pencil } from "lucide-react";
 
 export type ProjectData = {
   id: string;
@@ -62,7 +63,7 @@ export const columns: ColumnDef<ProjectData>[] = [
       const project = row.original;
       return (
         <DialogComponent
-        trigger={<Button variant="outline">Edit</Button>}
+        trigger={<Pencil className="cursor-pointer" size={18}></Pencil>}
         title={`Edit ${row.getValue("name")}`}
         description="Modify project details"
       >

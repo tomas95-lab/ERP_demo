@@ -33,13 +33,6 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
-
 interface DataTableProps<T> {
   data: T[]
   columns: ColumnDef<T>[]
@@ -159,6 +152,26 @@ export function DataTable<T>({ data, columns, filterPlaceholder = "Filter...", f
             )}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Pagination controls */}
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
       </div>
     </div>
   )

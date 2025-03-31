@@ -12,10 +12,28 @@ export function Projects() {
 
   return (
     <div className="flex flex-col gap-2">
-      <h1 className="text-xl font-bold">Projects</h1>
-      <p className="text-sm text-muted-foreground mb-4">
-        Manage all ongoing, pending, and completed construction projects.
-      </p>
+      <div className="flex items-start justify-between mb-4 flex-wrap gap-y-2">
+        <div>
+          <h1 className="text-xl font-bold">Projects</h1>
+          <p className="text-sm text-muted-foreground mb-4">
+            Manage all ongoing, pending, and completed construction projects.
+          </p>
+        </div>
+        <div className="flex gap-4 items-center sm:mt-0 mt-2">
+          <DialogComponent
+            trigger={<Button>create a new Project</Button>}
+            title="create a new Project"
+            description="Modify project details"
+          >
+            {(onClose) => (
+              <CreateProjectForm onSuccess={onClose}></CreateProjectForm>
+            )}
+          </DialogComponent>
+          <Button>Export CSV</Button>
+        </div>
+      </div>
+
+      
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
         <div className="p-4 border rounded-lg text-center">
           <p className="text-muted-foreground text-sm">Total</p>
@@ -42,19 +60,6 @@ export function Projects() {
       </div>
       <div className="flex flex-col gap-4 items-end">
         <DataTable data={projects} columns={columns} filterPlaceholder="Filter Status..." filterColumn="status" />
-
-        <div className="flex gap-4" > 
-          <DialogComponent
-              trigger={<Button className="mt-8">create a new Project</Button>}
-              title="create a new Project"
-              description="Modify project details"
-            >
-            {(onClose) => (
-              <CreateProjectForm onSuccess={onClose}></CreateProjectForm>
-            )}
-          </DialogComponent>
-          <Button  className="mt-8">Export CSV</Button>  
-        </div>
       </div>
     </div>
   );
