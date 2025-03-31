@@ -1,6 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "./ui/button";
 import { Badge } from "@/components/ui/badge";
+import { DialogComponent } from "./DialogComponent";
+import { EditProjectForm } from "./EditProjectForm";
 
 export type ProjectData = {
   id: string;
@@ -56,8 +58,22 @@ export const columns: ColumnDef<ProjectData>[] = [
   
   {
     id: "actions",
-    cell: ({ row }) => (
-      <Button className="cursor-pointer h-8 px-4" onClick={() =>alert(`Editing ${row.original.name}`) }>Edit</Button>
-    ),
+    cell: ({ row }) => {
+      const project = row.original;
+      return (
+        <DialogComponent
+        tiger={<Button variant="outline">Edit</Button>}
+        title={`Edit ${row.getValue("name")}`}
+        description="Modify project details"
+      >
+        {(onClose) => (
+          <EditProjectForm
+            project={row.original}
+            onSuccess={onClose}
+          />
+        )}
+      </DialogComponent>
+      );
+    },
   },
 ];

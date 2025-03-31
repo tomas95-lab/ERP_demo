@@ -1,21 +1,20 @@
-import { useEffect, useState } from "react"
-import { db } from "@/firebaseConfig"
-import { collection, getDocs } from "firebase/firestore"
+import { useEffect, useState } from "react";
+import { collection, onSnapshot, getFirestore } from "firebase/firestore";
 
-export function useFirestoreCollection<T>(collectionPath: string) {
-  const [data, setData] = useState<T[]>([])
-  const [loading, setLoading] = useState(true)
+export function useFirestoreCollection<T>(path: string) {
+  const [data, setData] = useState<T[]>([]);
+  const [loading, setLoading] = useState(true);
+  const db = getFirestore();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const snapshot = await getDocs(collection(db, collectionPath))
-      const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as T[]
-      setData(docs)
-      setLoading(false)
-    }
+    const unsubscribe = onSnapshot(collection(db, path), (snapshot) => {
+      const docs = snapshot.docs.map((doc) => ({ ...doc.data(), firestoreId: doc.id } as T));
+      setData(docs);
+      setLoading(false);
+    });
 
-    fetchData()
-  }, [collectionPath])
+    return () => unsubscribe();
+  }, [path]);
 
-  return { data, loading }
+  return { data, loading };
 }
