@@ -4,6 +4,7 @@ import { FileText, DollarSign, Clock, AlertTriangle } from 'lucide-react';
 import { DataTable } from '@/components/DataTable';
 import { invoiceColumns } from '@/components/columns_financials';
 import { useFirestoreCollection } from '@/hooks/useFirestoreCollection';
+import { useState } from 'react';
 
 export function Invoices() {  
   interface ChartConfig {
@@ -45,7 +46,13 @@ export function Invoices() {
   }, 0);
   
   const invoiceDataTable: Invoice[] = typedInvoiceData;
-  
+
+  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'overdue' | 'paid'>('all');
+
+    const statusFilterFn = (item: Invoice) => {
+      if (statusFilter === 'all') return true;
+      return item.status.toLowerCase() === statusFilter;
+    };
   return (
     <>
     <div>
@@ -64,6 +71,9 @@ export function Invoices() {
             description="Sum of all invoices issued across all projects."
             action="View All"
             full
+            variant='default'
+            active={statusFilter === 'all'}
+            onActionClick={() => setStatusFilter('all')}
           >
             <div className="flex items-center gap-4">
               <FileText size={28} className="text-purple-600" />
@@ -79,6 +89,9 @@ export function Invoices() {
             description="Total amount received from all payments."
             action="View Payments"
             full
+            variant='default'
+            active={statusFilter === 'paid'}
+            onActionClick={() => setStatusFilter('paid')}
           >
             <div className="flex items-center gap-4">
               <DollarSign size={28} className="text-green-600" />
@@ -90,10 +103,13 @@ export function Invoices() {
           </CardComponent>
   
           <CardComponent
-            title="Pending Invoices"
+            title="Filter Pending"
             description="Invoices not yet paid or past due."
             action="Review Now"
             full
+            variant='default'
+            active={statusFilter === 'pending'}
+            onActionClick={() => setStatusFilter('pending')}
           >
             <div className="flex items-center gap-4">
               <Clock size={28} className="text-yellow-500" />
@@ -107,8 +123,11 @@ export function Invoices() {
           <CardComponent
             title="Overdue"
             description="Invoices past due date requiring attention."
-            action="Take Action"
+            action="Filter Overdue"
             full
+            variant='default'
+            active={statusFilter === 'overdue'}
+            onActionClick={() => setStatusFilter('overdue')}
           >
             <div className="flex items-center gap-4">
               <AlertTriangle size={28} className="text-red-600" />
@@ -136,6 +155,7 @@ export function Invoices() {
               columns={invoiceColumns}
               filterPlaceholder="Filter Project..."
               filterColumn="project"
+              externalFilter={statusFilterFn}
             />
           </div>
         </div>

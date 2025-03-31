@@ -22,8 +22,8 @@ export function Projects() {
         </div>
         <div className="flex gap-4 items-center sm:mt-0 mt-2">
           <DialogComponent
-            trigger={<Button>create a new Project</Button>}
-            title="create a new Project"
+            trigger={<Button>Create a new Project</Button>}
+            title="Create a new Project"
             description="Modify project details"
           >
             {(onClose) => (

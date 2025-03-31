@@ -14,9 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { ChevronDown } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
-
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -38,16 +36,25 @@ interface DataTableProps<T> {
   columns: ColumnDef<T>[]
   filterPlaceholder?: string
   filterColumn: string
+  externalFilter?: (item: T) => boolean
 }
 
-export function DataTable<T>({ data, columns, filterPlaceholder = "Filter...", filterColumn }: DataTableProps<T>) {
+export function DataTable<T>({
+  data,
+  columns,
+  filterPlaceholder = "Filter...",
+  filterColumn,
+  externalFilter,
+}: DataTableProps<T>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
+  const filteredData = externalFilter ? data.filter(externalFilter) : data
+
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -86,40 +93,37 @@ export function DataTable<T>({ data, columns, filterPlaceholder = "Filter...", f
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className="capitalize"
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) =>
+                    column.toggleVisibility(!!value)
+                  }
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  )
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -154,7 +158,6 @@ export function DataTable<T>({ data, columns, filterPlaceholder = "Filter...", f
         </Table>
       </div>
 
-      {/* Pagination controls */}
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
