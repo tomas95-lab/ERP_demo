@@ -34,12 +34,23 @@ export const columns: ColumnDef<ProjectData>[] = [
   },
   {
     accessorKey: "startDate",
-    header: "Start Date"
+    header: "Start Date",
+    cell: ({ row }) => {
+      const rawDate = row.getValue("startDate") as string;
+      const date = new Date(rawDate);
+      return date.toLocaleDateString("en-US");
+    },
   },
   {
     accessorKey: "endDate",
-    header: "End Date"
+    header: "End Date",
+    cell: ({ row }) => {
+      const rawDate = row.getValue("endDate") as string;
+      const date = new Date(rawDate);
+      return date.toLocaleDateString("es-US");
+    },
   },
+  
   {
     accessorKey: "supervisor",
     header: "Supervisor"

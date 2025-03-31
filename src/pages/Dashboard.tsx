@@ -33,6 +33,7 @@ export default function Dashboard() {
   
   const { data: costData } = useFirestoreCollection<Cost>("costs")
   const {data: barData} = useFirestoreCollection("yearChart")
+  const {data: projects} = useFirestoreCollection<{ status: string }>("projects")
 
   return (
     <div className="flex flex-col gap-2">
@@ -45,7 +46,8 @@ export default function Dashboard() {
         <CardComponent title="Active Projects" description="" action="View All projects" full path="/projects/all">
           <div className="flex flex-col items-center justify-center space-y-2">
             <Briefcase size={32} className="text-gray-600" />
-            <span className="text-4xl font-bold">66</span>
+            <span className="text-4xl font-bold">            {projects.filter(p => p.status === "Active").length}
+            </span>
             <Badge className="bg-green-800">Currently active</Badge>
           </div>
         </CardComponent>

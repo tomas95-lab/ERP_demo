@@ -8,11 +8,12 @@ import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 
 
 export function Projects() {
-  const {data: projects} = useFirestoreCollection<{ status: string }>("projects")
+  const {data: projects, loading:loadingProjects} = useFirestoreCollection<{ status: string }>("projects")
 
   return (
+   
     <div className="flex flex-col gap-2">
-      <div className="flex items-start justify-between mb-4 flex-wrap gap-y-2">
+            <div className="flex items-start justify-between mb-4 flex-wrap gap-y-2">
         <div>
           <h1 className="text-xl font-bold">Projects</h1>
           <p className="text-sm text-muted-foreground mb-4">
@@ -32,9 +33,9 @@ export function Projects() {
           <Button>Export CSV</Button>
         </div>
       </div>
-
-      
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+      {loadingProjects ?<div className="text-center text-muted-foreground">Loading Projects...</div> : (
+        <>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
         <div className="p-4 border rounded-lg text-center">
           <p className="text-muted-foreground text-sm">Total</p>
           <p className="font-bold text-lg">{projects.length}</p>
@@ -61,6 +62,9 @@ export function Projects() {
       <div className="flex flex-col gap-4 items-end">
         <DataTable data={projects} columns={columns} filterPlaceholder="Filter Status..." filterColumn="status" />
       </div>
+        </>
+      )}
+
     </div>
   );
 }
