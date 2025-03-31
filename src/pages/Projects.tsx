@@ -13,7 +13,7 @@ export function Projects() {
   return (
    
     <div className="flex flex-col gap-2">
-            <div className="flex items-start justify-between mb-4 flex-wrap gap-y-2">
+      <div className="flex items-start justify-between mb-4 flex-wrap gap-y-2">
         <div>
           <h1 className="text-xl font-bold">Projects</h1>
           <p className="text-sm text-muted-foreground mb-4">
@@ -35,7 +35,7 @@ export function Projects() {
       </div>
       {loadingProjects ?<div className="text-center text-muted-foreground">Loading Projects...</div> : (
         <>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
         <div className="p-4 border rounded-lg text-center">
           <p className="text-muted-foreground text-sm">Total</p>
           <p className="font-bold text-lg">{projects.length}</p>

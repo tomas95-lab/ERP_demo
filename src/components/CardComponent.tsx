@@ -57,7 +57,7 @@ export default function CardComponent ({
   const ringClass = active ? `ring-2 ring-offset-2 ${ringClassMap[variant] ?? 'ring-primary'}` : ''
 
   return (
-    <Card className="justify-between">
+    <Card className="justify-between h-full">
       <CardHeader>
         <CardTitle className={`${center ? 'text-center' : ''}`}>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

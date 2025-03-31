@@ -64,6 +64,11 @@ export function DataTable<T>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    initialState: {
+      pagination: {
+        pageSize: 5,
+      },
+    },
     state: {
       sorting,
       columnFilters,
@@ -71,7 +76,7 @@ export function DataTable<T>({
       rowSelection,
     },
   })
-
+  
   return (
     <div className="w-full">
       <div className="flex items-center py-4">

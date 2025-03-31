@@ -67,7 +67,7 @@ export function ReusableChart({
   return (
     <ChartContainer
       config={config}
-      className={`w-full  rounded-xl ${card ? "bg-card shadow-sm border-2 ": ''} text-card-foreground flex flex-col gap-6 pb-8 pt-6 `}
+      className={`h-full w-full  rounded-xl ${card ? "bg-card shadow-sm border-2 ": ''} text-card-foreground flex flex-col gap-6 pb-8 pt-6 `}
     >
       {title && <h2 className="mx-auto text-lg text-center ont-semibold px-4 pb-2">{title}</h2>}
       <p className="text-center text-sm text-muted-foreground">{description}</p>
