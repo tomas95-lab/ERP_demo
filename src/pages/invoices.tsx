@@ -5,6 +5,7 @@ import { FileText, DollarSign, Clock, AlertTriangle } from 'lucide-react'
 import { DataTable } from '@/components/DataTable'
 import { invoiceColumns } from '@/components/columns_financials'
 import { useFirestoreCollection } from '@/hooks/useFirestoreCollection'
+import { format } from "date-fns"
 
 import { InvoiceForm } from '@/components/InvoiceForm'
 import { DialogComponent } from '@/components/DialogComponent'
@@ -18,6 +19,7 @@ export function Invoices() {
   const barConfig: ChartConfig = {
     paid: { label: "Paid", color: "#10b981" },
     pending: { label: "Pending", color: "#fbbf24" },
+    overdue: { label: "Overdue", color: "#e7000b" },
   }
 
   const { data: barData, loading: barLoading } = useFirestoreCollection("financials/invoiceChart/items")
@@ -44,6 +46,32 @@ export function Invoices() {
     if (statusFilter === 'all') return true
     return item.status.toLowerCase() === statusFilter
   }
+
+
+
+function groupInvoicesByMonthAndStatus(invoices: Invoice[]) {
+  const result: Record<string, { [status: string]: number }> = {}
+
+  invoices.forEach((invoice) => {
+    const date = new Date(invoice.date)
+    const monthKey = format(date, "MMM yyyy") // ej: Mar 2025
+    const statusKey = invoice.status.toLowerCase()
+
+    if (!result[monthKey]) result[monthKey] = {}
+    if (!result[monthKey][statusKey]) result[monthKey][statusKey] = 0
+
+    result[monthKey][statusKey] += invoice.amount
+  })
+
+  return Object.entries(result).map(([month, values]) => ({
+    month,
+    paid: values.paid || 0,
+    pending: values.pending || 0,
+    overdue: values.overdue || 0,
+  }))
+}
+const chartData = groupInvoicesByMonthAndStatus(typedInvoiceData)
+
 
   return (
     <>
@@ -137,7 +165,7 @@ export function Invoices() {
               onActionClick={() => setStatusFilter('overdue')}
             >
               <div className="flex items-center gap-4">
-                <AlertTriangle size={28} className="text-red-600" />
+                <AlertTriangle size={28} className="text-red-800" />
                 <div>
                   <div className="text-sm font-medium text-muted-foreground">Overdue Balance</div>
                   <div className="text-2xl font-bold">${totalInvoicesOverdueAmount}</div>
@@ -149,12 +177,12 @@ export function Invoices() {
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 ">
             <ReusableChart
               type="bar"
-              data={barData}
+              data={chartData}
               config={barConfig}
               title="Invoices and Payments by Month"
               xKey="month"
-              yKeys={["paid", "pending"]}
-            />
+              yKeys={["paid", "pending", "overdue"]}
+              />
             <div>
               <h2 className="text-xl font-bold mb-2">Main Invoices</h2>
               <DataTable

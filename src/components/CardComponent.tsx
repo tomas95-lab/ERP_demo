@@ -35,10 +35,11 @@ export default function CardComponent ({
   variant = 'default',
   active = false,
 }: CardComponentProps) {
+
   const variantClassMap: Record<string, string> = {
     green: 'bg-green-600 hover:bg-green-700 text-white',
     yellow: 'bg-yellow-500 hover:bg-yellow-600 text-white',
-    red: 'bg-red-600 hover:bg-red-700 text-white',
+    red: 'bg-red-800 hover:bg-red-700 text-white',
     outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
     default: 'bg-primary text-white hover:bg-primary/90',
     destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
@@ -47,7 +48,7 @@ export default function CardComponent ({
   const ringClassMap: Record<string, string> = {
     green: 'ring-green-300',
     yellow: 'ring-yellow-300',
-    red: 'ring-red-300',
+    red: 'ring-red-800',
     default: 'ring-primary',
     destructive: 'ring-destructive',
     outline: 'ring-border',

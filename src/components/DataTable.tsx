@@ -68,6 +68,9 @@ export function DataTable<T>({
       pagination: {
         pageSize: 5,
       },
+      sorting: [
+        { id: "date", desc: true } // 👈 inicial ordenado por fecha descendente
+      ],
     },
     state: {
       sorting,

@@ -68,5 +68,10 @@ export const invoiceColumns: ColumnDef<InvoinceData>[] = [
     {
         accessorKey: "date",
         header: "Date",
+        cell:({row})=> {
+          const rawDate = row.getValue("date") as string;
+          const date = new Date(rawDate);
+          return date.toLocaleDateString("en-US");
+        },
     },
 ]
