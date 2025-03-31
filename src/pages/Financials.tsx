@@ -58,7 +58,7 @@ export function Financials() {
   const pendingAmount = 35200;
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <h1 className="text-xl font-bold">Expense Tracking</h1>
       <p className="text-sm text-muted-foreground mb-4">
         Monitor and manage expenses across all active and completed projects.

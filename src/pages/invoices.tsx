@@ -48,15 +48,16 @@ export function Invoices() {
   
   return (
     <>
+    <div>
+      <h1 className="text-xl font-bold">Invoices & Payments</h1>
+      <p className="text-sm text-muted-foreground mb-4">
+        Monitor and manage invoices and payments across all active and completed projects.
+      </p>
+    </div>
       {dataLoading && barLoading ? (
         <div className="text-center text-muted-foreground">Loading Invoices...</div>
       ) : (
-        <div>
-        <h1 className="text-xl font-bold">Invoices & Payments</h1>
-        <p className="text-sm text-muted-foreground mb-4">
-          Monitor and manage invoices and payments across all active and completed projects.
-        </p>
-  
+        <div className="flex flex-col gap-4">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <CardComponent
             title="Total Invoices"

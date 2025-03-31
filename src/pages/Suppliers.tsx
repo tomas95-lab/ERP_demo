@@ -39,7 +39,7 @@ export function Suppliers() {
   }, [chartData]);
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <h1 className="text-xl font-bold">All Suppliers</h1>
       <p className="text-sm text-muted-foreground mb-4">
         Manage and track all suppliers involved in your construction projects, including their status, activity, and contributions.

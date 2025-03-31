@@ -9,7 +9,7 @@ export function Projects() {
   const {data: projects} = useFirestoreCollection<{ status: string }>("projects")
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <h1 className="text-xl font-bold">Projects</h1>
       <p className="text-sm text-muted-foreground mb-4">
         Manage all ongoing, pending, and completed construction projects.

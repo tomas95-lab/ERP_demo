@@ -88,7 +88,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <h1 className="text-xl font-bold">Welcome!</h1>
       <div className="grid auto-rows-min gap-4 md:grid-cols-3">
         <CardComponent title="Create a New Project" description="" action="false" full>
@@ -193,7 +193,7 @@ export default function Dashboard() {
 
         <ReusableChart type="bar" data={barData} config={barConfig} title="Project Costs by Month" xKey="month" yKeys={["materials", "labor"]} />
       </div>
-      <div className="h-full flex-1 rounded-xl bg-muted md:min-h-min p-4">
+      <div className="flex-1 rounded-xl md:min-h-min p-4">
         <h2 className="text-xl font-bold mb-2">Main Costs</h2>
         <DataTable data={costData} columns={columns} filterPlaceholder="Filter users..." filterColumn="provider" />
       </div>
