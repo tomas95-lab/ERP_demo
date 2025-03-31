@@ -1,9 +1,10 @@
+import { useState, useEffect } from "react";
 import CardComponent from "@/components/CardComponent";
 import { DataTable } from "@/components/DataTable";
-import {columns}  from "@/components/columns_financials";
+import { columns } from "@/components/columns_financials";
 import { ReusableChart } from "@/components/ReusableChart";
 import { CalendarDays, CircleDollarSign, Clock, Building2 } from "lucide-react";
-import data from "../data/systemData.json"
+import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 
 interface ChartConfig {
   [key: string]: {
@@ -22,21 +23,24 @@ const barConfig = {
   },
 } satisfies ChartConfig;
 
-const barData = data.financials.expenseChart
-
-
-const ExpenseData: { category: string; amount: number; project: string; }[] = data.financials.expense
-
-
 export function Financials() {
+  const [loading, setLoading] = useState(true);
+  const { data: barData, loading: barLoading } = useFirestoreCollection("financials/expenseChart/items");
+  const { data: ExpenseData, loading: expenseLoading } = useFirestoreCollection<{ category: string; amount: number; project: string; date?: string }>("financials/expense/items");
 
-  const expenses = data.financials.expense;
+  useEffect(() => {
+    setLoading(barLoading || expenseLoading);
+  }, [barLoading, expenseLoading]);
 
-  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+  if (loading) {
+    return <div className="text-center py-10">Loading...</div>;
+  }
 
-  const thisMonth = expenses
+  const totalExpenses = ExpenseData.reduce((sum, e) => sum + e.amount, 0);
+
+  const thisMonth = ExpenseData
     .filter(e => {
-      const date = new Date(e.date || "2025-03-15"); 
+      const date = new Date(e.date || "2025-03-15");
       const now = new Date();
       return (
         date.getMonth() === now.getMonth() &&
@@ -46,7 +50,7 @@ export function Financials() {
     .reduce((sum, e) => sum + e.amount, 0);
 
   const projectTotals: { [key: string]: number } = {};
-  expenses.forEach((e) => {
+  ExpenseData.forEach((e) => {
     projectTotals[e.project] = (projectTotals[e.project] || 0) + e.amount;
   });
   const topProject = Object.entries(projectTotals).sort((a, b) => b[1] - a[1])[0];

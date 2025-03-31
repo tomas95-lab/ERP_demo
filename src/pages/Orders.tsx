@@ -4,38 +4,37 @@ import { Button } from "@/components/ui/button";
 import { ReusableChart } from "@/components/ReusableChart";
 import { columns } from "@/components/columns_orders";
 import { DataTable } from "@/components/DataTable";
-import data from "../data/systemData.json"
+import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 
-const purchaseOrders =  data.orders.purchaseOrders
 
-const totalOrdersData = data.orders.totalOrders
-
-const totalOrdersConfig = {
-  orders: { label: "Orders", color: "#3b82f6" },
-};
-
-const itemsOverTimeData = data.orders.itemsOverTime
-
-const itemsOverTimeConfig = {
-  items: { label: "Items", color: "#10b981" },
-};
-
-const returnsData = data.orders.returns 
-
-const returnsConfig = {
-  returns: { label: "Returns", color: "#fbbf24" },
-};
-
-const fulfilledData = data.orders.fulfilled
-
-const fulfilledConfig = {
-  fulfilled: { label: "Fulfilled", color: "#34d399" },
-};
 
 export function Orders() {
+  const { data: purchaseOrders, loading: purchaseOrdersLoading } = useFirestoreCollection("orders/purchaseOrders/items");
+  const { data: totalOrdersData, loading: totalOrdersLoading } = useFirestoreCollection("orders/totalOrders/items");
+  const { data: itemsOverTimeData, loading: itemsOverTimeDataLoading } = useFirestoreCollection("orders/itemsOverTime/items");
+  const { data: returnsData, loading: returnsDataLoading } = useFirestoreCollection("orders/returns/items");
+  const { data: fulfilledData, loading: fulfilledDataLoading } = useFirestoreCollection("orders/fulfilled/items");
+
+  const totalOrdersConfig = {
+    orders: { label: "Orders", color: "#3b82f6" },
+  };
+  
+  const itemsOverTimeConfig = {
+    items: { label: "Items", color: "#10b981" },
+  };
+  
+  
+  const returnsConfig = {
+    returns: { label: "Returns", color: "#fbbf24" },
+  };
+  
+  const fulfilledConfig = {
+    fulfilled: { label: "Fulfilled", color: "#34d399" },
+  };
+
   return (
-    <div>
-      <div className="flex justify-between flex-wrap items-center">
+    <>
+    <div className="flex justify-between flex-wrap items-center">
         <div>
           <h1 className="text-xl font-bold">Orders</h1>
           <p className="text-sm text-muted-foreground mb-4">
@@ -43,7 +42,12 @@ export function Orders() {
           </p>
         </div>
         <Button>Create Order</Button>
-      </div>
+    </div>
+    {totalOrdersLoading && itemsOverTimeDataLoading && purchaseOrdersLoading && returnsDataLoading && fulfilledDataLoading ? (
+              <div className="text-center text-muted-foreground">Loading Orders...</div>
+
+    ):(
+      <div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <CardComponent
         title="Total Orders"
@@ -99,5 +103,8 @@ export function Orders() {
       </div>
       <DataTable data={purchaseOrders} columns={columns} filterPlaceholder="Filter by Supplier" filterColumn="supplier" ></DataTable>
     </div>
+    )}
+    </>
+
   );
 }

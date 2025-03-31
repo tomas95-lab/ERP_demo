@@ -1,11 +1,13 @@
 import { DataTable } from "@/components/DataTable";
 import {columns } from "@/components/columns_project"; // Import columns from columns.tsx
 import { Button } from "@/components/ui/button";
-import data from "../data/systemData.json"
 
-const projects = data.projects
+import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
+
 
 export function Projects() {
+  const {data: projects} = useFirestoreCollection<{ status: string }>("projects")
+
   return (
     <div>
       <h1 className="text-xl font-bold">Projects</h1>

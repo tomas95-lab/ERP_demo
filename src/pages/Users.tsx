@@ -1,7 +1,10 @@
-import { columns, users } from "@/components/columns_users";
+import { columns } from "@/components/columns_users";
 import { DataTable } from "@/components/DataTable";
 import { Button } from "@/components/ui/button";
+import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
+
 export function Users() {
+  const {data: users, loading: loadingUsers} = useFirestoreCollection("users")
   return (
     <>
       <div className="flex justify-between items-center">
@@ -13,7 +16,6 @@ export function Users() {
           <Button>Add a New User</Button>
         </div>
       </div>
-
       <DataTable data={users} columns={columns} filterColumn="name" filterPlaceholder="Search by Name..."></DataTable>
     </>
   );
