@@ -62,7 +62,7 @@ export const columns: ColumnDef<ProjectData>[] = [
       const project = row.original;
       return (
         <DialogComponent
-        tiger={<Button variant="outline">Edit</Button>}
+        trigger={<Button variant="outline">Edit</Button>}
         title={`Edit ${row.getValue("name")}`}
         description="Modify project details"
       >

@@ -1,5 +1,7 @@
 import { DataTable } from "@/components/DataTable";
+import { DialogComponent } from "@/components/DialogComponent";
 import {columns } from "@/components/columns_project"; // Import columns from columns.tsx
+import CreateProjectForm from "@/components/createProjectForm";
 import { Button } from "@/components/ui/button";
 
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
@@ -42,7 +44,15 @@ export function Projects() {
         <DataTable data={projects} columns={columns} filterPlaceholder="Filter Status..." filterColumn="status" />
 
         <div className="flex gap-4" > 
-          <Button  className="mt-8">Create New Project</Button>  
+          <DialogComponent
+              trigger={<Button className="mt-8">create a new Project</Button>}
+              title="create a new Project"
+              description="Modify project details"
+            >
+            {(onClose) => (
+              <CreateProjectForm onSuccess={onClose}></CreateProjectForm>
+            )}
+          </DialogComponent>
           <Button  className="mt-8">Export CSV</Button>  
         </div>
       </div>
