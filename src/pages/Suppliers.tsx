@@ -8,6 +8,7 @@ import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 import { ReusableChart } from "@/components/ReusableChart";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { DialogComponent } from "@/components/DialogComponent";
 
 export function Suppliers() {
   const { data: chartData, loading } = useFirestoreCollection<{ status: string; active: boolean; value: number; name: string }>("suppliers/chartSupplier/items");
@@ -121,8 +122,23 @@ export function Suppliers() {
                   <img src={delivery} />
                 </picture>
               </CardContent>
-              <CardFooter className="w-full">
-                <Button className="w-full h-[40px]">Register Supplier</Button>
+              <CardFooter className="w-auto">
+                <DialogComponent
+                  title="tes"
+                  button
+                  description="edsd"
+                  full
+                  height="40px"
+                  trigger= "Register Supplier"
+                >
+                  {(onClose) => (
+                    <div>
+                      <p>Provide the supplier details here.</p>
+                      <Button onClick={onClose}>Close</Button>
+                    </div>
+                  )}
+                </DialogComponent>
+                
               </CardFooter>
             </Card>
           </div>

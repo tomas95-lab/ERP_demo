@@ -7,20 +7,26 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog"
   import { ReactNode, useState } from "react"
+import { Button } from "./ui/button";
   
   interface DialogComponentProps {
-    trigger: ReactNode;
+    trigger: string;
     title: string;
     description: string;
+    button: boolean,
+    full?: boolean
+    height?: string
     children: (onClose: () => void) => ReactNode;
   }
   
-  export function DialogComponent({ trigger, title, description, children }: DialogComponentProps) {
+  export function DialogComponent({ trigger, title, description, children, button, full, height }: DialogComponentProps) {
     const [open, setOpen] = useState(false);
   
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger onClick={() => setOpen(true)}>{trigger}</DialogTrigger>
+        <DialogTrigger className= {full ? "w-100" : ""} onClick={() => setOpen(true)}>
+          {button ?  <Button className={full ? `w-full h-[${height}]` : " "}> {trigger}</Button> : trigger}
+        </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>

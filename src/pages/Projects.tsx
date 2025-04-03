@@ -9,6 +9,7 @@ import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 
 export function Projects() {
   const {data: projects, loading:loadingProjects} = useFirestoreCollection<{ status: string }>("projects")
+  console.log(projects)
 
   return (
    
@@ -22,7 +23,8 @@ export function Projects() {
         </div>
         <div className="flex gap-4 items-center sm:mt-0 mt-2">
           <DialogComponent
-            trigger={<Button>Create a new Project</Button>}
+            trigger="Create a new Project"
+            button
             title="Create a new Project"
             description="Modify project details"
           >

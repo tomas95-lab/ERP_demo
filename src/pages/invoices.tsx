@@ -83,11 +83,8 @@ const chartData = groupInvoicesByMonthAndStatus(typedInvoiceData)
         <DialogComponent
           title="Create a new Invoice"
           description="Add invoice details"
-          trigger={
-            <Button asChild>
-              <span>Create a new Invoice</span>
-            </Button>
-          }
+          trigger= "Create a new Invoice"
+          button
         >
           {(onClose) => (
             <InvoiceForm projectsData={projectsData} onClose={onClose} />
