@@ -96,7 +96,7 @@ export function ReusableChart({
       {type === "pie" && (
         <PieChart>
         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Pie data={data}  dataKey="value" nameKey="name"  innerRadius={60} strokeWidth={5}>
+            <Pie data={data} dataKey={dataKey || "defaultKey"} nameKey={xKey} innerRadius={60} strokeWidth={5}>
               <Label
                 content={({ viewBox }) => {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {

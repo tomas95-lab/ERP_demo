@@ -47,8 +47,6 @@ export function Invoices() {
     return item.status.toLowerCase() === statusFilter
   }
 
-
-
 function groupInvoicesByMonthAndStatus(invoices: Invoice[]) {
   const result: Record<string, { [status: string]: number }> = {}
 

@@ -1,151 +1,128 @@
-import React from "react";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "@/firebaseConfig";
-import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-
+import React from "react"
+import { collection, addDoc, getDocs, query, where } from "firebase/firestore"
+import { db } from "@/firebaseConfig"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-export default function CreateSupplier({ onSuccess }: { onSuccess: () => void }) {
-    const [startDate, setStartDate] = React.useState<Date>();
-    const [endDate, setEndDate] = React.useState<Date>();
-    const [name, setName] = React.useState("");
-    const [supervisor, setSupervisor] = React.useState("");
-    const [status, setStatus] = React.useState("");
-    const [budget, setBudget] = React.useState("");
-  
-    const handleCreateProject = async (e: React.FormEvent) => {
-      e.preventDefault();
-  
-      if (!name || !supervisor || !status || !startDate || !endDate || !budget) {
-        alert("Please fill in all fields");
-        return;
-      }
-      onSuccess() 
+} from "@/components/ui/select"
 
-      await addDoc(collection(db, "projects"), {
-        name,
-        supervisor,
-        status,
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
-        budget: Number(budget),
-        createdAt: new Date().toISOString(),
-      });
-  
-      alert("Project created!");
-      setName("");
-      setSupervisor("");
-      setStatus("");
-      setStartDate(undefined);
-      setEndDate(undefined);
-      setBudget("");
-    };
-    return(
-        <form onSubmit={handleCreateProject}>
-        <div className="grid w-full items-center gap-4 grid-cols-2">
-          <div>
-            <div className="flex flex-col space-y-1.5 gap-2 mt-2">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name of your project" />
-            </div>
-            <div className="flex flex-col space-y-1.5 gap-2 mt-2">
-              <Label htmlFor="supervisor">Supervisor</Label>
-              <Input id="supervisor" value={supervisor} onChange={(e) => setSupervisor(e.target.value)} placeholder="Supervisor of your project" />
-            </div>
-          </div>
-          <div>
-            <div className="flex flex-col space-y-1.5 gap-2 mt-2">
-                <Label htmlFor="budget">Budget</Label>
-                <Input id="budget" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="Budget of your project" />
-            </div>
-            <div className="flex flex-col space-y-1.5 gap-2 mt-2">
-              <Label htmlFor="status">Status</Label>
-              <Select value={status} onValueChange={(value) => setStatus(value)}>
-                <SelectTrigger className="w-[100%]">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Active">Active</SelectItem>
-                  <SelectItem value="Pending">Pending</SelectItem>
-                  <SelectItem value="Completed">Completed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div className="flex gap-4 col-span-2">
-            <div className="flex flex-col space-y-1.5 gap-2 mt-2 w-full">
-              <Label>Start Date</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !startDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon />
-                    {startDate ? format(startDate, "PPP") : <span>Pick a start date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={startDate}
-                    onSelect={setStartDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
+export default function CreateSupplierForm({ onClose }: { onClose: () => void }) {
+  const [name, setName] = React.useState("")
+  const [contact, setContact] = React.useState("")
+  const [email, setEmail] = React.useState("")
+  const [phone, setPhone] = React.useState("")
+  const [address, setAddress] = React.useState("")
+  const [category, setCategory] = React.useState("")
+  const [cuit, setCuit] = React.useState("")
+  const [status, setStatus] = React.useState("")
+  const [notes, setNotes] = React.useState("")
+  const [loading, setLoading] = React.useState(false)
 
-            <div className="flex flex-col space-y-1.5 gap-2 mt-2 w-full">
-              <Label>End Date</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !endDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon />
-                    {endDate ? format(endDate, "PPP") : <span>Pick an end date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={endDate}
-                    onSelect={setEndDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-          </div>
-          <div className="col-span-2">
-            <Button type="submit" className="w-full mt-4">Create Project</Button>
-          </div>
-        </div>
-      </form>
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!name || !contact || !email || !phone || !address || !category || !cuit || !status) {
+      alert("Please fill in all required fields.")
+      return
+    }
+
+    setLoading(true)
+
+    // Verificamos duplicados por nombre o CUIT
+    const suppliersRef = collection(db, "suppliers")
+    const duplicateQuery = query(
+      suppliersRef,
+      where("cuit", "==", cuit)
     )
-  
+    const duplicateQueryName = query(
+      suppliersRef,
+      where("name", "==", name)
+    )
+    const snapshot = await getDocs(duplicateQuery) 
+    
+    if (!snapshot.empty) {
+      alert("A supplier with this CUIT already exists.")
+      setLoading(false)
+      return
+    }
+
+    await addDoc(suppliersRef, {
+      name,
+      contact,
+      email,
+      phone,
+      address,
+      category,
+      cuit,
+      status,
+      notes,
+      createdAt: new Date().toISOString(),
+    })
+
+    setLoading(false)
+    onClose()
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="grid w-full items-center gap-4">
+        <div className="flex flex-col space-y-1.5 mt-2">
+          <Label>Name</Label>
+          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Company Name" />
+        </div>
+        <div className="flex flex-col space-y-1.5 mt-2">
+          <Label>Contact Person</Label>
+          <Input value={contact} onChange={(e) => setContact(e.target.value)} placeholder="Contact Name" />
+        </div>
+        <div className="flex flex-col space-y-1.5 mt-2">
+          <Label>Email</Label>
+          <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+        </div>
+        <div className="flex flex-col space-y-1.5 mt-2">
+          <Label>Phone</Label>
+          <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone Number" />
+        </div>
+        <div className="flex flex-col space-y-1.5 mt-2 col-span-2">
+          <Label>Address</Label>
+          <Input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Supplier Address" />
+        </div>
+        <div className="flex flex-col space-y-1.5 mt-2">
+          <Label>Category</Label>
+          <Input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="E.g. Concrete, Electrical" />
+        </div>
+        <div className="flex flex-col space-y-1.5 mt-2">
+          <Label>CUIT</Label>
+          <Input value={cuit} onChange={(e) => setCuit(e.target.value)} placeholder="CUIT Number" />
+        </div>
+        <div className="flex flex-col space-y-1.5 mt-2 col-span-2">
+          <Label>Status</Label>
+          <Select value={status} onValueChange={setStatus}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent className="w-full">
+              <SelectItem value="Active">Active</SelectItem>
+              <SelectItem value="Inactive">Inactive</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-col space-y-1.5 mt-2 col-span-2">
+          <Label>Notes</Label>
+          <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Additional notes..." />
+        </div>
+        <div className="col-span-2">
+          <Button type="submit" className="w-full mt-4" disabled={loading}>
+            {loading ? "Saving..." : "Register Supplier"}
+          </Button>
+        </div>
+      </div>
+    </form>
+  )
 }
