@@ -34,13 +34,11 @@ export function Suppliers() {
     Dec: "#f43f5e",
   };
   
-  const { data: chartData = [], loading: loadingChart } = useFirestoreCollection("suppliers/chartSupplier/items")
   const { data: purchaseOrders = [], loading: loadingPurchase } = useFirestoreCollection("orders/purchaseOrders/items")
   console.log(purchaseOrders)
-  const { data: totalOrdersData = [], loading: loadingOrders } = useFirestoreCollection<{ month: string; orders: number }>("orders/totalOrders/items")
   const { data: suppliersData = [], loading: loadingSuppliers } = useFirestoreCollection<{ name: string; value: number; status: string }>("suppliers")
 
-  const loading = loadingChart || loadingSuppliers || loadingOrders
+  const loading =  loadingSuppliers 
 
   const totalSuppliers = suppliersData.length
   const activeSuppliers = suppliersData.filter(s => s.status === "Active").length
