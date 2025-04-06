@@ -15,8 +15,28 @@ import {
 import { DialogComponent } from "@/components/DialogComponent"
 import CreateSupplier from "@/components/createSupplierForm"
 
+import { format } from "date-fns"
+
+
 export function Suppliers() {
+  const monthColors: Record<string, string> = {
+    Jan: "#3b82f6",
+    Feb: "#10b981",
+    Mar: "#f59e0b",
+    Apr: "#8b5cf6",
+    May: "#ec4899",
+    Jun: "#f87171",
+    Jul: "#14b8a6",
+    Aug: "#eab308",
+    Sep: "#0ea5e9",
+    Oct: "#6366f1",
+    Nov: "#22c55e",
+    Dec: "#f43f5e",
+  };
+  
   const { data: chartData = [], loading: loadingChart } = useFirestoreCollection("suppliers/chartSupplier/items")
+  const { data: purchaseOrders = [], loading: loadingPurchase } = useFirestoreCollection("orders/purchaseOrders/items")
+  console.log(purchaseOrders)
   const { data: totalOrdersData = [], loading: loadingOrders } = useFirestoreCollection<{ month: string; orders: number }>("orders/totalOrders/items")
   const { data: suppliersData = [], loading: loadingSuppliers } = useFirestoreCollection<{ name: string; value: number; status: string }>("suppliers")
 
@@ -32,8 +52,18 @@ export function Suppliers() {
 
   const chartConfig = {} satisfies Record<string, { label: string; color?: string }>
 
-  const totalOrders = totalOrdersData.reduce((acc, curr) => acc + curr.orders, 0)
-
+  const ordersByMonth = purchaseOrders.reduce((acc: Record<string, number>, order: any) => {
+    const month = format(new Date(order.date), "MMM")
+    acc[month] = (acc[month] || 0) + 1
+    return acc
+  }, {})
+  
+  const chartOrdersData = Object.entries(ordersByMonth).map(([month, orders]) => ({
+    month,
+    orders,
+    fill: monthColors[month] || "#ccc",
+  }))
+  
   return (
     <div className="flex flex-col gap-2">
       <h1 className="text-xl font-bold">Supplier Overview</h1>
@@ -82,15 +112,16 @@ export function Suppliers() {
             </CardComponent>
 
             <ReusableChart
-              data={totalOrdersData}
+              data={chartOrdersData}
               config={chartConfig}
               type="pie"
               dataKey="orders"
               xKey="month"
               title="Monthly Order Distribution"
-              total={totalOrders}
+              total={purchaseOrders.length}
               TotalDescriptionPie="Total Orders"
             />
+
 
             <Card>
               <CardHeader>

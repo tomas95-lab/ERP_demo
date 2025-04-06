@@ -10,9 +10,8 @@ import { CreateOrderForm } from "@/components/CreateOrder"
 
 export function Orders() {
   const { data: purchaseOrders = [], loading: loadingPurchase } = useFirestoreCollection("orders/purchaseOrders/items")
-  const { data: itemsOverTimeData = [], loading: loadingItems } = useFirestoreCollection("orders/itemsOverTime/items")
 
-  const loading = loadingPurchase || loadingItems
+  const loading = loadingPurchase 
 
   const monthlyTotals = purchaseOrders.reduce((acc: Record<string, number>, order: any) => {
     const month = format(new Date(order.date), "MMM")
