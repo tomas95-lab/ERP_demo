@@ -1,73 +1,64 @@
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { useEffect, useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
+import { doc, getDoc, setDoc } from "firebase/firestore"
+import { db } from "@/firebaseConfig"
 
-export function GeneralSettings() {
+export const GeneralSettings = () => {
   const [formData, setFormData] = useState({
-    company: "",
-    industry: "",
-    taxid: "",
-    phone: "",
-    email: "",
-    web: "",
-    city: "",
-    state: "",
-    zip: "",
-    country: "",
-    currency: "",
-    time: "",
-    defaultProject: "",
-    defaultCategory: "",
-    defaultPaymentTerms: "",
-    language: "",
-    notifications: "",
-    autosave: "",
-  });
+    company: "", industry: "", taxid: "", phone: "", email: "", web: "",
+    city: "", state: "", zip: "", country: "", currency: "", time: "",
+    defaultProject: "", defaultCategory: "", defaultPaymentTerms: "",
+    language: "", notifications: "", autosave: "",
+  })
 
   const [errors, setErrors] = useState({
     email: false,
     zip: false,
     phone: false,
-  });
+  })
 
+  // Load from Firestore
   useEffect(() => {
-    const saved = localStorage.getItem("general-settings");
-    if (saved) {
-      setFormData(JSON.parse(saved));
+    const fetchSettings = async () => {
+      const docRef = doc(db, "settings", "general")
+      const docSnap = await getDoc(docRef)
+      if (docSnap.exists()) {
+        setFormData(docSnap.data() as typeof formData)
+      }
     }
-  }, []);
+    fetchSettings()
+  }, [])
 
   const validate = () => {
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    const zipRegex = /^\d{4,10}$/;
-    const phoneRegex = /^\+?\d{6,15}$/;
-
+    const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/
+    const zipRegex = /^\d{4,10}$/
+    const phoneRegex = /^\+?\d{6,15}$/
     setErrors({
       email: !emailRegex.test(formData.email),
       zip: !zipRegex.test(formData.zip),
       phone: !phoneRegex.test(formData.phone),
-    });
-
+    })
     return emailRegex.test(formData.email) &&
       zipRegex.test(formData.zip) &&
-      phoneRegex.test(formData.phone);
-  };
+      phoneRegex.test(formData.phone)
+  }
 
   const handleChange = (field: string, value: string) => {
-    setFormData({ ...formData, [field]: value });
-  };
+    setFormData({ ...formData, [field]: value })
+  }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
     if (validate()) {
-      localStorage.setItem("general-settings", JSON.stringify(formData));
-      alert("Settings saved!");
+      await setDoc(doc(db, "settings", "general"), formData)
+      alert("Settings saved to Firestore!")
     }
-  };
+  }
 
   return (
     <div className="flex flex-col gap-2">
