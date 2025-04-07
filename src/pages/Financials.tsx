@@ -5,6 +5,9 @@ import { columns } from "@/components/columns_financials"
 import { ReusableChart } from "@/components/ReusableChart"
 import { CalendarDays, CircleDollarSign, Clock, Building2 } from "lucide-react"
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection"
+import { Button } from "@/components/ui/button"
+import ProjectView from "@/components/ProjectView"
+import { format } from "date-fns"
 
 interface Expense {
   category: string
@@ -17,6 +20,9 @@ interface Project {
   name: string
   budget: number
   status: string
+  startDate: string
+  endDate: string
+  supervisor: string
 }
 
 interface ChartConfig {
@@ -72,15 +78,21 @@ export function Financials() {
       budget: p.budget,
       spent: totalSpent,
       remaining: p.budget - totalSpent,
+      startDate: p.startDate,
+      endDate: p.endDate,
+      supervisor: p.supervisor
     }
   })
 
+  console.table(enrichedProjectTotals)
   const topProject = enrichedProjectTotals.sort((a, b) => b.spent - a.spent)[0] || {
     name: "No data",
     spent: 0,
     budget: 0,
     remaining: 0,
   }
+
+  console.log(topProject)
 
   const pendingAmount = 35200
 
@@ -123,19 +135,26 @@ export function Financials() {
             <CardComponent
               title="Top Project"
               description="Project with the highest spending so far."
-              action="Open Project"
-              full
+              action="false"
+              dialog={true}
+              dialogTitle={`Top Project - ${topProject.name}`}
+              dialogTrigger={<Button className="w-full h-[40px]">View Details</Button>}
+              dialogChildren={(onClose) => (
+                  <ProjectView project={topProject}></ProjectView>
+              )}
             >
               <div className="flex items-center gap-4">
                 <div className="bg-muted rounded-full p-2">
-                  <Building2 size={24} className="text-orange-600" />
+                  <Building2 size={24} color="orange">
+                  </Building2>
                 </div>
                 <div>
                   <div className="text-lg font-bold text-foreground">{topProject.name}</div>
-                  <div className="text-s text-muted-foreground">${topProject.budget.toLocaleString()}</div>
+                  <div className="text-s text-muted-foreground">${topProject.budget?.toLocaleString()}</div>
                 </div>
               </div>
             </CardComponent>
+
 
             <CardComponent
               title="Pending Expenses"

@@ -7,23 +7,29 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { ReactNode } from 'react';
-import { Link } from "react-router-dom";
+import { ReactNode } from "react"
+import { Link } from "react-router-dom"
+import { DialogComponent } from "./DialogComponent"
 
 interface CardComponentProps {
-  title: string;
-  description: string;
-  action: string;
-  children: ReactNode;
-  full: boolean;
-  path?: string;
-  center?: boolean;
-  onActionClick?: () => void;
-  variant?: 'default' | 'destructive' | 'outline' | 'green' | 'yellow' | 'red';
-  active?: boolean;
+  title: string
+  description: string
+  action: string
+  children: ReactNode
+  full: boolean
+  path?: string
+  center?: boolean
+  onActionClick?: () => void
+  variant?: "default" | "destructive" | "outline" | "green" | "yellow" | "red"
+  active?: boolean
+  dialog?: boolean
+  dialogTrigger?: ReactNode
+  dialogTitle?: string
+  dialogDescription?: string
+  dialogChildren?: ((onClose: () => void) => ReactNode) | ReactNode
 }
 
-export default function CardComponent ({
+export default function CardComponent({
   title,
   description,
   action,
@@ -32,52 +38,65 @@ export default function CardComponent ({
   path,
   center,
   onActionClick,
-  variant = 'default',
+  variant = "default",
   active = false,
+  dialog,
+  dialogTrigger,
+  dialogTitle,
+  dialogDescription,
+  dialogChildren,
 }: CardComponentProps) {
-
   const variantClassMap: Record<string, string> = {
-    green: 'bg-green-600 hover:bg-green-700 text-white',
-    yellow: 'bg-yellow-500 hover:bg-yellow-600 text-white',
-    red: 'bg-red-800 hover:bg-red-700 text-white',
-    outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-    default: 'bg-primary text-white hover:bg-primary/90',
-    destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+    green: "bg-green-600 hover:bg-green-700 text-white",
+    yellow: "bg-yellow-500 hover:bg-yellow-600 text-white",
+    red: "bg-red-800 hover:bg-red-700 text-white",
+    outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+    default: "bg-primary text-white hover:bg-primary/90",
+    destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
   }
 
   const ringClassMap: Record<string, string> = {
-    green: 'ring-green-300',
-    yellow: 'ring-yellow-300',
-    red: 'ring-red-800',
-    default: 'ring-primary',
-    destructive: 'ring-destructive',
-    outline: 'ring-border',
+    green: "ring-green-300",
+    yellow: "ring-yellow-300",
+    red: "ring-red-800",
+    default: "ring-primary",
+    destructive: "ring-destructive",
+    outline: "ring-border",
   }
 
   const variantClasses = variantClassMap[variant]
-  const ringClass = active ? `ring-2 ring-offset-2 ${ringClassMap[variant] ?? 'ring-primary'}` : ''
+  const ringClass = active ? `ring-2 ring-offset-2 ${ringClassMap[variant] ?? "ring-primary"}` : ""
 
   return (
     <Card className="justify-between h-full">
       <CardHeader>
-        <CardTitle className={`${center ? 'text-center' : ''}`}>{title}</CardTitle>
+        <CardTitle className={`${center ? "text-center" : ""}`}>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent>
-        {children}
-      </CardContent>
+      <CardContent>{children}</CardContent>
       <CardFooter className="flex justify-end">
         {path ? (
-          <Link className={`${full ? 'w-full' : ''} h-[40px]`} to={path}>
-            <Button className={`${full ? 'w-full' : ''} h-[40px]`}>{action}</Button>
+          <Link className={`${full ? "w-full" : ""} h-[40px]`} to={path}>
+            <Button className={`${full ? "w-full" : ""} h-[40px]`}>{action}</Button>
           </Link>
         ) : action === "false" ? null : (
           <Button
-            className={`${variantClasses} ${ringClass} ${full ? 'w-full' : ''} h-[40px]`}
+            className={`${variantClasses} ${ringClass} ${full ? "w-full" : ""} h-[40px]`}
             onClick={onActionClick}
           >
             {action}
           </Button>
+        )}
+
+        {dialog && (
+          <DialogComponent
+            full
+            trigger={dialogTrigger ?? <Button className="w-full">Open</Button>}
+            description={dialogDescription || ""}
+            title={dialogTitle || ""}
+          >
+            {typeof dialogChildren === "function" ? dialogChildren : () => dialogChildren}
+          </DialogComponent>
         )}
       </CardFooter>
     </Card>

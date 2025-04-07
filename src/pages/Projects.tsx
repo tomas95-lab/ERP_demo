@@ -9,8 +9,7 @@ import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 
 export function Projects() {
   const {data: projects, loading:loadingProjects} = useFirestoreCollection<{ status: string }>("projects")
-  console.log(projects)
-
+  
   return (
    
     <div className="flex flex-col gap-2">

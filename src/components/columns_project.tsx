@@ -1,9 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "./ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DialogComponent } from "./DialogComponent";
 import { EditProjectForm } from "./EditProjectForm";
-import { Pencil } from "lucide-react";
+import { Eye, Pencil } from "lucide-react";
+import { on } from "events";
+import ProjectView from "./ProjectView";
 
 export type ProjectData = {
   id: string;
@@ -73,18 +74,30 @@ export const columns: ColumnDef<ProjectData>[] = [
     cell: ({ row }) => {
       const project = row.original;
       return (
-        <DialogComponent
-        trigger={<Pencil className="cursor-pointer" size={18}></Pencil>}
-        title={`Edit ${row.getValue("name")}`}
-        description="Modify project details"
-      >
-        {(onClose) => (
-          <EditProjectForm
-            project={row.original}
-            onSuccess={onClose}
-          />
-        )}
-      </DialogComponent>
+        <div className="flex items-center gap-2">
+          <DialogComponent
+          trigger={<Pencil className="cursor-pointer" size={18}></Pencil>}
+          title={`Edit ${row.getValue("name")}`}
+          description="Modify project details"
+        >
+          {(onClose) => (
+            <EditProjectForm
+              project={row.original}
+              onSuccess={onClose}
+            />
+          )}
+          </DialogComponent>
+          <DialogComponent
+            trigger={<Eye className="cursor-pointer" size={18} />}
+            title={`View ${row.getValue("name")}`}
+            description="View project details"
+          >
+            {onClose => (
+              <ProjectView project={project}  />
+            )}
+          </DialogComponent>
+
+        </div>
       );
     },
   },
