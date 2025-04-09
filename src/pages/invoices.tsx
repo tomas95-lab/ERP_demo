@@ -72,12 +72,14 @@ const chartData = groupInvoicesByMonthAndStatus(typedInvoiceData)
 
 
   return (
-    <>
-      <div>
-        <h1 className="text-xl font-bold">Invoices & Payments</h1>
-        <p className="text-sm text-muted-foreground mb-4">
-          Monitor and manage invoices and payments across all active and completed projects.
-        </p>
+    <div className='flex flex-col gap-2'>
+      <div className='flex justify-between items-center'>
+        <div>
+          <h1 className="text-xl font-bold">Invoices & Payments</h1>
+          <p className="text-sm text-muted-foreground mb-4">
+            Monitor and manage invoices and payments across all active and completed projects.
+          </p>
+        </div>
         <DialogComponent
           title="Create a new Invoice"
           description="Add invoice details"
@@ -89,7 +91,7 @@ const chartData = groupInvoicesByMonthAndStatus(typedInvoiceData)
           )}
         </DialogComponent>
 
-        </div>
+      </div>
 
       {(dataLoading || barLoading) ? (
         <div className="text-center text-muted-foreground">Loading Invoices...</div>
@@ -191,6 +193,6 @@ const chartData = groupInvoicesByMonthAndStatus(typedInvoiceData)
           </div>
         </div>
       )}
-    </>
+    </div>
   )
 }
