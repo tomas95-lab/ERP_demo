@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { toast } from "sonner";
 
 export default function CreateSupplierForm({ onClose }: { onClose: () => void }) {
   const [name, setName] = React.useState("")
@@ -29,26 +30,26 @@ export default function CreateSupplierForm({ onClose }: { onClose: () => void })
     e.preventDefault()
 
     if (!name || !contact || !email || !phone || !address || !category || !cuit || !status) {
-      alert("Please fill in all required fields.")
+      toast.error("Error Registering The supplier", {
+        description: "Please fill in all required fields.",
+      });
       return
     }
 
     setLoading(true)
 
-    // Verificamos duplicados por nombre o CUIT
     const suppliersRef = collection(db, "suppliers")
     const duplicateQuery = query(
       suppliersRef,
       where("cuit", "==", cuit)
     )
-    const duplicateQueryName = query(
-      suppliersRef,
-      where("name", "==", name)
-    )
+
     const snapshot = await getDocs(duplicateQuery) 
     
     if (!snapshot.empty) {
-      alert("A supplier with this CUIT already exists.")
+      toast.error("Error Registering The supplier", {
+        description: "A supplier with this CUIT already exists.",
+      });
       setLoading(false)
       return
     }

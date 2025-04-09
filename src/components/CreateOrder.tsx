@@ -53,7 +53,7 @@ export function CreateOrderForm({ onClose }: { onClose: () => void }) {
         <Label>Supplier</Label>
         <Select value={form.supplier} onValueChange={(value) => handleChange("supplier", value)}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select supplier" />
+            <SelectValue placeholder="Select A supplier" />
           </SelectTrigger>
           <SelectContent>
             {suppliersData.map((supplier) => (

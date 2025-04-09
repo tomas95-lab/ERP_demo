@@ -3,12 +3,13 @@ import { DialogComponent } from "@/components/DialogComponent";
 import {columns } from "@/components/columns_project"; // Import columns from columns.tsx
 import CreateProjectForm from "@/components/createProjectForm";
 import { Button } from "@/components/ui/button";
-
+import {useState} from "react"
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 
 
 export function Projects() {
   const {data: projects, loading:loadingProjects} = useFirestoreCollection<{ status: string }>("projects")
+  const [formLoading, setFormLoading] = useState(false)
   
   return (
    
@@ -25,10 +26,10 @@ export function Projects() {
             trigger="Create a new Project"
             button
             title="Create a new Project"
-            description="Modify project details"
+            description=""
           >
             {(onClose) => (
-              <CreateProjectForm onSuccess={onClose}></CreateProjectForm>
+              <CreateProjectForm onSuccess={onClose} setFormLoading={setFormLoading}></CreateProjectForm>
             )}
           </DialogComponent>
           <Button>Export CSV</Button>

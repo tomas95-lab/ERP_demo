@@ -3,8 +3,9 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { doc, updateDoc } from "firebase/firestore"
 import { db } from "@/firebaseConfig"
-import { useState } from "react"
+import { use, useState } from "react"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { toast } from "sonner"
 
 export function EditProjectForm({
   project,
@@ -17,18 +18,27 @@ export function EditProjectForm({
   const [supervisor, setSupervisor] = useState(project.supervisor)
   const [status, setStatus] = useState(project.status)
   const [budget, setBudget] = useState(project.budget)
+  const [loading, setLoading] = useState(false)
 
   const handleUpdate = async () => {
-    const ref = doc(db, "projects", project.firestoreId)
-    onSuccess() 
+    try {
+      const ref = doc(db, "projects", project.firestoreId)
+      setLoading(true)
+      await updateDoc(ref, {
+        name,
+        supervisor,
+        status,
+        budget: Number(budget),
+      })
+      toast.success(`The project "${name}" was edited successfully`)
+      onSuccess()
+    } catch (error) {
+      toast.error("Error Editing The project", {
+        description: String(error),
+      });
+    }
 
-    await updateDoc(ref, {
-      name,
-      supervisor,
-      status,
-      budget: Number(budget),
-    })
-
+    setLoading(false)
   }
 
   return (
@@ -56,7 +66,7 @@ export function EditProjectForm({
           </SelectContent>
         </Select>
       </div>
-      <Button onClick={handleUpdate} className="w-full">Save Changes</Button>
+      <Button onClick={handleUpdate} disabled = {loading} className="w-full">{loading ? "Saving..." : "Save Changes"}</Button>
     </div>
   )
 }

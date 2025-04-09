@@ -20,13 +20,17 @@ interface CardComponentProps {
   path?: string
   center?: boolean
   onActionClick?: () => void
-  variant?: "default" | "destructive" | "outline" | "green" | "yellow" | "red"
+  variant?: "default" | "destructive" | "outline" | "green" | "yellow" | "red" | "loading"
   active?: boolean
   dialog?: boolean
   dialogTrigger?: ReactNode
   dialogTitle?: string
   dialogDescription?: string
   dialogChildren?: ((onClose: () => void) => ReactNode) | ReactNode
+  form?:boolean
+  formId?:string
+  formAction?:string
+  formLoading?:boolean
 }
 
 export default function CardComponent({
@@ -45,6 +49,10 @@ export default function CardComponent({
   dialogTitle,
   dialogDescription,
   dialogChildren,
+  form = false,
+  formAction,
+  formId,
+  formLoading = false,
 }: CardComponentProps) {
   const variantClassMap: Record<string, string> = {
     green: "bg-green-600 hover:bg-green-700 text-white",
@@ -91,13 +99,24 @@ export default function CardComponent({
         {dialog && (
           <DialogComponent
             full
-            trigger={dialogTrigger ?? <Button className="w-full">Open</Button>}
+            trigger={dialogTrigger ?? <Button className="w-full h-[40px] cursor-pointer">Open</Button>}
             description={dialogDescription || ""}
             title={dialogTitle || ""}
           >
             {typeof dialogChildren === "function" ? dialogChildren : () => dialogChildren}
           </DialogComponent>
         )}
+
+        {form ? 
+        <Button
+        form={formId}
+        type="submit"
+        className={`${variantClasses} ${ringClass} ${full ? "w-full" : ""} h-[40px]`}
+        disabled = {formLoading}
+        >
+          {formLoading ? "Loading..." : formAction}
+        </Button>
+        : "" }
       </CardFooter>
     </Card>
   )

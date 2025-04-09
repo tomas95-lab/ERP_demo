@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import { Orders } from "./pages/Orders";
 import { Invoices } from "./pages/invoices";
 import { TotalSupplier } from "./pages/TotalSupplier";
+import Expenses from "./pages/Expenses";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/projects/all" element={<Projects />} />
           <Route path="/financials/expenses" element={<Financials />} />
+          <Route path="/financials/expenses/all/table" element={<Expenses />} />
           <Route path="/financials/invoices" element={<Invoices />} />
           <Route path="/suppliers/all" element={<Suppliers />} />
           <Route path="/suppliers/all/table" element={<TotalSupplier />} />
