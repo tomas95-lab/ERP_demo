@@ -88,22 +88,6 @@ export default function CreateExpenseForm({ onClose }: { onClose: () => void }) 
         />
       </div>
 
-      <div>
-        <Label>Amount</Label>
-        <Input
-          type="number"
-          className="mt-2 block w-full"
-          placeholder="$"
-          value={amount || ""}
-          onChange={(e) => setAmount(Number(e.target.value))}
-        />
-        {selectedProject && (
-          <p className="text-xs text-muted-foreground mt-1">
-            Remaining budget: ${remainingBudget?.toLocaleString()}
-          </p>
-        )}
-      </div>
-
       <div className="w-full">
         <Label>Project</Label>
         <Select value={project} onValueChange={(value) => setProject(value)}>
@@ -118,6 +102,22 @@ export default function CreateExpenseForm({ onClose }: { onClose: () => void }) 
             ))}
           </SelectContent>
         </Select>
+      </div>
+      
+      <div>
+        <Label>Amount</Label>
+        <Input
+          type="number"
+          className="mt-2 block w-full"
+          placeholder="$"
+          value={amount || ""}
+          onChange={(e) => setAmount(Number(e.target.value))}
+        />
+        {selectedProject && (
+          <p className="text-xs text-muted-foreground mt-1">
+            Remaining budget: ${remainingBudget?.toLocaleString()}
+          </p>
+        )}
       </div>
 
       <div>

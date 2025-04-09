@@ -30,11 +30,11 @@ import {
 
 
 export default function SideBarComponent({ children }: { children: React.ReactNode }) {
-  const location = useLocation() // Detecta la URL actual
-  const url = location.pathname // Guarda la URL actual en una variable
-  const urlArray = url.split("/") // Divide la URL en un array    
-  const urlParts = urlArray.slice(1) // Obtiene las partes de la URL
-  const urlPartsArray = urlParts.map((part) => part.charAt(0).toUpperCase() + part.slice(1)) // Convierte las partes de la URL en un array 
+  const location = useLocation() 
+  const url = location.pathname 
+  const urlArray = url.split("/") 
+  const urlParts = urlArray.slice(1) 
+  const urlPartsArray = urlParts.map((part) => part.charAt(0).toUpperCase() + part.slice(1)) 
 
   const navigate = useNavigate()
 

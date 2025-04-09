@@ -253,6 +253,7 @@ export function Financials() {
               description="Expenses awaiting approval or processing."
               action="Review Now"
               full
+              path="/financials/expenses/all/table?status=pending"
             >
               <div className="flex items-center gap-4">
                 <div className="bg-muted rounded-full p-2">
