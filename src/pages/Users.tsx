@@ -26,7 +26,7 @@ export function Users() {
         </div>
         <div>
           <DialogComponent
-            trigger={<Button variant="outline">Create User</Button>}
+            trigger={<Button>Create User</Button>}
             title="Create User"
             description="Add a new user to the system."
           >

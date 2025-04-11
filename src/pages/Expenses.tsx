@@ -44,7 +44,7 @@ export default function Expenses(){
                 <div className="space-y-2">
                     <h1 className="text-xl font-bold"> {statusFilter == "pending" ? "Pending" : "All"} expenses</h1>
                     <p className="text-sm text-muted-foreground mb-4">
-                    Monitor and manage expenses across all active and completed projects.
+                        Monitor and manage expenses across all active and completed projects.
                     </p>
                 </div>
                 <div className="flex gap-4 items-center sm:mt-0 mt-2">
