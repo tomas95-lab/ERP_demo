@@ -99,6 +99,7 @@ export default function CardComponent({
         {dialog && (
           <DialogComponent
             full
+            button={false}
             trigger={dialogTrigger ?? <Button className="w-full h-[40px] cursor-pointer">Open</Button>}
             description={dialogDescription || ""}
             title={dialogTitle || ""}

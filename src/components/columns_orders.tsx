@@ -71,6 +71,7 @@ export const columns: ColumnDef<OrdersData>[] = [
             trigger={<Pencil className="cursor-pointer" size={18} />}
             title={`Order Details - ${order.supplier}`}
             description="Review full order information"
+            button={false}
           >
             {onclose => (
               <EditOrderForm

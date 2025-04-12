@@ -84,15 +84,14 @@ export default function Dashboard() {
             <Badge className="bg-green-800">Active</Badge>
           </div>
         </CardComponent>
-
         <ReusableChart
-          type="bar"
-          data={barData}
-          config={barConfig}
-          title="Monthly Project Costs"
-          xKey="month"
-          yKeys={["materials", "labor"]}
-        />
+            type="bar"
+            data={barData}
+            config={barConfig}
+            title="Monthly Project Costs"
+            xKey="month"
+            yKeys={["materials", "labor"]}
+          />
       </div>
 
       <div className="flex-1 rounded-xl bg-white shadow p-4 mt-4">

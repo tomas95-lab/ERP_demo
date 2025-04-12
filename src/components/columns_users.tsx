@@ -55,6 +55,7 @@ export const columns: ColumnDef<UsersData>[] = [
           trigger={<Pencil className="cursor-pointer" size={18} />}
           title={`Edit ${user.name}`}
           description="Edit the user"
+          button={false}
         >
           {(onClose) => (
             <EditUserForm user={user} onClose={onClose} />

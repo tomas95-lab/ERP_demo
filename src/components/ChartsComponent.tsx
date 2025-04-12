@@ -55,44 +55,45 @@ export function ReusableChart({
         config={config}
         className="h-full w-full border-2 rounded-xl bg-card text-card-foreground flex flex-col gap-6 py-6 shadow-sm"
       >
-        {/* Título opcional */}
-        {title && <h2 className="mx-auto text-lg font-bold">{title}</h2>}
-  
-        {type === "bar" && (
-          <BarChart width={width} height={height} data={data} accessibilityLayer>
-            {showGrid && <CartesianGrid vertical={false} />}
-            <XAxis
-              dataKey={xKey}
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <YAxis />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            {yKeys.map((key) => (
-              <Bar
-                key={key}
-                dataKey={key}
-                fill={`var(--color-${key})`}
-                radius={4}
+        <>
+          {title && <h2 className="mx-auto text-lg font-bold">{title}</h2>}
+
+          {type === "bar" && (
+            <BarChart width={width} height={height} data={data} accessibilityLayer>
+              {showGrid && <CartesianGrid vertical={false} />}
+              <XAxis
+                dataKey={xKey}
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) => value.slice(0, 3)}
               />
-            ))}
-          </BarChart>
-        )}
-  
-        {type === "pie" && (
-          <PieChart width={width} height={height}>
-            <Pie
-              data={data}
-              dataKey={dataKeyPie}
-              nameKey={nameKeyPie}
-              outerRadius={80}
-              fill="#60a5fa"
-            />
-            <Tooltip />
-          </PieChart>
-        )}
+              <YAxis />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              {yKeys.map((key) => (
+                <Bar
+                  key={key}
+                  dataKey={key}
+                  fill={`var(--color-${key})`}
+                  radius={4}
+                />
+              ))}
+            </BarChart>
+          )}
+
+          {type === "pie" && (
+            <PieChart width={width} height={height}>
+              <Pie
+                data={data}
+                dataKey={dataKeyPie}
+                nameKey={nameKeyPie}
+                outerRadius={80}
+                fill="#60a5fa"
+              />
+              <Tooltip />
+            </PieChart>
+          )}
+        </>
       </ChartContainer>
     )
   }
