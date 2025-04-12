@@ -3,14 +3,20 @@ import { DialogComponent } from "@/components/DialogComponent";
 import {columns } from "@/components/columns_project"; // Import columns from columns.tsx
 import CreateProjectForm from "@/components/createProjectForm";
 import { Button } from "@/components/ui/button";
-import {useState} from "react"
+import {useState,useEffect} from "react"
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
+import { useScreen } from "@/components/ScreenContext"
 
 
 export function Projects() {
   const {data: projects, loading:loadingProjects} = useFirestoreCollection<{ status: string }>("projects")
   const [formLoading, setFormLoading] = useState(false)
-  
+  const { setScreen } = useScreen();
+   
+  useEffect(() => {
+  setScreen("Projects");
+  }, []);
+
   return (
    
     <div className="flex flex-col gap-2">

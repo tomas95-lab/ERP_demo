@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { ReusableChart } from '@/components/ReusableChart'
 import CardComponent from '../components/CardComponent'
 import { FileText, DollarSign, Clock, AlertTriangle } from 'lucide-react'
@@ -6,7 +6,7 @@ import { DataTable } from '@/components/DataTable'
 import { invoiceColumns } from '@/components/columns_financials'
 import { useFirestoreCollection } from '@/hooks/useFirestoreCollection'
 import { format } from "date-fns"
-
+import { useScreen } from "@/components/ScreenContext"
 import { InvoiceForm } from '@/components/InvoiceForm'
 import { DialogComponent } from '@/components/DialogComponent'
 import { Button } from '@/components/ui/button'
@@ -15,7 +15,11 @@ export function Invoices() {
   interface ChartConfig {
     [key: string]: { label: string; color: string }
   }
-
+    const { setScreen } = useScreen();
+   
+    useEffect(() => {
+    setScreen("Invoices");
+    }, []);
   const barConfig: ChartConfig = {
     paid: { label: "Paid", color: "#10b981" },
     pending: { label: "Pending", color: "#fbbf24" },

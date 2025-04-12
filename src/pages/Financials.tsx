@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import ProjectView from "@/components/ProjectView"
 import { DialogComponent } from "@/components/DialogComponent"
 import CreateExpenseForm from "@/components/createExpenseForm"
+import { useScreen } from "@/components/ScreenContext"
 
 interface Expense {
   category: string
@@ -47,7 +48,11 @@ const barConfig = {
 
 export function Financials() {
   const [loading, setLoading] = useState(true)
-
+    const { setScreen } = useScreen();
+   
+    useEffect(() => {
+    setScreen("Financials");
+    }, []);
   const { data: ExpenseData = [], loading: expenseLoading } = useFirestoreCollection<Expense>("financials/expense/items")
   const { data: projects = [] } = useFirestoreCollection<Project>("projects")
   

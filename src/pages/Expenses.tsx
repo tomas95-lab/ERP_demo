@@ -2,11 +2,10 @@ import { DataTable } from "@/components/DataTable"
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection"
 import {columns} from "../components/columns_total_expenses"
 import { DialogComponent } from "@/components/DialogComponent"
-import CreateProjectForm from "@/components/createProjectForm"
 import { useSearchParams } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import CreateExpenseForm from "@/components/createExpenseForm"
-import { filterFns } from "@tanstack/react-table"
+import { useScreen } from "@/components/ScreenContext"
 
 interface Expense {
     category: string
@@ -18,9 +17,13 @@ interface Expense {
 
 export default function Expenses(){
     const { data: ExpenseData = [], loading: expenseLoading } = useFirestoreCollection<Expense>("financials/expense/items")
-    const [loading, setFormLoading] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams();
+    const { setScreen } = useScreen();
    
+    useEffect(() => {
+    setScreen("Expenses");
+    }, []);
+
     const [statusFilter, setStatusFilter] = useState(searchParams.get("status"))
     
     const statusFilterFn = (item: Expense) => {

@@ -1,6 +1,6 @@
 import CardComponent from "@/components/CardComponent"
 import { CheckCircle, RefreshCcw, Users } from "lucide-react"
-
+import { useEffect } from "react"
 import logo from "../../public/avatars/300-18.jpg"
 import delivery from "../../public/easy/5.svg"
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection"
@@ -16,9 +16,16 @@ import { DialogComponent } from "@/components/DialogComponent"
 import CreateSupplier from "@/components/createSupplierForm"
 
 import { format } from "date-fns"
+import { useScreen } from "@/components/ScreenContext"
 
 
 export function Suppliers() {
+  const { setScreen } = useScreen();
+   
+  useEffect(() => {
+  setScreen("Suppliers");
+  }, []);
+
   const monthColors: Record<string, string> = {
     Jan: "#3b82f6",
     Feb: "#10b981",

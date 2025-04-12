@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import CardComponent from "@/components/CardComponent"
 import { DataTable } from "@/components/DataTable"
 import { columns } from "@/components/columns"
@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Briefcase } from "lucide-react"
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection"
 import CreateProjectForm from "@/components/createProjectForm"
+import { useScreen } from "@/components/ScreenContext"
 
 interface ChartConfig {
   [key: string]: {
@@ -16,6 +17,13 @@ interface ChartConfig {
 }
 
 export default function Dashboard() {
+  const { setScreen } = useScreen();
+
+
+  useEffect(() => {
+    setScreen("Dashboard");
+  }, []);
+
   const barConfig: ChartConfig = {
     materials: {
       label: "Materials",

@@ -1,11 +1,17 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo,useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
 import { DataTable } from "@/components/DataTable"
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection"
 import { columns } from "@/components/columns_supplierTotal"
 import { Button } from "@/components/ui/button"
-
+import { useScreen } from "@/components/ScreenContext"
 export function TotalSupplier() {
+  const { setScreen } = useScreen();
+   
+  useEffect(() => {
+  setScreen("Suppliers");
+  }, []);
+
   type Supplier = {
     name: string
     number: number

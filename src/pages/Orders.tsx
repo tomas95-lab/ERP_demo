@@ -7,10 +7,16 @@ import { DataTable } from "@/components/DataTable"
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection"
 import { DialogComponent } from "@/components/DialogComponent"
 import { CreateOrderForm } from "@/components/CreateOrder"
+import { useScreen } from "@/components/ScreenContext"
+import { useEffect } from "react"
 
 export function Orders() {
   const { data: purchaseOrders = [], loading: loadingPurchase } = useFirestoreCollection("orders/purchaseOrders/items")
-
+  const { setScreen } = useScreen();
+   
+  useEffect(() => {
+  setScreen("Expenses");
+  }, []);
   const loading = loadingPurchase 
 
   const monthlyTotals = purchaseOrders.reduce((acc: Record<string, number>, order: any) => {
