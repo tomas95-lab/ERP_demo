@@ -94,8 +94,7 @@ export default function Dashboard() {
             yKeys={["materials", "labor"]}
             description="hola"
           >
-            <p>No additional content provided.</p>
-        </ReusableChart>
+          </ReusableChart>
       </div>
 
       <div className="flex-1 rounded-xl bg-white shadow p-4 mt-4">

@@ -185,7 +185,8 @@ export function Orders() {
                 dataKeyLine="fulfilled"
                 type="mini"
                 color="#34d399"
-              />
+              >
+              </ReusableChart>
             </CardComponent>
           </div>
 

@@ -43,8 +43,6 @@ interface ReusableChartProps {
   card?: boolean,
   description?: string,
   dataKeyLine?: string,
-  children: ReactNode; // Cambiado de ReactElement a ReactNode
-
 }
 
 export function ReusableChart({
@@ -54,8 +52,6 @@ export function ReusableChart({
   title,
   xKey = "month",
   yKeys = [],
-  width = 400,
-  height = 250,
   total,
   TotalDescriptionPie,
   mini,
