@@ -1,5 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
+import type { Invoice } from "@/pages/invoices"; // Import the Invoice type
 
 export type InvoinceData ={
     project: string;
@@ -38,7 +39,7 @@ export const columns: ColumnDef<ExpenseData>[] = [
 ];
 
 
-export const invoiceColumns: ColumnDef<InvoinceData>[] = [
+export const invoiceColumns: ColumnDef<Invoice>[] = [
     {
         accessorKey: "project",
         header: "Project",

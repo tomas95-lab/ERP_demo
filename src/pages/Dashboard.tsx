@@ -1,24 +1,25 @@
-import { useState, useEffect } from "react"
-import CardComponent from "@/components/CardComponent"
-import { DataTable } from "@/components/DataTable"
-import { columns } from "@/components/columns"
-import { ReusableChart } from "@/components/ReusableChart"
-import { Badge } from "@/components/ui/badge"
-import { Briefcase } from "lucide-react"
-import { useFirestoreCollection } from "@/hooks/useFirestoreCollection"
-import CreateProjectForm from "@/components/createProjectForm"
-import { useScreen } from "@/components/ScreenContext"
+import { useState, useEffect } from "react";
+import { DocumentData } from "firebase/firestore";
+import { ColumnDef } from "@tanstack/react-table";
+import CardComponent from "@/components/CardComponent";
+import { DataTable } from "@/components/DataTable";
+import { columns } from "@/components/columns";
+import { ReusableChart } from "@/components/ReusableChart";
+import { Badge } from "@/components/ui/badge";
+import { Briefcase } from "lucide-react";
+import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
+import CreateProjectForm from "@/components/createProjectForm";
+import { useScreen } from "@/components/ScreenContext";
 
 interface ChartConfig {
   [key: string]: {
-    label: string
-    color: string
-  }
+    label: string;
+    color: string;
+  };
 }
 
 export default function Dashboard() {
   const { setScreen } = useScreen();
-
 
   useEffect(() => {
     setScreen("Dashboard");
@@ -33,18 +34,18 @@ export default function Dashboard() {
       label: "Labor",
       color: "#60a5fa",
     },
-  }
+  };
 
-  const { data: costData } = useFirestoreCollection("costs")
-  const { data: barData } = useFirestoreCollection("yearChart")
-  const { data: projects } = useFirestoreCollection<{ status: string }>("projects")
+  const { data: costData } = useFirestoreCollection("costs");
+  const { data: barData } = useFirestoreCollection("yearChart");
+  const { data: projects } = useFirestoreCollection<{ status: string }>("projects");
 
-  const [formLoading, setFormLoading] = useState(false)
-  const [formKey, setFormKey] = useState(0) // Force re-render after project creation
+  const [formLoading, setFormLoading] = useState(false);
+  const [formKey, setFormKey] = useState(0); // Force re-render after project creation
 
   const handleProjectCreated = () => {
-    setFormKey(prevKey => prevKey + 1)
-  }
+    setFormKey((prevKey) => prevKey + 1);
+  };
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -56,7 +57,7 @@ export default function Dashboard() {
           form
           formId="createProject"
           formAction="Create Project"
-          action= "false"
+          action="false"
           formLoading={formLoading}
           full
         >
@@ -78,7 +79,7 @@ export default function Dashboard() {
           <div className="flex flex-col items-center justify-center space-y-2">
             <Briefcase size={32} className="text-gray-600" />
             <span className="text-4xl font-bold">
-              {projects.filter(project => project.status === "Active").length}
+              {projects.filter((project) => project.status === "Active").length}
             </span>
             <Badge className="bg-green-800">Active</Badge>
           </div>
@@ -98,11 +99,11 @@ export default function Dashboard() {
         <h2 className="text-xl font-bold mb-3">Cost Details</h2>
         <DataTable
           data={costData}
-          columns={columns}
+          columns={columns as ColumnDef<DocumentData & { firestoreId?: string }>[]} // Type assertion added
           filterPlaceholder="Filter by provider..."
           filterColumn="provider"
         />
       </div>
     </div>
-  )
+  );
 }

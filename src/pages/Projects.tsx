@@ -1,15 +1,23 @@
 import { DataTable } from "@/components/DataTable";
 import { DialogComponent } from "@/components/DialogComponent";
-import { columns } from "@/components/columns_project"; // Importa las columnas desde columns.tsx
+import { columns } from "@/components/columns_project";
 import CreateProjectForm from "@/components/createProjectForm";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+
+// Define or import the ProjectData type
+interface ProjectData {
+  id: string;
+  name: string;
+  status: "Active" | "Pending" | "Completed";
+  [key: string]: any; // Adjust fields as per your actual data structure
+}
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 import { useScreen } from "@/components/ScreenContext";
 
+
 export function Projects() {
-  const { data: projects, loading: loadingProjects } = useFirestoreCollection<{ status: string }>("projects");
-  const [formLoading, setFormLoading] = useState(false);
+  const { data: projects, loading: loadingProjects } = useFirestoreCollection<ProjectData>("projects");
   const { setScreen } = useScreen();
 
   useEffect(() => {
@@ -19,19 +27,15 @@ export function Projects() {
   const handleExportCSV = () => {
     if (!projects || projects.length === 0) return;
 
-    // Usamos la primera fila para obtener los headers (asumimos que todos tienen la misma estructura)
-    const header = Object.keys(projects[0]);
-    // Función para reemplazar valores nulos por cadena vacía
+    const header = Object.keys(projects[0]) as (keyof ProjectData)[];
     const replacer = (_key: string, value: any) => (value === null ? "" : value);
-    // Creamos el contenido CSV
     const csvContent = [
-      header.join(","), // Fila de headers
+      header.join(","),
       ...projects.map((row) =>
         header.map((fieldName) => JSON.stringify(row[fieldName], replacer)).join(",")
       ),
     ].join("\r\n");
 
-    // Creamos el Blob y el URL para la descarga
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -60,10 +64,9 @@ export function Projects() {
             description=""
           >
             {(onClose) => (
-              <CreateProjectForm onSuccess={onClose} setFormLoading={setFormLoading} />
+              <CreateProjectForm onSuccess={onClose} setFormLoading={() => {}} card={false} />
             )}
           </DialogComponent>
-          {/* Se implementa el botón con la función handleExportCSV */}
           <Button onClick={handleExportCSV}>Export CSV</Button>
         </div>
       </div>
@@ -98,7 +101,7 @@ export function Projects() {
           <div className="flex flex-col gap-4 items-end">
             <DataTable
               data={projects}
-              columns={columns}
+              columns={columns as any} // Podés tiparlo mejor si hacés que `columns` tenga tipo ColumnDef<ProjectData>[]
               filterPlaceholder="Filter Status..."
               filterColumn="status"
             />

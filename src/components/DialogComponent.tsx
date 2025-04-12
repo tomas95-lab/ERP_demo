@@ -6,18 +6,18 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog"
-  import { ReactNode, useState } from "react"
+import { ReactNode, useState } from "react"
 import { Button } from "./ui/button";
   
-  interface DialogComponentProps {
-    trigger: string;
-    title: string;
-    description: string;
-    button: boolean,
-    full?: boolean
-    height?: string
-    children: (onClose: () => void) => ReactNode;
-  }
+interface DialogComponentProps {
+  trigger: ReactNode;
+  title: string;
+  description: string;
+  button: boolean,
+  full?: boolean
+  height?: string
+  children: (onClose: () => void) => ReactNode;
+}
   
   export function DialogComponent({ trigger, title, description, children, button, full, height }: DialogComponentProps) {
     const [open, setOpen] = useState(false);

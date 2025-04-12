@@ -233,6 +233,7 @@ export function Financials() {
               title="Top Project"
               description="Project with the highest spending so far."
               action="false"
+              full={false}
               dialog={true}
               dialogTitle={`Top Project - ${topProject.name}`}
               dialogTrigger={<Button className="w-full h-[40px]">View Details</Button>}

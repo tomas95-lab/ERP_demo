@@ -1,48 +1,36 @@
-import { useState, useMemo,useEffect } from "react"
-import { useSearchParams } from "react-router-dom"
-import { DataTable } from "@/components/DataTable"
-import { useFirestoreCollection } from "@/hooks/useFirestoreCollection"
-import { columns } from "@/components/columns_supplierTotal"
-import { Button } from "@/components/ui/button"
-import { useScreen } from "@/components/ScreenContext"
+import { useState, useMemo, useEffect } from "react";
+import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
+import { useSearchParams } from "react-router-dom";
+import { DataTable } from "@/components/DataTable";
+import { columns, SupplierData } from "@/components/columns_supplierTotal";
+import { Button } from "@/components/ui/button";
+import { useScreen } from "@/components/ScreenContext";
+import { ColumnDef } from "@tanstack/react-table";
+
 export function TotalSupplier() {
   const { setScreen } = useScreen();
-   
+
   useEffect(() => {
-  setScreen("Suppliers");
-  }, []);
+    setScreen("Suppliers");
+  }, [setScreen]);
 
-  type Supplier = {
-    name: string
-    number: number
-    status: "Inactive" | "Active"
-    value: number
-    active: boolean
-    category?: string
-    avgDelivery?: number
-    orders?: number
-    contact?: string
-  }
-
-  const [searchParams] = useSearchParams()
-  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all')
+  const [searchParams] = useSearchParams();
+  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
 
   const urlFilter = useMemo(() => {
-    return searchParams.get("filter")?.toLowerCase() || ""
-  }, [searchParams])
+    return searchParams.get("filter")?.toLowerCase() || "";
+  }, [searchParams]);
 
-  const { data: suppliersData = [], Suppliersloading } = useFirestoreCollection<Supplier>("suppliers")
+  const { data: suppliersData = [], loading: loadingSuppliers } = useFirestoreCollection<SupplierData>("suppliers");
 
-  console.log("suppliersData", suppliersData)
   const filteredData = useMemo(() => {
-    if (Suppliersloading) return []
-
+    if (loadingSuppliers) return [];
     return suppliersData.filter((supplier) => {
-      const matchesStatus = statusFilter === 'all' || supplier.status?.toLowerCase() === statusFilter
-      const matchesURL = !urlFilter || supplier.status?.toLowerCase() === urlFilter
-      return matchesStatus && matchesURL
-    })
-  }, [suppliersData, statusFilter, urlFilter, Suppliersloading])
+      const matchesStatus = statusFilter === "all" || supplier.status?.toLowerCase() === statusFilter;
+      const matchesURL = !urlFilter || supplier.status?.toLowerCase() === urlFilter;
+      return matchesStatus && matchesURL;
+    });
+  }, [suppliersData, statusFilter, urlFilter, loadingSuppliers]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -55,22 +43,28 @@ export function TotalSupplier() {
 
       {!urlFilter && (
         <div className="flex gap-2 mb-2">
-          <Button variant={statusFilter === 'all' ? 'default' : 'outline'} onClick={() => setStatusFilter('all')}>All</Button>
-          <Button variant={statusFilter === 'active' ? 'default' : 'outline'} onClick={() => setStatusFilter('active')}>Active</Button>
-          <Button variant={statusFilter === 'inactive' ? 'default' : 'outline'} onClick={() => setStatusFilter('inactive')}>Inactive</Button>
+          <Button variant={statusFilter === "all" ? "default" : "outline"} onClick={() => setStatusFilter("all")}>
+            All
+          </Button>
+          <Button variant={statusFilter === "active" ? "default" : "outline"} onClick={() => setStatusFilter("active")}>
+            Active
+          </Button>
+          <Button variant={statusFilter === "inactive" ? "default" : "outline"} onClick={() => setStatusFilter("inactive")}>
+            Inactive
+          </Button>
         </div>
       )}
 
-      {Suppliersloading ? (
+      {loadingSuppliers ? (
         <div className="text-center text-muted-foreground">Loading suppliers...</div>
       ) : (
         <DataTable
-          columns={columns}
+          columns={columns as ColumnDef<SupplierData>[]}
           data={filteredData}
           filterPlaceholder="Search by name..."
           filterColumn="name"
         />
       )}
     </div>
-  )
+  );
 }

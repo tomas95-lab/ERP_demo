@@ -1,13 +1,13 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
 import { DialogComponent } from "./DialogComponent";
 import { Pencil } from "lucide-react";
 import EditExpenseForm from "./EditExpense";
+import { Badge } from "@/components/ui/badge";
 
 export type ExpenseData = {
   category: string;
   amount: number;
-  date: string
+  date: string;
   project: string;
   status: string;
 };
@@ -37,34 +37,42 @@ export const columns: ColumnDef<ExpenseData>[] = [
     accessorKey: "date",
     header: "Date",
     cell: ({ row }) => {
-        const rawDate = row.getValue("date") as string;
-        const date = new Date(rawDate);
-        return date.toLocaleDateString("es-US");
-      }
+      const rawDate = row.getValue("date") as string;
+      const date = new Date(rawDate);
+      return date.toLocaleDateString("es-US");
+    },
   },
   {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
       const status = (row.getValue("status") as string).toLowerCase();
-      return <Badge className={`w-20 ${status == "paid" ? "bg-green-800" : status == "pending" ? "bg-yellow-400 text-black" : status == "rejected" ? "bg-red-800" : ""}`}>{status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()}</Badge>;
+      const color =
+        status === "paid"
+          ? "bg-green-800"
+          : status === "pending"
+          ? "bg-yellow-400 text-black"
+          : status === "rejected"
+          ? "bg-red-800"
+          : "bg-gray-300";
+      const label = status.charAt(0).toUpperCase() + status.slice(1);
+      return <Badge className={`w-20 ${color}`}>{label}</Badge>;
     },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-        const expense = row.original
-        return (
-          <DialogComponent
-            trigger={<Pencil className="cursor-pointer" size={18} />}
-            title={`Edit expense: ${expense.project} - ${expense.category}`}
-            description=""
-          >
-            {(onClose) => (
-              <EditExpenseForm expense={expense} onClose={onClose} />
-            )}
-          </DialogComponent>
-        )
-      }
+      const expense = row.original;
+      return (
+        <DialogComponent
+          trigger={<Pencil className="cursor-pointer" size={18} />}
+          title={`Edit expense: ${expense.project} - ${expense.category}`}
+          description=""
+          button={false}
+        >
+          {(onClose) => <EditExpenseForm expense={expense} onClose={onClose} />}
+        </DialogComponent>
+      );
+    },
   },
 ];

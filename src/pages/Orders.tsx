@@ -9,6 +9,8 @@ import { DialogComponent } from "@/components/DialogComponent"
 import { CreateOrderForm } from "@/components/CreateOrder"
 import { useScreen } from "@/components/ScreenContext"
 import { useEffect } from "react"
+import { ColumnDef } from "@tanstack/react-table"
+import { DocumentData } from "firebase/firestore"
 
 export function Orders() {
   const { data: purchaseOrders = [], loading: loadingPurchase } = useFirestoreCollection("orders/purchaseOrders/items")
@@ -191,7 +193,7 @@ export function Orders() {
           <div className="mt-6">
             <DataTable
               data={purchaseOrders}
-              columns={columns}
+              columns={columns as ColumnDef<DocumentData & { firestoreId?: string }>[]}
               filterPlaceholder="Filter by Supplier"
               filterColumn="supplier"
             />

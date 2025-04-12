@@ -6,8 +6,6 @@ import EditSupplierForm from "./EditSupplierForm";
 import { doc, deleteDoc } from "firebase/firestore"
 import { db } from "@/firebaseConfig"
 
-
-
 const handleDelete = async (firestoreId: string) => {
   if (confirm("Are you sure you want to delete this supplier?")) {
     await deleteDoc(doc(db, "suppliers", firestoreId))
@@ -76,6 +74,7 @@ export const columns: ColumnDef<SupplierData>[] = [
             trigger={<Eye className="cursor-pointer" size={18} />}
             title={`View ${row.getValue("name")}`}
             description="View supplier details"
+            button={false}
           >
             {(onClose) => (
               <div className="grid grid-cols-2 gap-4 p-4 text-sm">
@@ -102,11 +101,11 @@ export const columns: ColumnDef<SupplierData>[] = [
               </div>
             )}
           </DialogComponent>
-
           <DialogComponent
             trigger={<Pencil className="cursor-pointer" size={18} />}
             title={`Edit ${row.getValue("name")}`}
             description="Modify supplier information"
+            button={false}
           >
             {(onClose) => <EditSupplierForm supplier={supplier} onClose={onClose} />}
           </DialogComponent>
