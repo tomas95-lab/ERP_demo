@@ -178,7 +178,6 @@ export function Orders() {
                 <span className="text-2xl font-bold">{purchaseOrders.filter((order) => order.status === "Completed").length}</span>
               </div>
               <ReusableChart
-                mini
                 data={fulfilledChartData}
                 config={{ fulfilled: { label: "Fulfilled", color: "#34d399" } }}
                 card={false}

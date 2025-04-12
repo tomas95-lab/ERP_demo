@@ -43,7 +43,8 @@ export default function Dashboard() {
   const [formLoading, setFormLoading] = useState(false);
   const [formKey, setFormKey] = useState(0); // Force re-render after project creation
 
-  const handleProjectCreated = () => {
+
+ const handleProjectCreated = () => {
     setFormKey((prevKey) => prevKey + 1);
   };
 
@@ -91,7 +92,10 @@ export default function Dashboard() {
             title="Monthly Project Costs"
             xKey="month"
             yKeys={["materials", "labor"]}
-          />
+            description="hola"
+          >
+            <p>No additional content provided.</p>
+        </ReusableChart>
       </div>
 
       <div className="flex-1 rounded-xl bg-white shadow p-4 mt-4">
