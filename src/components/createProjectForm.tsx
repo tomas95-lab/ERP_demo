@@ -41,13 +41,13 @@ export default function CreateProjectForm({
   const [supervisor, setSupervisor] = React.useState("");
   const [status, setStatus] = React.useState("");
   const [budget, setBudget] = React.useState("");
-  const [error, setError] = React.useState("");
+  // Removed unused error state
 
   const handleCreateProject = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!name || !supervisor || !status || !startDate || !endDate || !budget) {
-      setError("Please fill in all required fields.");
+      // Removed setError call as error state is no longer used
       toast.error("There was an error", {
         description: "Please fill in all required fields.",
       });
@@ -71,14 +71,13 @@ export default function CreateProjectForm({
         description: `${name} created by ${supervisor}`,
       });
 
-      // Reinicia los campos
       setName("");
       setSupervisor("");
       setStatus("");
       setStartDate(undefined);
       setEndDate(undefined);
       setBudget("");
-      setError("");
+      // Removed setError call as error state is no longer used
       onSuccess();
     } catch (err) {
       toast.error("Error creating project", {

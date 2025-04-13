@@ -41,7 +41,7 @@ export function Suppliers() {
     Dec: "#f43f5e",
   };
   
-  const { data: purchaseOrders = [], loading: loadingPurchase } = useFirestoreCollection("orders/purchaseOrders/items")
+  const { data: purchaseOrders = [] } = useFirestoreCollection("orders/purchaseOrders/items")
   console.log(purchaseOrders)
   const { data: suppliersData = [], loading: loadingSuppliers } = useFirestoreCollection<{ name: string; value: number; status: string }>("suppliers")
 

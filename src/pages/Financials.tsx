@@ -237,7 +237,7 @@ export function Financials() {
               dialog={true}
               dialogTitle={`Top Project - ${topProject.name}`}
               dialogTrigger={<Button className="w-full h-[40px]">View Details</Button>}
-              dialogChildren={(onClose) => (
+              dialogChildren={() => (
                   <ProjectView project={topProject}></ProjectView>
               )}
             >

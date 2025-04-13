@@ -76,7 +76,7 @@ export const columns: ColumnDef<SupplierData>[] = [
             description="View supplier details"
             button={false}
           >
-            {(onClose) => (
+            {() => (
               <div className="grid grid-cols-2 gap-4 p-4 text-sm">
                 <div>
                   <p className="text-muted-foreground mb-1">Status</p>

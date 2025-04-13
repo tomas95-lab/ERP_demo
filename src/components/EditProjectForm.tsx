@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { doc, updateDoc } from "firebase/firestore"
 import { db } from "@/firebaseConfig"
-import { use, useState } from "react"
+import { useState } from "react"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { toast } from "sonner"
 

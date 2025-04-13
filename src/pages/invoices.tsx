@@ -37,9 +37,8 @@ export function Invoices() {
   };
 
   // Traemos los datos: gráfico, facturas, y proyectos (para el formulario)
-  const { data: barData, loading: barLoading } = useFirestoreCollection("financials/invoiceChart/items");
   const { data: invoiceData, loading: dataLoading } = useFirestoreCollection("financials/invoices/items");
-  const { data: projectsData = [], loading: loadingProjects } = useFirestoreCollection<{ status: string; name: string }>(
+  const { data: projectsData = [] } = useFirestoreCollection<{ status: string; name: string }>(
     "projects"
   );
 
@@ -114,7 +113,7 @@ export function Invoices() {
         </DialogComponent>
       </div>
 
-      {(dataLoading || barLoading) ? (
+      {(dataLoading) ? (
         <div className="text-center text-muted-foreground">Loading Invoices...</div>
       ) : (
         <div className="flex flex-col gap-4">

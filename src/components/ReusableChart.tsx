@@ -11,7 +11,6 @@ import {
   Line, 
   LineChart
 } from "recharts"
-import { ReactNode } from "react"
 
 import {
   ChartConfig,
@@ -54,7 +53,6 @@ export function ReusableChart({
   yKeys = [],
   total,
   TotalDescriptionPie,
-  mini,
   color,
   dataKey,
   card = true,
@@ -127,7 +125,7 @@ return (
     </CardContent>
     <CardFooter className="flex-col items-start gap-2 text-sm">
       <div className="flex gap-2 font-medium leading-none">
-        Trending up by 5.2% this month
+        {description}
       </div>
     </CardFooter>
   </Card>

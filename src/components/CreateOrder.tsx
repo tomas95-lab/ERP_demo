@@ -11,7 +11,7 @@ import {
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection"
 
 export function CreateOrderForm({ onClose }: { onClose: () => void }) {
-  const { data: suppliersData = [], loading: loadingSuppliers } = useFirestoreCollection<{ name: string; value: number; status: string, firestoreId: string }>("suppliers")
+  const { data: suppliersData = [] } = useFirestoreCollection<{ name: string; value: number; status: string, firestoreId: string }>("suppliers")
 
   const [form, setForm] = useState({
     supplier: "",

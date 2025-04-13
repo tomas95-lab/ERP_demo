@@ -101,7 +101,7 @@ export function Projects() {
           <div className="flex flex-col gap-4 items-end">
             <DataTable
               data={projects}
-              columns={columns as any} // Podés tiparlo mejor si hacés que `columns` tenga tipo ColumnDef<ProjectData>[]
+              columns={columns as any}
               filterPlaceholder="Filter Status..."
               filterColumn="status"
             />

@@ -96,7 +96,7 @@ export const columns: ColumnDef<ProjectData>[] = [
             description="View project details"
             button={false}
           >
-            {(onClose) => <ProjectView project={project} />}
+            {() => <ProjectView project={project} />}
           </DialogComponent>
         </div>
       );

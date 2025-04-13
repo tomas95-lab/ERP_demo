@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { DialogComponent } from "@/components/DialogComponent";
-import { Eye, Pencil, Trash } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
 import { EditOrderForm } from "./EditOrders";
 import { deleteDoc, doc } from "firebase/firestore"
 import { db } from "@/firebaseConfig"
@@ -73,7 +73,7 @@ export const columns: ColumnDef<OrdersData>[] = [
             description="Review full order information"
             button={false}
           >
-            {onclose => (
+            {(onclose) => (
               <EditOrderForm
                 order={order}
                 onClose={onclose}

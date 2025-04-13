@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/select"
 import { db } from "@/firebaseConfig"
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore"
-import { toast } from "sonner"
 
 export function CreateUserForm({
   onClose,

@@ -24,20 +24,25 @@ export function Users() {
             Manage system users, assign roles, and control access permissions to ensure secure and efficient collaboration.
           </p>
         </div>
-        <div>
-          <DialogComponent
-            trigger={<Button>Create User</Button>}
-            title="Create User"
-            description="Add a new user to the system."
-          >
-            {(onClose) => <CreateUserForm onClose={onClose} onSuccess={showToast} />}
-          </DialogComponent>
-        </div>
+        {loadingUsers ? (
+                  <div>
+                  <DialogComponent
+                    trigger={<Button>Create User</Button>}
+                    title="Create User"
+                    description="Add a new user to the system."
+                    button={true}
+                  >
+                    {(onClose) => <CreateUserForm onClose={onClose} onSuccess={showToast} />}
+                  </DialogComponent>
+                </div>
+        ): (
+          <div className="text-center text-muted-foreground">Loading Users...</div>
+        )}
       </div>
 
       <DataTable
         data={users}
-        columns={columns}
+        columns={columns as any}
         filterColumn="name"
         filterPlaceholder="Search by Name..."
       />
