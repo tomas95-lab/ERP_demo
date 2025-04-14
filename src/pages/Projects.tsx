@@ -65,7 +65,7 @@ export function Projects() {
             description=""
           >
             {(onClose) => (
-              <CreateProjectForm onSuccess={onClose} setFormLoading={setFormLoading} card></CreateProjectForm>
+              <CreateProjectForm onSuccess={onClose} formLoading={formLoading} setFormLoading={setFormLoading} card></CreateProjectForm>
               )}
           </DialogComponent>
           <Button onClick={handleExportCSV}>Export CSV</Button>
