@@ -1,55 +1,96 @@
-# React + TypeScript + Vite
+# ERP System Demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+This is a demo ERP (Enterprise Resource Planning) system built using **React**, **TypeScript**, and **Vite**. The system is designed to streamline project management, financial tracking, supplier management, and user administration.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Dashboard**: Provides an overview of active projects, monthly costs, and quick actions.
+- **Project Management**: Create, view, and manage projects with detailed information.
+- **Financials**: Track expenses, invoices, and payments with visual charts and data tables.
+- **Supplier Management**: Manage supplier details, purchase orders, and onboarding processes.
+- **User Management**: Add, edit, and manage user roles and permissions.
+- **Settings**: Configure system preferences, default values, and regional settings.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Technologies Used
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- **Frontend**: React, TypeScript, Vite
+- **Database**: Firebase Firestore
+- **UI Components**: Radix UI, TailwindCSS
+- **Charts**: Custom reusable chart components
+- **State Management**: React Context API
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/erp-system-demo.git
+   cd erp-system-demo
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Configure Firebase:
+   - Create a Firebase project.
+   - Add your Firebase configuration to `src/firebaseConfig.ts`.
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Open the application in your browser:
+   ```
+   http://localhost:3000
+   ```
+
+## Folder Structure
+
+- **src/components**: Reusable UI components (e.g., forms, tables, charts).
+- **src/pages**: Main application pages (e.g., Dashboard, Projects, Financials).
+- **src/hooks**: Custom React hooks for Firestore integration.
+- **src/lib**: Utility functions and configurations.
+- **src/styles**: Global and component-specific styles.
+
+## Key Components
+
+### Dashboard
+- Displays an overview of active projects and monthly costs.
+- Includes a form to create new projects.
+
+### Projects
+- Manage all projects with filtering and sorting options.
+- Create and edit project details.
+
+### Financials
+- Track expenses and invoices with detailed charts and tables.
+- Group data by month and status for better visualization.
+
+### Suppliers
+- Manage supplier details and purchase orders.
+- View onboarding progress and active suppliers.
+
+### Users
+- Add, edit, and manage user roles and permissions.
+- Ensure secure collaboration within the system.
+
+## Deployment
+
+To deploy the application, build the project and host it on a platform like Vercel or Firebase Hosting:
+```bash
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Contributing
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Contributions are welcome! Please fork the repository and submit a pull request with your changes.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
-# ERP_demo
+## License
+
+This project is licensed under the MIT License.
+````
+<copilot-edited-file>
