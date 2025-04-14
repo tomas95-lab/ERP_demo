@@ -86,15 +86,15 @@ export default function Dashboard() {
           </div>
         </CardComponent>
         <ReusableChart
-            type="bar"
-            data={barData}
-            config={barConfig}
-            title="Monthly Project Costs"
-            xKey="month"
-            yKeys={["materials", "labor"]}
-            description="hola"
-          >
-          </ReusableChart>
+          type="bar"
+          data={barData}
+          config={barConfig}
+          title="Monthly Project Costs"
+          xKey="month"
+          yKeys={["materials", "labor"]}
+          description="Detailed visualization of monthly project expenses for materials and labor."
+        />
+
       </div>
 
       <div className="flex-1 rounded-xl bg-white shadow p-4 mt-4">

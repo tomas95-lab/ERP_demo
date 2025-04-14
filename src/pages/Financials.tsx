@@ -274,14 +274,16 @@ export function Financials() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <ReusableChart
-              type="bar"
-              data={formattedChartData}
-              config={barConfig}
-              title="Project Costs by Month"
-              xKey="category"
-              yKeys={["value"]}
-            />
+          <ReusableChart
+            type="bar"
+            data={formattedChartData}
+            config={barConfig}
+            title="Project Costs by Month"
+            xKey="category"
+            yKeys={["value"]}
+            description="Detailed bar chart depicting monthly project costs, segmented by expense category for clear cost visualization."
+          />
+
             <div>
               <h2 className="text-xl font-bold mb-2">Main Expenses</h2>
               <DataTable

@@ -63,7 +63,7 @@ export function ReusableChart({
 return (
   <>
     {card ? (
-      <Card>
+      <Card className="justify-between">
     <CardHeader>
       <CardTitle>{title}</CardTitle>
       <CardDescription>{""}</CardDescription>
