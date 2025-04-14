@@ -3,7 +3,7 @@ import { DialogComponent } from "@/components/DialogComponent";
 import { columns } from "@/components/columns_project";
 import CreateProjectForm from "@/components/createProjectForm";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 
 // Define or import the ProjectData type
 interface ProjectData {
@@ -19,6 +19,7 @@ import { useScreen } from "@/components/ScreenContext";
 export function Projects() {
   const { data: projects, loading: loadingProjects } = useFirestoreCollection<ProjectData>("projects");
   const { setScreen } = useScreen();
+  const [formLoading, setFormLoading] = useState(false)
 
   useEffect(() => {
     setScreen("Projects");
@@ -64,8 +65,8 @@ export function Projects() {
             description=""
           >
             {(onClose) => (
-              <CreateProjectForm onSuccess={onClose} setFormLoading={() => {}} card={false} />
-            )}
+              <CreateProjectForm onSuccess={onClose} setFormLoading={setFormLoading} card></CreateProjectForm>
+              )}
           </DialogComponent>
           <Button onClick={handleExportCSV}>Export CSV</Button>
         </div>

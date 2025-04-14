@@ -3,18 +3,9 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
 import { toast } from "sonner";
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 import {
   Select,
@@ -26,14 +17,15 @@ import {
 
 interface CreateProjectFormProps {
   onSuccess: () => void;
+  formLoading: boolean; // si quieres manejarlo desde el padre
   setFormLoading: (loading: boolean) => void;
   card: boolean;
 }
 
 export default function CreateProjectForm({
   onSuccess,
-  setFormLoading,
   card = true,
+  setFormLoading
 }: CreateProjectFormProps) {
   const [startDate, setStartDate] = React.useState<Date>();
   const [endDate, setEndDate] = React.useState<Date>();
@@ -41,19 +33,21 @@ export default function CreateProjectForm({
   const [supervisor, setSupervisor] = React.useState("");
   const [status, setStatus] = React.useState("");
   const [budget, setBudget] = React.useState("");
-  // Removed unused error state
+  const [loading, setLoading] = React.useState(false);
 
   const handleCreateProject = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!name || !supervisor || !status || !startDate || !endDate || !budget) {
-      // Removed setError call as error state is no longer used
       toast.error("There was an error", {
         description: "Please fill in all required fields.",
       });
       return;
     }
 
+    // Activa el loading antes de hacer la llamada asíncrona
+    setLoading(true);
+    // Si deseas que el componente padre conozca el estado, haz:
     setFormLoading(true);
 
     try {
@@ -71,19 +65,22 @@ export default function CreateProjectForm({
         description: `${name} created by ${supervisor}`,
       });
 
+      // Limpia los campos del formulario
       setName("");
       setSupervisor("");
       setStatus("");
       setStartDate(undefined);
       setEndDate(undefined);
       setBudget("");
-      // Removed setError call as error state is no longer used
+
       onSuccess();
     } catch (err) {
       toast.error("Error creating project", {
         description: "Something went wrong. Try again.",
       });
     } finally {
+      // Desactiva el loading al final
+      setLoading(false);
       setFormLoading(false);
     }
   };
@@ -138,60 +135,30 @@ export default function CreateProjectForm({
         <div className="flex gap-4 col-span-2">
           <div className="flex flex-col space-y-1.5 gap-2 mt-2 w-full">
             <Label>Start Date</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !startDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon />
-                  {startDate ? format(startDate, "PPP") : <span>Pick a start date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={startDate}
-                  onSelect={setStartDate}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+            <Input
+              type="date"
+              value={startDate ? format(startDate, 'yyyy-MM-dd') : ""}
+              onChange={(e) => setStartDate(new Date(e.target.value))}
+            />
           </div>
 
           <div className="flex flex-col space-y-1.5 gap-2 mt-2 w-full">
             <Label>End Date</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !endDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon />
-                  {endDate ? format(endDate, "PPP") : <span>Pick an end date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={endDate}
-                  onSelect={setEndDate}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+            <Input
+              type="date"
+              value={endDate ? format(endDate, 'yyyy-MM-dd') : ""}
+              onChange={(e) => setEndDate(new Date(e.target.value))}
+            />
           </div>
         </div>
         {card && (
           <div className="col-span-2">
-            <Button type="submit" className="w-full mt-4">
-              Create Project
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full mt-4"
+            >
+              {loading ? "Loading..." : "Create Project"}
             </Button>
           </div>
         )}

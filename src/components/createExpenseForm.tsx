@@ -10,14 +10,6 @@ import { db } from "@/firebaseConfig"
 import { addDoc, collection } from "firebase/firestore"
 import { toast } from "sonner"
 import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
-import { Calendar } from "@/components/ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
 
 export default function CreateExpenseForm({ onClose }: { onClose: () => void }) {
   const { data: DataProjects } = useFirestoreCollection<{ status: string, name: string, id: string, budget: number }>("projects")
@@ -135,29 +127,12 @@ export default function CreateExpenseForm({ onClose }: { onClose: () => void }) 
       </div>
 
       <div>
-        <Label>Date</Label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className={cn(
-                "w-full justify-start text-left font-normal mt-2",
-                !date && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, "PPP") : <span>Pick a date</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={setDate}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
+        <Label>Dateee</Label>
+        <Input
+          type="date"
+          value={date ? format(date, "yyyy-MM-dd") : ""}
+          onChange={(e) => setDate(e.target.value ? new Date(e.target.value) : undefined)}
+        />
       </div>
 
       <Button disabled={loading} type="submit" className="w-full mt-2">
