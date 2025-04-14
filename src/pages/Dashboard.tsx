@@ -66,6 +66,7 @@ export default function Dashboard() {
             card={false}
             onSuccess={handleProjectCreated}
             setFormLoading={setFormLoading}
+            formLoading={formLoading}
             key={formKey}
           />
         </CardComponent>
