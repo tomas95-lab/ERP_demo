@@ -78,13 +78,6 @@ export default function SideBarComponent({ children }: { children: React.ReactNo
                 </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  {/* <DropdownMenuSeparator /> */}
-                  {/* <DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer">Change Password</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer">Notifications</DropdownMenuItem> */}
-                  {/* <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem> */}
-                  {/* <DropdownMenuSeparator /> */}
                   <DropdownMenuItem className="text-red-600 cursor-pointer" onClick={LogOut}>Logout</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
