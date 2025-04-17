@@ -11,6 +11,7 @@ import { Orders } from "./pages/Orders";
 import { Invoices } from "./pages/invoices";
 import { TotalSupplier } from "./pages/TotalSupplier";
 import Expenses from "./pages/Expenses";
+import ProjectPlannerView from "./pages/ProjectPlannerView";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/projects/all" element={<Projects />} />
+          <Route path="/projects/all/planner" element={<ProjectPlannerView />} />
           <Route path="/financials/expenses" element={<Financials />} />
           <Route path="/financials/expenses/all/table" element={<Expenses />} />
           <Route path="/financials/invoices" element={<Invoices />} />

@@ -2,8 +2,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { DialogComponent } from "./DialogComponent";
 import { EditProjectForm } from "./EditProjectForm";
-import { Eye, Pencil } from "lucide-react";
+import { Eye, LayoutDashboard, Pencil } from "lucide-react";
 import ProjectView from "./ProjectView";
+import { Link } from "react-router-dom";
 
 export type ProjectData = {
   id: string;
@@ -13,6 +14,7 @@ export type ProjectData = {
   endDate: string;
   supervisor: string;
   budget: number;
+  firestoreId: string;
 };
 
 export const columns: ColumnDef<ProjectData>[] = [
@@ -98,6 +100,9 @@ export const columns: ColumnDef<ProjectData>[] = [
           >
             {() => <ProjectView project={project} />}
           </DialogComponent>
+          <Link to={`/projects/all/planner?id=${project.firestoreId}`}>
+            <LayoutDashboard size={18} className="cursor-pointer"></LayoutDashboard>
+          </Link>
         </div>
       );
     },
