@@ -1,50 +1,60 @@
-import { useEffect, useState,useRef  } from "react";
+import { useEffect, useState, useRef } from "react";
 import { db } from "@/firebaseConfig";
-import { doc, getDoc, getDocs, collection, addDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  getDocs,
+  collection,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { useSearchParams } from "react-router-dom";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 
 import { Button } from "@/components/ui/button";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { FileDropPreview } from "@/components/FileDropPreview";
 import { RefreshCcw } from "lucide-react";
 
 export default function ProjectPlannerView() {
+  const [postingComment, setPostingComment] = useState(false);
+
   const [searchParams] = useSearchParams();
   const projectId = searchParams.get("id");
   const [project, setProject] = useState<any>(null);
   const [comments, setComments] = useState<any[]>([]);
   const [assignee, setAssignee] = useState("");
+  const [newComment, setNewComment] = useState("");
 
-  const { data: tasks } = useFirestoreCollection(
-    `projects/${projectId}/tasks`
-  );
-
+  const { data: tasks } = useFirestoreCollection(`projects/${projectId}/tasks`);
   const { data: users } = useFirestoreCollection(`users`);
   const previewRef = useRef<{ reset: () => void }>(null);
 
   useEffect(() => {
     if (!projectId) return;
-
     const fetchProject = async () => {
       const docRef = doc(db, "projects", projectId);
       const docSnap = await getDoc(docRef);
-
       if (docSnap.exists()) {
         setProject({ id: docSnap.id, ...docSnap.data() });
       }
     };
-
     fetchProject();
   }, [projectId]);
 
   useEffect(() => {
     if (!projectId) return;
-
     const fetchComments = async () => {
       const commentsRef = collection(db, "projects", projectId, "comments");
       const snapshot = await getDocs(commentsRef);
@@ -54,7 +64,6 @@ export default function ProjectPlannerView() {
       }));
       setComments(commentData);
     };
-
     fetchComments();
   }, [projectId]);
 
@@ -62,7 +71,6 @@ export default function ProjectPlannerView() {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
-
     const name = formData.get("name") as string;
     const start = formData.get("start") as string;
     const end = formData.get("end") as string;
@@ -73,15 +81,12 @@ export default function ProjectPlannerView() {
       toast.error("All required fields must be filled.");
       return;
     }
-
     const startDate = new Date(start);
     const endDate = new Date(end);
-
     if (endDate < startDate) {
       toast.error("End date cannot be earlier than start date.");
       return;
     }
-
     const newTask = {
       name,
       start,
@@ -93,17 +98,33 @@ export default function ProjectPlannerView() {
       duration: 0,
       assign: assignee,
     };
-
     if (!projectId) return;
     const taskRef = collection(db, "projects", projectId, "tasks");
     await addDoc(taskRef, newTask);
-
     toast.success("Task created successfully.");
     form.reset();
     setAssignee("");
     form.querySelector<HTMLInputElement>("#name")?.focus();
   };
-  
+
+  const handleCommentSubmit = async () => {
+    if(newComment === ""){
+      return toast.error("Comment cannot be empty.");
+    }
+    if (!projectId) return;
+    setPostingComment(true);
+    const commentsRef = collection(db, "projects", projectId, "comments");
+    await addDoc(commentsRef, {
+      text: newComment.trim(),
+      author: "Tomas Ruiz",
+      createdAt: serverTimestamp(),
+    });
+    setNewComment("");
+    toast.success("Comment added.");
+    const snapshot = await getDocs(commentsRef);
+    setComments(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    setPostingComment(false);
+  };
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between flex-wrap items-center">
@@ -284,12 +305,26 @@ export default function ProjectPlannerView() {
               {comments.length === 0 ? (
                 <p className="text-sm text-muted-foreground">No comments yet.</p>
               ) : (
-                comments.map(comment => (
+                comments.map((comment) => (
                   <div key={comment.id} className="border rounded p-2 bg-gray-50">
-                    <p className="text-sm"><strong>{comment.author}</strong>: {comment.text}</p>
+                    <p className="text-sm">
+                      <strong>{comment.author}</strong>: {comment.text}
+                    </p>
                   </div>
                 ))
               )}
+            </div>
+            <div className="mt-4 space-y-2">
+              <Label htmlFor="comment">Add Comment</Label>
+              <Textarea
+                id="comment"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Write a comment..."
+              />
+              <Button size="sm" disabled={postingComment} onClick={handleCommentSubmit}>
+                Post Comment
+              </Button>
             </div>
           </section>
         </div>
