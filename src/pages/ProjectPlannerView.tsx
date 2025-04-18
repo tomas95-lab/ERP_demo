@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef  } from "react";
 import { db } from "@/firebaseConfig";
 import { doc, getDoc, getDocs, collection, addDoc } from "firebase/firestore";
 import { useSearchParams } from "react-router-dom";
@@ -10,7 +10,8 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Eye, File } from "lucide-react";
+import { FileDropPreview } from "@/components/FileDropPreview";
+import { RefreshCcw } from "lucide-react";
 
 export default function ProjectPlannerView() {
   const [searchParams] = useSearchParams();
@@ -24,6 +25,7 @@ export default function ProjectPlannerView() {
   );
 
   const { data: users } = useFirestoreCollection(`users`);
+  const previewRef = useRef<{ reset: () => void }>(null);
 
   useEffect(() => {
     if (!projectId) return;
@@ -252,21 +254,27 @@ export default function ProjectPlannerView() {
             </form>
             </div>
           </section>
+
           <section>
-            <h3 className="font-medium text-lg mb-4">Project Files</h3>
-            <div className="grid md:grid-cols-6 gap-6 ">
-              <div className="md:col-span-2 p-4 shadow rounded-xl flex flex-col gap-4 ">
-                <Button className="self-end">Upload File</Button>
-                <div className="flex items-center justify-between"id="file">
-                  <File size={18}></File>
-                  <h1>Tomas</h1>
-                  <h1>14/4/2025</h1>
-                  <Eye size={18}></Eye>
-                </div>
+            <div className="flex flex-col mb-2">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Project Files Preview</h3>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => previewRef.current?.reset()}
+                  className="gap-2"
+                >
+                  <RefreshCcw size={16} />
+                  Reset View
+                </Button>
               </div>
-              <div className="md:col-span-4 bg-gray-100 shadow rounded-xl h-[300px] p-4 ">
-                <h1 className="text-xl text-center">PREVIEW</h1>
-              </div>
+              <p className="text-sm text-muted-foreground mt-1">
+                Drag and drop a file to preview it (images, PDF or 3D models).
+              </p>
+            </div>
+            <div className="rounded-xl border bg-background h-[400px] p-4 shadow-sm">
+              <FileDropPreview ref={previewRef} />
             </div>
           </section>
           {/* Comments Section */}
