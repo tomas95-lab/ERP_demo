@@ -25,7 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FileDropPreview } from "@/components/FileDropPreview";
-import { RefreshCcw } from "lucide-react";
+import { ArrowRight, RefreshCcw } from "lucide-react";
 
 export default function ProjectPlannerView() {
   const [postingComment, setPostingComment] = useState(false);
@@ -201,12 +201,17 @@ export default function ProjectPlannerView() {
                       <div className="flex justify-between items-center">
                         <div>
                           <p className="font-semibold">{task.name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {task.start} → {task.end}
-                          </p>
+                          <div className="text-sm text-muted-foreground flex gap-2 items-center pt-2">
+                            {task.start} <ArrowRight size={16}></ArrowRight> {task.end}
+                          </div>
                           {task.parent && (
                             <p className="text-xs text-muted-foreground mt-1">
                               Depends on: {task.parent}
+                            </p>
+                          )}
+                          {task.assignee && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Assigned to: {task.assignee}
                             </p>
                           )}
                         </div>
