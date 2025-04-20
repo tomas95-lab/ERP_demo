@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { ReusableChart } from "@/components/ReusableChart";
 import CardComponent from "../components/CardComponent";
 import { FileText, DollarSign, Clock, AlertTriangle } from "lucide-react";
@@ -18,7 +18,7 @@ export type Invoice = {
 };
 
 export function Invoices() {
-  // Interface para la configuración del gráfico
+  
   interface ChartConfig {
     [key: string]: { label: string; color: string };
   }
@@ -29,70 +29,97 @@ export function Invoices() {
     setScreen("Invoices");
   }, [setScreen]);
 
-  // Configuración para el gráfico de barras
+  
   const barConfig: ChartConfig = {
     paid: { label: "Paid", color: "#10b981" },
     pending: { label: "Pending", color: "#fbbf24" },
     overdue: { label: "Overdue", color: "#e7000b" },
   };
 
-  // Traemos los datos: gráfico, facturas, y proyectos (para el formulario)
+  
   const { data: invoiceData, loading: dataLoading } = useFirestoreCollection("financials/invoices/items");
   const { data: projectsData = [] } = useFirestoreCollection<{ status: string; name: string }>(
     "projects"
   );
 
-  // Convertimos los datos de invoice en el tipo Invoice
-  const typedInvoiceData: Invoice[] = (invoiceData as unknown as Invoice[]) || [];
+  
+  // Cast the data once and memoize it to prevent unnecessary re-computations
+  const typedInvoiceData = useMemo(() => {
+    return (invoiceData as unknown as Invoice[]) || [];
+  }, [invoiceData]);
 
-  // Cálculos totales para las tarjetas
-  const totalInvoices = typedInvoiceData.length;
-  const totalInvoicesPaidAmount = typedInvoiceData.reduce(
-    (total, invoice) => (invoice.status === "Paid" ? total + invoice.amount : total),
-    0
-  );
-  const totalInvoicesPendingAmount = typedInvoiceData.reduce(
-    (total, invoice) => (invoice.status === "Pending" ? total + invoice.amount : total),
-    0
-  );
-  const totalInvoicesOverdueAmount = typedInvoiceData.reduce(
-    (total, invoice) => (invoice.status === "Overdue" ? total + invoice.amount : total),
-    0
-  );
+  
+  // Calculate totals with memoization to prevent recalculations on every render
+  const { 
+    totalInvoices, 
+    totalInvoicesPaidAmount, 
+    totalInvoicesPendingAmount, 
+    totalInvoicesOverdueAmount 
+  } = useMemo(() => {
+    const totalInvoices = typedInvoiceData.length;
+    const totalInvoicesPaidAmount = typedInvoiceData.reduce(
+      (total, invoice) => (invoice.status === "Paid" ? total + invoice.amount : total),
+      0
+    );
+    const totalInvoicesPendingAmount = typedInvoiceData.reduce(
+      (total, invoice) => (invoice.status === "Pending" ? total + invoice.amount : total),
+      0
+    );
+    const totalInvoicesOverdueAmount = typedInvoiceData.reduce(
+      (total, invoice) => (invoice.status === "Overdue" ? total + invoice.amount : total),
+      0
+    );
+    
+    return {
+      totalInvoices,
+      totalInvoicesPaidAmount,
+      totalInvoicesPendingAmount,
+      totalInvoicesOverdueAmount
+    };
+  }, [typedInvoiceData]);
 
-  // Estado para filtrar facturas
+  
   const [statusFilter, setStatusFilter] = useState<"all" | "pending" | "overdue" | "paid">("all");
 
-  // Función para filtrar por status
-  const statusFilterFn = (item: Invoice) => {
+  
+  // Create a memoized filter function to prevent recreation on each render
+  const statusFilterFn = useCallback((item: Invoice) => {
     if (statusFilter === "all") return true;
     return item.status.toLowerCase() === statusFilter;
-  };
+  }, [statusFilter]);
 
-  // Agrupa las facturas por mes y status para generar los datos del gráfico
-  function groupInvoicesByMonthAndStatus(invoices: Invoice[]) {
-    const result: Record<string, { [status: string]: number }> = {};
+  
+  // Memoize the chart data to prevent recalculation on every render
+  const chartData = useMemo(() => {
+    function groupInvoicesByMonthAndStatus(invoices: Invoice[]) {
+      const result: Record<string, { [status: string]: number }> = {};
+  
+      invoices.forEach((invoice) => {
+        const date = new Date(invoice.date);
+        const monthKey = format(date, "MMM yyyy"); 
+        const statusKey = invoice.status.toLowerCase();
+  
+        if (!result[monthKey]) result[monthKey] = {};
+        if (!result[monthKey][statusKey]) result[monthKey][statusKey] = 0;
+  
+        result[monthKey][statusKey] += invoice.amount;
+      });
+  
+      return Object.entries(result).map(([month, values]) => ({
+        month,
+        paid: values.paid || 0,
+        pending: values.pending || 0,
+        overdue: values.overdue || 0,
+      }));
+    }
 
-    invoices.forEach((invoice) => {
-      const date = new Date(invoice.date);
-      const monthKey = format(date, "MMM yyyy"); // ej.: Mar 2025
-      const statusKey = invoice.status.toLowerCase();
+    return groupInvoicesByMonthAndStatus(typedInvoiceData);
+  }, [typedInvoiceData]);
 
-      if (!result[monthKey]) result[monthKey] = {};
-      if (!result[monthKey][statusKey]) result[monthKey][statusKey] = 0;
-
-      result[monthKey][statusKey] += invoice.amount;
-    });
-
-    return Object.entries(result).map(([month, values]) => ({
-      month,
-      paid: values.paid || 0,
-      pending: values.pending || 0,
-      overdue: values.overdue || 0,
-    }));
-  }
-
-  const chartData = groupInvoicesByMonthAndStatus(typedInvoiceData);
+  // Handle filter change with debounce to prevent rapid state changes
+  const handleFilterChange = useCallback((newFilter: "all" | "pending" | "overdue" | "paid") => {
+    setStatusFilter(newFilter);
+  }, []);
 
   return (
     <div className="flex flex-col gap-2">
@@ -125,7 +152,7 @@ export function Invoices() {
               full
               variant="default"
               active={statusFilter === "all"}
-              onActionClick={() => setStatusFilter("all")}
+              onActionClick={() => handleFilterChange("all")}
             >
               <div className="flex items-center gap-4">
                 <FileText size={28} className="text-purple-600" />
@@ -143,7 +170,7 @@ export function Invoices() {
               full
               variant="green"
               active={statusFilter === "paid"}
-              onActionClick={() => setStatusFilter("paid")}
+              onActionClick={() => handleFilterChange("paid")}
             >
               <div className="flex items-center gap-4">
                 <DollarSign size={28} className="text-green-600" />
@@ -161,7 +188,7 @@ export function Invoices() {
               full
               variant="yellow"
               active={statusFilter === "pending"}
-              onActionClick={() => setStatusFilter("pending")}
+              onActionClick={() => handleFilterChange("pending")}
             >
               <div className="flex items-center gap-4">
                 <Clock size={28} className="text-yellow-500" />
@@ -179,7 +206,7 @@ export function Invoices() {
               full
               variant="red"
               active={statusFilter === "overdue"}
-              onActionClick={() => setStatusFilter("overdue")}
+              onActionClick={() => handleFilterChange("overdue")}
             >
               <div className="flex items-center gap-4">
                 <AlertTriangle size={28} className="text-red-800" />

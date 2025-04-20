@@ -104,17 +104,21 @@ export function Suppliers() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <CardComponent title="Top Supplier" description="Best performing supplier based on recent orders." action="false" full>
-              <div className="flex items-center gap-4">
-                <img src={logo} className="w-20 h-20 rounded-full" />
-                <div>
-                  <div className="font-semibold text-foreground">{topSupplier.name}</div>
-                  <div className="text-sm text-muted-foreground">Avg. Delivery: 3.8 days</div>
-                  <div className="text-sm text-muted-foreground">Orders this month: 12</div>
+              <CardComponent title="Top Supplier" description="Best performing supplier based on recent orders." action="false" full>
+              <div className="flex items-center gap-4 justify-center">
+            {topSupplier.name !== "N/A" ? (
+                <>
+                  <img src={logo} className="w-20 h-20 rounded-full" />
+                  <div>
+                    <div className="font-semibold text-foreground">{topSupplier.name}</div>
+                    <div className="text-sm text-muted-foreground">Avg. Delivery: 3.8 days</div>
+                    <div className="text-sm text-muted-foreground">Orders this month: 12</div>
+                  </div>
+                </>
+              ) : <h1 className="text-center text-muted-foreground">No suppliers available</h1>}
                 </div>
-              </div>
-
-            </CardComponent>
+              </CardComponent>
+              
 
             <ReusableChart
               data={chartOrdersData}
@@ -126,7 +130,6 @@ export function Suppliers() {
               total={purchaseOrders.length}
               TotalDescriptionPie="Total Orders"
             />
-
 
             <Card>
               <CardHeader>
