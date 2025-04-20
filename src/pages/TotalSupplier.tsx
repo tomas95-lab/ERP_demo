@@ -6,6 +6,17 @@ import { columns, SupplierData } from "@/components/columns_supplierTotal";
 import { Button } from "@/components/ui/button";
 import { useScreen } from "@/components/ScreenContext";
 import { ColumnDef } from "@tanstack/react-table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 export function TotalSupplier() {
   const { setScreen } = useScreen();
@@ -65,6 +76,8 @@ export function TotalSupplier() {
           filterColumn="name"
         />
       )}
+
+
     </div>
   );
 }

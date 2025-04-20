@@ -3,15 +3,20 @@ import { Badge } from "@/components/ui/badge";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { DialogComponent } from "./DialogComponent";
 import EditSupplierForm from "./EditSupplierForm";
-import { doc, deleteDoc } from "firebase/firestore"
-import { db } from "@/firebaseConfig"
-
-const handleDelete = async (firestoreId: string) => {
-  if (confirm("Are you sure you want to delete this supplier?")) {
-    await deleteDoc(doc(db, "suppliers", firestoreId))
-    alert("Supplier deleted successfully.")
-  }
-}
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from "@/firebaseConfig";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export type SupplierData = {
   id: string;
@@ -109,12 +114,30 @@ export const columns: ColumnDef<SupplierData>[] = [
           >
             {(onClose) => <EditSupplierForm supplier={supplier} onClose={onClose} />}
           </DialogComponent>
-
-          <Trash2
-            className="cursor-pointer text-red-600"
-            size={18}
-            onClick={() => handleDelete(supplier.firestoreId)}
-          />
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Trash2 className="cursor-pointer text-red-600" size={18} />
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete the supplier and remove its data.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={async () => {
+                    await deleteDoc(doc(db, "suppliers", supplier.firestoreId))
+                    toast.success("Supplier deleted");
+                  }}
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       );
     },
