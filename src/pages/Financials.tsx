@@ -1,12 +1,18 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import CardComponent from "@/components/CardComponent"
 import { DataTable } from "@/components/DataTable"
 import { columns } from "@/components/columns_financials"
 import { ReusableChart } from "@/components/ReusableChart"
-import { CalendarDays, CircleDollarSign, Clock, Building2 } from "lucide-react"
+import {
+  CalendarDays,
+  CircleDollarSign,
+  Clock,
+  Building2,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react"
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection"
 import { Button } from "@/components/ui/button"
-import ProjectView from "@/components/ProjectView"
 import { DialogComponent } from "@/components/DialogComponent"
 import CreateExpenseForm from "@/components/createExpenseForm"
 import { useScreen } from "@/components/ScreenContext"
@@ -16,7 +22,7 @@ interface Expense {
   amount: number
   project: string
   date?: string
-  status:string
+  status: string
 }
 
 interface Project {
@@ -36,112 +42,133 @@ interface ChartConfig {
 }
 
 const barConfig = {
-  category: {
-    label: "Materials",
-    color: "#2563eb",
-  },
-  value: {
-    label: "Labor",
-    color: "#60a5fa",
-  },
+  category: { label: "Materials", color: "#2563eb" },
+  value: { label: "Labor", color: "#60a5fa" },
 } satisfies ChartConfig
+
+const money = (n: number) =>
+  Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n)
 
 export function Financials() {
   const [loading, setLoading] = useState(true)
-    const { setScreen } = useScreen();
-   
-    useEffect(() => {
-    setScreen("Financials");
-    }, []);
-  const { data: ExpenseData = [], loading: expenseLoading } = useFirestoreCollection<Expense>("financials/expense/items")
-  const { data: projects = [] } = useFirestoreCollection<Project>("projects")
-  
-  const chartData = ExpenseData.reduce((acc, item) => {
-    const key = item.category?.toLowerCase() || "Other";
-    acc[key] = (acc[key] || 0) + item.amount;
-    return acc;
-  }, {} as Record<string, number>);
-  
-  const formattedChartData = Object.entries(chartData).map(([category, value]) => ({
-    category,
-    value,
-  }));
+  const { setScreen } = useScreen()
+
+  useEffect(() => {
+    setScreen("Financials")
+  }, [])
+
+  const {
+    data: ExpenseData = [],
+    loading: expenseLoading,
+  } = useFirestoreCollection<Expense>("financials/expense/items")
+  const { data: projects = [] } =
+    useFirestoreCollection<Project>("projects")
+
+  const totalExpenses = useMemo(
+    () => ExpenseData.reduce((sum, e) => sum + e.amount, 0),
+    [ExpenseData]
+  )
+
+  if(projects.length !==0){
+    projects.map((project)=>console.log(project.budget))
+  } else {
+    console.log("Projects are available")
+  }
+
+  const totalBudget = useMemo(
+    () => projects.reduce((sum, p) => sum + p.budget, 0),
+    [projects]
+  )
+
+  console.log(totalBudget, totalExpenses)
+  const costVariance = totalBudget - totalExpenses
+  const cpi = totalExpenses ? totalBudget / totalExpenses : 0
+  const varianceColour = costVariance >= 0 ? "text-green-600" : "text-red-600"
+
+  const chartData = useMemo(() => {
+    return ExpenseData.reduce((acc, item) => {
+      const key = item.category?.toLowerCase() || "other"
+      acc[key] = (acc[key] || 0) + item.amount
+      return acc
+    }, {} as Record<string, number>)
+  }, [ExpenseData])
+
+  const formattedChartData = Object.entries(chartData).map(
+    ([category, value]) => ({
+      category,
+      value,
+    })
+  )
 
   useEffect(() => {
     setLoading(expenseLoading)
   }, [expenseLoading])
 
-  const totalExpenses = ExpenseData.reduce((sum, e) => sum + e.amount, 0)
-
-  const thisMonth = ExpenseData
-    .filter(e => {
+  const thisMonth = useMemo(() => {
+    return ExpenseData.filter(e => {
       const date = new Date(e.date || "2025-03-15")
       const now = new Date()
       return (
         date.getMonth() === now.getMonth() &&
         date.getFullYear() === now.getFullYear()
       )
+    }).reduce((sum, e) => sum + e.amount, 0)
+  }, [ExpenseData])
+
+  const pendingAmount = useMemo(() => {
+    return ExpenseData.filter(
+      e => e.status.toLowerCase() === "pending"
+    ).reduce((sum, e) => sum + e.amount, 0)
+  }, [ExpenseData])
+
+  const now = new Date()
+  const month = now.getMonth()
+  const year = now.getFullYear()
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ]
+  const currentMonth = monthNames[month]
+
+  const thisMonthExpenses = useMemo(() => {
+    return ExpenseData.filter(e => {
+      if (!e.date) return false
+      const date = new Date(e.date)
+      return date.getMonth() === month && date.getFullYear() === year
     })
-    .reduce((sum, e) => sum + e.amount, 0)
+  }, [ExpenseData, month, year])
 
-  const enrichedProjectTotals = projects.map((p) => {
-    const totalSpent = ExpenseData
-      .filter(e => e.project === p.name)
-      .reduce((sum, e) => sum + e.amount, 0)
+  const totalSpentThisMonth = thisMonthExpenses.reduce(
+    (sum, e) => sum + e.amount,
+    0
+  )
 
-    return {
-      name: p.name,
-      status: p.status,
-      budget: p.budget,
-      spent: totalSpent,
-      remaining: p.budget - totalSpent,
-      startDate: p.startDate,
-      endDate: p.endDate,
-      supervisor: p.supervisor
-    }
-  })
-
-  const topProject = enrichedProjectTotals.sort((a, b) => b.spent - a.spent)[0] || {
-    name: "No data",
-    spent: 0,
-    budget: 0,
-    remaining: 0,
-  }
-
-
-  const pendingAmount = ExpenseData
-  .filter((expense) => expense.status.toLowerCase() === "pending")
-  .reduce((sum, expense) => sum + expense.amount, 0);
-
-
-  const now = new Date();
-  const month = now.getMonth();
-  const year = now.getFullYear();
-  const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-  const currentMonth = monthNames[month];
-  
-  const thisMonthExpenses = ExpenseData.filter(e => {
-    if (!e.date) return false;
-    const date = new Date(e.date);
-    return date.getMonth() === month && date.getFullYear() === year;
-  });
-  
-  const totalSpentThisMonth = thisMonthExpenses.reduce((sum, e) => sum + e.amount, 0);
-  
-  const projectSpendingMap: Record<string, number> = {};
+  const projectSpendingMap: Record<string, number> = {}
   thisMonthExpenses.forEach(exp => {
-    projectSpendingMap[exp.project] = (projectSpendingMap[exp.project] || 0) + exp.amount;
-  });
-  const topProjectThisMonth = Object.entries(projectSpendingMap)
-    .sort((a, b) => b[1] - a[1])
-    .map(([name]) => ({ name }))[0] || { name: "—" };
-  
-  const latestThisMonth = thisMonthExpenses
-    .sort((a, b) => new Date(b.date ?? "").getTime() - new Date(a.date ?? "").getTime())
-    .slice(0, 5);
+    projectSpendingMap[exp.project] =
+      (projectSpendingMap[exp.project] || 0) + exp.amount
+  })
+  const topProjectThisMonth =
+    Object.entries(projectSpendingMap)
+      .sort((a, b) => b[1] - a[1])
+      .map(([name]) => ({ name }))[0] || { name: "—" }
 
+  const latestThisMonth = thisMonthExpenses
+    .sort(
+      (a, b) =>
+        new Date(b.date ?? "").getTime() - new Date(a.date ?? "").getTime()
+    )
+    .slice(0, 5)
 
   return (
     <div className="flex flex-col gap-2">
@@ -149,28 +176,75 @@ export function Financials() {
         <div>
           <h1 className="text-xl font-bold">Expense Tracking</h1>
           <p className="text-sm text-muted-foreground mb-4">
-            Monitor and manage expenses across all active and completed projects.
+            Monitor and manage expenses across all active and completed
+            projects.
           </p>
         </div>
         <div>
           <DialogComponent
-              trigger="Create a new Expense"
-              button
-              title="Create a new Expense"
-              description=""
+            trigger="Create a new Expense"
+            button
+            title="Create a new Expense"
+            description=""
           >
-              {(onClose) => (
-                <CreateExpenseForm onClose={onClose}></CreateExpenseForm>      
-              )}
+            {onClose => <CreateExpenseForm onClose={onClose} />}
           </DialogComponent>
         </div>
       </div>
-      
+
       {loading ? (
-        <div className="text-center text-muted-foreground">Loading Expenses...</div> 
+        <div className="text-center text-muted-foreground">
+          Loading Expenses...
+        </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 mb-6">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-6 mb-6">
+            <CardComponent
+              title="Total Budget"
+              description="Sum of all project budgets."
+              action="false"
+              full
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <CircleDollarSign size={28} className="text-emerald-600" />
+                <span className="text-2xl font-bold">
+                  {money(totalBudget)}
+                </span>
+              </div>
+            </CardComponent>
+
+            <CardComponent
+              title="Cost Variance"
+              description="Budget minus actual cost."
+              action="false"
+              full
+            >
+              <div className="flex flex-col items-center space-y-2">
+                {costVariance >= 0 ? (
+                  <TrendingUp size={28} className="text-green-600" />
+                ) : (
+                  <TrendingDown size={28} className="text-red-600" />
+                )}
+                <span className={`text-2xl font-bold ${varianceColour}`}>
+                  {money(costVariance)}
+                </span>
+              </div>
+            </CardComponent>
+
+            <CardComponent
+              title="CPI"
+              description="Cost Performance Index (budget / actual)."
+              action="false"
+              full
+            >
+              <div className="flex flex-col items-center space-y-2">
+                <Building2 size={28} className="text-blue-600" />
+                <span className="text-2xl font-bold">
+                  {cpi.toFixed(2)}
+                </span>
+              </div>
+            </CardComponent>
+
             <CardComponent
               title="Total Expenses"
               description="Sum of all recorded expenses across all projects."
@@ -178,81 +252,78 @@ export function Financials() {
               full
               path="/financials/expenses/all/table"
             >
-              <div className="flex flex-col items-center justify-center space-y-2">
+              <div className="flex flex-col items-center space-y-2">
                 <CircleDollarSign size={28} className="text-green-600" />
-                <span className="text-2xl font-bold">${totalExpenses.toLocaleString()}</span>
+                <span className="text-2xl font-bold">
+                  {money(totalExpenses)}
+                </span>
               </div>
             </CardComponent>
-
+            
             <CardComponent
               title="This Month"
               description="Expenses logged during the current month."
               action="false"
               full
               dialog
-              dialogTrigger={<Button className="w-full h-[40px] cursor-pointer">View Report</Button>}
+              dialogTrigger={
+                <Button className="w-full h-[40px] cursor-pointer">
+                  View Report
+                </Button>
+              }
               dialogDescription={`Expenses logged in ${currentMonth}`}
               dialogTitle="This month"
               dialogChildren={() => (
                 <div className="space-y-4 text-sm p-1">
                   <div>
-                    <h3 className="text-sm text-muted-foreground">Top Project</h3>
-                    <p className="text-base font-semibold">{topProjectThisMonth.name || "—"}</p>
+                    <h3 className="text-sm text-muted-foreground">
+                      Top Project
+                    </h3>
+                    <p className="text-base font-semibold">
+                      {topProjectThisMonth.name}
+                    </p>
                   </div>
-              
                   <div>
-                    <h3 className="text-sm text-muted-foreground">Total Spent</h3>
-                    <p className="text-base font-semibold">${totalSpentThisMonth.toLocaleString()}</p>
+                    <h3 className="text-sm text-muted-foreground">
+                      Total Spent
+                    </h3>
+                    <p className="text-base font-semibold">
+                      {money(totalSpentThisMonth)}
+                    </p>
                   </div>
-              
                   <div>
-                    <h3 className="text-sm text-muted-foreground">Latest Expenses</h3>
+                    <h3 className="text-sm text-muted-foreground">
+                      Latest Expenses
+                    </h3>
                     <ul className="space-y-2">
                       {latestThisMonth.map((exp, index) => (
-                        <li key={index} className="text-sm text-foreground flex justify-between border-b pb-1">
+                        <li
+                          key={index}
+                          className="flex justify-between border-b pb-1"
+                        >
                           <div>
-                            <span className="font-medium capitalize">{exp.category}</span>
-                            <span className="ml-1 text-muted-foreground">({exp.project})</span>
+                            <span className="font-medium capitalize">
+                              {exp.category}
+                            </span>
+                            <span className="ml-1 text-muted-foreground">
+                              ({exp.project})
+                            </span>
                           </div>
-                          <span className="font-semibold">${exp.amount.toLocaleString()}</span>
+                          <span className="font-semibold">
+                            {money(exp.amount)}
+                          </span>
                         </li>
                       ))}
                     </ul>
                   </div>
                 </div>
               )}
-              
             >
-              <div className="flex flex-col items-center justify-center space-y-2">
+              <div className="flex flex-col items-center space-y-2">
                 <CalendarDays size={28} className="text-blue-600" />
-                <span className="text-2xl font-bold">${thisMonth.toLocaleString()}</span>
+                <span className="text-2xl font-bold">{money(thisMonth)}</span>
               </div>
             </CardComponent>
-
-            <CardComponent
-              title="Top Project"
-              description="Project with the highest spending so far."
-              action="false"
-              full={false}
-              dialog={true}
-              dialogTitle={`Top Project - ${topProject.name}`}
-              dialogTrigger={<Button className="w-full h-[40px]">View Details</Button>}
-              dialogChildren={() => (
-                  <ProjectView project={topProject}></ProjectView>
-              )}
-            >
-              <div className="flex items-center gap-4">
-                <div className="bg-muted rounded-full p-2">
-                  <Building2 size={24} color="orange">
-                  </Building2>
-                </div>
-                <div>
-                  <div className="text-lg font-bold text-foreground">{topProject.name}</div>
-                  <div className="text-s text-muted-foreground">${topProject.budget?.toLocaleString()}</div>
-                </div>
-              </div>
-            </CardComponent>
-
 
             <CardComponent
               title="Pending Expenses"
@@ -266,33 +337,38 @@ export function Financials() {
                   <Clock size={24} className="text-yellow-500" />
                 </div>
                 <div>
-                  <div className="text-sm font-medium text-muted-foreground">Pending Approvals</div>
-                  <div className="text-lg font-bold text-foreground">${pendingAmount.toLocaleString()}</div>
+                  <div className="text-sm font-medium text-muted-foreground">
+                    Pending Approvals
+                  </div>
+                  <div className="text-lg font-bold text-foreground">
+                    {money(pendingAmount)}
+                  </div>
                 </div>
               </div>
             </CardComponent>
           </div>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <ReusableChart
-            type="bar"
-            data={formattedChartData}
-            config={barConfig}
-            title="Project Costs by Month"
-            xKey="category"
-            yKeys={["value"]}
-            description="Detailed bar chart depicting monthly project costs, segmented by expense category for clear cost visualization."
-          />
+            <ReusableChart
+              type="bar"
+              data={formattedChartData}
+              config={barConfig}
+              title="Costs by Category"
+              xKey="category"
+              yKeys={["value"]}
+              description="Bar chart depicting costs per category."
+            />
 
             <div>
               <h2 className="text-xl font-bold mb-2">Main Expenses</h2>
               <DataTable
-                data={[...ExpenseData].sort((a, b) => b.amount - a.amount).slice(0,5)}
+                data={[...ExpenseData]
+                  .sort((a, b) => b.amount - a.amount)
+                  .slice(0, 5)}
                 columns={columns}
                 filterPlaceholder="Filter Category..."
                 filterColumn="category"
               />
-
             </div>
           </div>
         </>

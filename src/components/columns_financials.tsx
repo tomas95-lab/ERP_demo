@@ -19,7 +19,12 @@ export const columns: ColumnDef<ExpenseData>[] = [
   {
     accessorKey: "category",
     header: "Category",
+    cell: ({ row }) => {
+      const value = row.getValue("category") as string;
+      return <span className="capitalize">{value}</span>;
+    },
   },
+  
   {
     accessorKey: "amount",
     header: "Amount",
