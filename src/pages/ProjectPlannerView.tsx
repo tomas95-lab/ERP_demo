@@ -9,7 +9,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { useSearchParams } from "react-router-dom";
-import { format, set } from "date-fns";
+import { format} from "date-fns";
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 
 import { Button } from "@/components/ui/button";
