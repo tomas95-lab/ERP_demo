@@ -17,8 +17,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
-
 
 export type OrdersData = {
   id: string;
