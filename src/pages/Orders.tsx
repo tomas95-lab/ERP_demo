@@ -191,6 +191,7 @@ export function Orders() {
           </div>
 
           <div className="mt-6">
+            <h2 className="text-xl font-bold mb-3">Purchase Orders</h2>
             <DataTable
               data={purchaseOrders}
               columns={columns as ColumnDef<DocumentData & { firestoreId?: string }>[]}
