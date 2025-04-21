@@ -5,6 +5,20 @@ import { Pencil, Trash } from "lucide-react";
 import { EditOrderForm } from "./EditOrders";
 import { deleteDoc, doc } from "firebase/firestore"
 import { db } from "@/firebaseConfig"
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
+
 
 export type OrdersData = {
   id: string;
@@ -13,18 +27,6 @@ export type OrdersData = {
   date: string;
   total: number;
 };
-
-const handleDelete = async (order: OrdersData) => {
-  const confirm = window.confirm("Are you sure you want to delete this order?");
-  if (confirm) {
-    try {
-      await deleteDoc(doc(db, "orders/purchaseOrders/items", String(order.id)));
-    } catch (error) {
-      console.error("Error deleting order:", error);
-    }
-  }
-};
-
 
 
 export const columns: ColumnDef<OrdersData>[] = [
@@ -80,11 +82,30 @@ export const columns: ColumnDef<OrdersData>[] = [
             />)}
           </DialogComponent>
 
-          <Trash
-          className="cursor-pointer text-red-600"
-          size={18}
-          onClick={() => handleDelete(order)}
-          />
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Trash className="cursor-pointer text-red-600" size={18} />
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete the supplier and remove its data.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={async () => {
+                    await deleteDoc(doc(db, "orders/purchaseOrders/items", String(order.id)))
+                    toast.success("Order deleted");
+                  }}
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       );
     },

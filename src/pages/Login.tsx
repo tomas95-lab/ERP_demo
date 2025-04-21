@@ -9,7 +9,6 @@ import {
   AlertTitle,
 } from "@/components/ui/alert";
 import welcome from "../../public/auth/welcome-dark.png";
-
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
