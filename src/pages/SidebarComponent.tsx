@@ -60,7 +60,7 @@ export default function SideBarComponent({ children }: { children: React.ReactNo
                 {urlPartsArray.map((path, index) => {
                   return (
                     <>
-                      <BreadcrumbItem>
+                      <BreadcrumbItem key={index}>
                         <BreadcrumbLink href="/" key={index}>{path == 'Dashboard' ? 'Home' : path}</BreadcrumbLink>
                       </BreadcrumbItem>
                       {index !== urlPartsArray.length - 1 ? <BreadcrumbSeparator /> : ""}
