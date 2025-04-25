@@ -103,7 +103,7 @@ export function Suppliers() {
             </CardComponent>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
               <CardComponent title="Top Supplier" description="Best performing supplier based on recent orders." action="false" full>
               <div className="flex items-center gap-4 justify-center">
             {topSupplier.name !== "N/A" ? (
