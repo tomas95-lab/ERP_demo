@@ -89,7 +89,7 @@ export default function Dashboard() {
         <Spinner />
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4">
             <CardComponent title="Total Projects" description="All projects in the system." action="View All" path="/projects/all" full>
               <div className="flex items-center justify-center gap-4">
                 <span className="text-4xl font-bold">{totalProjects}</span>
@@ -120,8 +120,8 @@ export default function Dashboard() {
             </CardComponent> */}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-2">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2">
               <ReusableChart
                 type="bar"
                 data={barData}
@@ -133,10 +133,10 @@ export default function Dashboard() {
               />
             </div>
             <CardComponent title="Quick Actions" description="Create new items quickly" full action="false">              
-              <div className="flex flex-col justify-between h-100 p-4">
+              <div className="flex flex-col justify-between  p-4 space-y-4">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline" className="w-full h-20 justify-start gap-3 p-4 hover:bg-blue-50">
+                    <Button variant="outline" className="w-full h-[100px] justify-start gap-3 p-4 hover:bg-blue-50">
                       <div className="bg-blue-100 p-2 rounded-lg">
                         <Plus className="h-5 w-5 text-blue-600" />
                       </div>
@@ -163,7 +163,7 @@ export default function Dashboard() {
 
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline" className="w-full h-20 justify-start gap-3 px-4 hover:bg-green-50">
+                    <Button variant="outline" className="w-full h-[100px] justify-start gap-3 px-4 hover:bg-green-50">
                       <div className="bg-green-100 p-2 rounded-lg">
                         <Receipt className="h-5 w-5 text-green-600" />
                       </div>
@@ -181,7 +181,7 @@ export default function Dashboard() {
 
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline" className="w-full h-20 justify-start gap-3 px-4 hover:bg-yellow-50">
+                    <Button variant="outline" className="w-full h-[100px] justify-start gap-3 px-4 hover:bg-yellow-50">
                       <div className="bg-yellow-100 p-2 rounded-lg">
                         <FileText className="h-5 w-5 text-yellow-600" />
                       </div>
@@ -203,8 +203,8 @@ export default function Dashboard() {
             </CardComponent>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-2">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2">
               <div className="rounded-xl bg-white shadow p-4">
                 <h2 className="text-xl font-bold mb-3">Cost Details</h2>
                 <DataTable

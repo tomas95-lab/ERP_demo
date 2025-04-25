@@ -63,12 +63,12 @@ export function ReusableChart({
 return (
   <>
     {card ? (
-      <Card className="justify-between">
+      <Card className="h-full justify-between">
     <CardHeader>
       <CardTitle>{title}</CardTitle>
       <CardDescription>{""}</CardDescription>
     </CardHeader>
-    <CardContent>
+    <CardContent className="h-full">
       <ChartContainer config={config}>
         {type == "bar" ? 
         (

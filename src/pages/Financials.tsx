@@ -197,7 +197,7 @@ export function Financials() {
         <Spinner />
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-6 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
             <CardComponent
               title="Total Budget"
               description="Sum of all project budgets."
@@ -347,7 +347,7 @@ export function Financials() {
             </CardComponent>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <ReusableChart
               type="bar"
               data={formattedChartData}

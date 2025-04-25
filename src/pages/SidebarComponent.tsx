@@ -19,6 +19,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { useNavigate, useLocation } from "react-router-dom"
+import React from "react"
 
 import {
   Avatar,
@@ -26,6 +27,26 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 
+// Definir las rutas válidas del sistema
+const validRoutes = {
+  dashboard: true,
+  projects: {
+    all: true,
+    planner: true,
+  },
+  financials: {
+    expenses: true,
+    invoices: true,
+  },
+  suppliers: {
+    all: true,
+    orders: true,
+  },
+  settings: {
+    general: true,
+    users: true,
+  },
+};
 
 export default function SideBarComponent({ children }: { children: React.ReactNode }) {
   const location = useLocation() 
@@ -40,6 +61,33 @@ export default function SideBarComponent({ children }: { children: React.ReactNo
     localStorage.setItem("isAuthenticated", "false")
     navigate("/")
   }
+
+  // Función para verificar si una ruta existe
+  const isValidRoute = (path: string[]) => {
+    let current: any = validRoutes;
+    for (const part of path) {
+      if (!current[part.toLowerCase()]) return false;
+      current = current[part.toLowerCase()];
+    }
+    return true;
+  };
+
+  // Función modificada para construir y validar la ruta
+  const getBreadcrumbPath = (index: number) => {
+    const pathParts = urlParts.slice(0, index + 1);
+    if (isValidRoute(pathParts)) {
+      return '/' + pathParts.join('/');
+    }
+    return null;
+  }
+
+  // Función de navegación segura
+  const safeNavigate = (path: string | null) => {
+    if (path) {
+      navigate(path);
+    }
+  };
+
   if (localStorage.getItem("isAuthenticated") == "false") {
     navigate("/")
   }
@@ -54,17 +102,34 @@ export default function SideBarComponent({ children }: { children: React.ReactNo
           <div className="flex items-center justify-between w-full">
             <Breadcrumb>
               <BreadcrumbList>
-                
-                {urlParts[0] !== 'dashboard' ? <><BreadcrumbItem> <BreadcrumbLink href="/">Home</BreadcrumbLink> </BreadcrumbItem> <BreadcrumbSeparator /> </>  : "" }
+                {urlParts[0] !== 'dashboard' && (
+                  <>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink 
+                        onClick={() => safeNavigate('/dashboard')}
+                        className="cursor-pointer"
+                      >
+                        Home
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                  </>
+                )}
 
                 {urlPartsArray.map((path, index) => {
+                  const breadcrumbPath = getBreadcrumbPath(index);
                   return (
-                    <>
-                      <BreadcrumbItem key={index}>
-                        <BreadcrumbLink href="/" key={index}>{path == 'Dashboard' ? 'Home' : path}</BreadcrumbLink>
+                    <React.Fragment key={index}>
+                      <BreadcrumbItem>
+                        <BreadcrumbLink 
+                          onClick={() => safeNavigate(breadcrumbPath)}
+                          className={`${breadcrumbPath ? 'cursor-pointer hover:underline' : 'cursor-not-allowed opacity-50'}`}
+                        >
+                          {path === 'Dashboard' ? 'Home' : path}
+                        </BreadcrumbLink>
                       </BreadcrumbItem>
-                      {index !== urlPartsArray.length - 1 ? <BreadcrumbSeparator /> : ""}
-                    </>
+                      {index !== urlPartsArray.length - 1 && <BreadcrumbSeparator />}
+                    </React.Fragment>
                   )
                 })}
               </BreadcrumbList>

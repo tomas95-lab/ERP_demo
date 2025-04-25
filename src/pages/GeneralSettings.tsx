@@ -71,7 +71,7 @@ export const GeneralSettings = () => {
         <Card>
           <CardHeader>Company Information</CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               <div className="flex flex-col gap-1">
                 <Label htmlFor="company">Company Name</Label>
                 <Input id="company" value={formData.company} onChange={(e) => handleChange("company", e.target.value)} placeholder="Enter company name" />
@@ -86,7 +86,7 @@ export const GeneralSettings = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               <div className="flex flex-col gap-1">
                 <Label htmlFor="phone">Phone Number</Label>
                 <Input id="phone" value={formData.phone} onChange={(e) => handleChange("phone", e.target.value)} placeholder="Enter your Phone Number" className={errors.phone ? "border-red-500" : ""} />
@@ -101,7 +101,7 @@ export const GeneralSettings = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               <div className="flex flex-col gap-1">
                 <Label htmlFor="city">City</Label>
                 <Input id="city" value={formData.city} onChange={(e) => handleChange("city", e.target.value)} placeholder="City Name" />
@@ -126,7 +126,7 @@ export const GeneralSettings = () => {
         <Card>
           <CardHeader>Regional Settings</CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               <div className="flex flex-col gap-1">
                 <Label htmlFor="currency">Currency</Label>
                 <Input id="currency" value={formData.currency} onChange={(e) => handleChange("currency", e.target.value)} placeholder="Enter your currency" />
@@ -142,7 +142,7 @@ export const GeneralSettings = () => {
         <Card>
           <CardHeader>Defaults</CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               <div className="flex flex-col gap-1">
                 <Label htmlFor="defaultProject">Default Project</Label>
                 <Input id="defaultProject" value={formData.defaultProject} onChange={(e) => handleChange("defaultProject", e.target.value)} placeholder="e.g. Residential Complex A" />
@@ -162,7 +162,7 @@ export const GeneralSettings = () => {
         <Card>
           <CardHeader>System Preferences</CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               <div className="flex flex-col gap-1">
                 <Label htmlFor="language">Language</Label>
                 <Input id="language" value={formData.language} onChange={(e) => handleChange("language", e.target.value)} placeholder="e.g. English" />

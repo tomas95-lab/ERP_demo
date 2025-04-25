@@ -12,6 +12,7 @@ import { Invoices } from "./pages/invoices";
 import { TotalSupplier } from "./pages/TotalSupplier";
 import Expenses from "./pages/Expenses";
 import ProjectPlannerView from "./pages/ProjectPlannerView";
+import ModuleOverview from "./pages/ModuleOverview";
 
 function App() {
   return (
@@ -22,6 +23,14 @@ function App() {
 
         <Route path="/" element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          
+          {/* Rutas intermedias */}
+          <Route path="/projects" element={<ModuleOverview />} />
+          <Route path="/financials" element={<ModuleOverview />} />
+          <Route path="/suppliers" element={<ModuleOverview />} />
+          <Route path="/settings" element={<ModuleOverview />} />
+          
+          {/* Rutas existentes */}
           <Route path="/projects/all" element={<Projects />} />
           <Route path="/projects/all/planner" element={<ProjectPlannerView />} />
           <Route path="/financials/expenses" element={<Financials />} />
