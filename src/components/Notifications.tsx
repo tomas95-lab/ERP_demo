@@ -1,13 +1,42 @@
 import { useFirestoreCollection } from "../hooks/useFirestoreCollection";
 import { DocumentData } from "firebase/firestore";
 import { differenceInDays, isPast, parseISO } from "date-fns";
-import { Bell, AlertCircle, CalendarClock} from "lucide-react";
+import { Bell, AlertCircle, CalendarClock } from "lucide-react";
+import { toast } from "sonner";
 
 interface Notification {
   type: string;
   message: string;
   icon?: React.ReactNode;
 }
+
+export const showNotification = (type: string, title: string, message: string) => {
+  switch (type) {
+    case 'success':
+      toast.success(title, {
+        description: message,
+        duration: 4000,
+      });
+      break;
+    case 'error':
+      toast.error(title, {
+        description: message,
+        duration: 5000,
+      });
+      break;
+    case 'warning':
+      toast.warning(title, {
+        description: message,
+        duration: 4000,
+      });
+      break;
+    default:
+      toast.info(title, {
+        description: message,
+        duration: 3000,
+      });
+  }
+};
 
 export function Notifications() {
   const { data: projects = [] } = useFirestoreCollection<DocumentData>("projects");

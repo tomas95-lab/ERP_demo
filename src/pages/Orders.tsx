@@ -18,7 +18,7 @@ export function Orders() {
   const { setScreen } = useScreen();
    
   useEffect(() => {
-  setScreen("Expenses");
+    setScreen("Expenses");
   }, []);
   const loading = loadingPurchase 
 
@@ -34,26 +34,25 @@ export function Orders() {
   }))
 
   const returnsData = purchaseOrders
-  .filter(order => order.status === "Cancelled")
-  .reduce((acc: Record<string, number>, order) => {
-    const month = format(new Date(order.date), "MMM")
-    acc[month] = (acc[month] || 0) + 1
-    return acc
-  }, {})
+    .filter(order => order.status === "Cancelled")
+    .reduce((acc: Record<string, number>, order) => {
+      const month = format(new Date(order.date), "MMM")
+      acc[month] = (acc[month] || 0) + 1
+      return acc
+    }, {})
 
   const returnsChartData = Object.entries(returnsData).map(([month, items]) => ({
     month,
     items,
   }))
 
-
   const fulfilledData = purchaseOrders
-  .filter(order => order.status === "Completed")
-  .reduce((acc: Record<string, number>, order) => {
-    const month = format(new Date(order.date), "MMM")
-    acc[month] = (acc[month] || 0) + 1
-    return acc
-  }, {})
+    .filter(order => order.status === "Completed")
+    .reduce((acc: Record<string, number>, order) => {
+      const month = format(new Date(order.date), "MMM")
+      acc[month] = (acc[month] || 0) + 1
+      return acc
+    }, {})
 
   const fulfilledChartData = Object.entries(fulfilledData).map(([month, fulfilled]) => ({
     month,
@@ -72,11 +71,11 @@ export function Orders() {
   }));
   
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <div className="flex justify-between flex-wrap items-center">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-bold">Orders</h1>
-          <p className="text-muted-foreground">
+    <div className="flex flex-col gap-6 p-6">
+      <div className="flex justify-between flex-wrap items-center gap-4">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight">Orders</h1>
+          <p className="text-muted-foreground text-sm md:text-base">
             View and manage all purchase orders issued to suppliers, including their status, delivery progress, and fulfillment details.
           </p>
         </div>
@@ -85,6 +84,7 @@ export function Orders() {
           button
           title="Create a new Order"
           description="Fill in the details of the new order to be created."
+          className="transition-transform duration-200 hover:scale-102"
         >
           {(onClose) => (
             <CreateOrderForm onClose={onClose} />
@@ -93,15 +93,18 @@ export function Orders() {
       </div>
 
       {loading ? (
-        <Spinner />
+        <div className="flex items-center justify-center min-h-[200px]">
+          <Spinner />
+        </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <CardComponent
               title="Monthly Purchase Volume"
               description="Total amount spent on purchase orders, broken down by month."
               action="false"
               full
+              className="bg-white transition-all duration-200 hover:shadow-lg"
             >
               <div className="flex space-x-2 justify-center items-center">
                 <DollarSign size={28} className="text-blue-600" />
@@ -129,6 +132,7 @@ export function Orders() {
               description="Track the volume of items ordered across recent periods."
               action="false"
               full
+              className="bg-white transition-all duration-200 hover:shadow-lg"
             >
               <div className="flex space-x-2 justify-center items-center">
                 <LineChart size={28} className="text-green-600" />
@@ -151,6 +155,7 @@ export function Orders() {
               description="Cancelled purchase orders grouped by month."
               action="false"
               full
+              className="bg-white transition-all duration-200 hover:shadow-lg"
             >
               <div className="flex space-x-2 justify-center items-center">
                 <RotateCcw size={28} className="text-yellow-600" />
@@ -173,6 +178,7 @@ export function Orders() {
               description="Completed purchase orders grouped by month."
               action="false"
               full
+              className="bg-white transition-all duration-200 hover:shadow-lg"
             >
               <div className="flex space-x-2 justify-center items-center">
                 <CheckCheck size={28} className="text-emerald-600" />
@@ -191,14 +197,16 @@ export function Orders() {
             </CardComponent>
           </div>
 
-          <div className="mt-6">
-            <h2 className="text-xl font-bold mb-3">Purchase Orders</h2>
-            <DataTable
-              data={purchaseOrders}
-              columns={columns as ColumnDef<DocumentData & { firestoreId?: string }>[]}
-              filterPlaceholder="Filter by Supplier"
-              filterColumn="supplier"
-            />
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold mb-4">Purchase Orders</h2>
+            <div className="rounded-lg border shadow-sm">
+              <DataTable
+                data={purchaseOrders}
+                columns={columns as ColumnDef<DocumentData & { firestoreId?: string }>[]}
+                filterPlaceholder="Filter by Supplier"
+                filterColumn="supplier"
+              />
+            </div>
           </div>
         </>
       )}

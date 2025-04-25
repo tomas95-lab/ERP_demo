@@ -9,15 +9,32 @@ type BotScreenActions = {
   [key: string]: BotActionDefinition;
 };
 
-import { BotActions } from "./botActions";
+import { botActions } from "./botActions";
+
+// Mapeo de nombres de pantalla a claves de botActions
+const screenMapper: { [key: string]: keyof typeof botActions } = {
+  "Dashboard": "Dashboard",
+  "Projects": "Projects",
+  "Financials": "Financials",
+  "Suppliers": "Suppliers",
+  "Orders": "Orders",
+};
 
 export async function getBotAction(
-  currentScreen: keyof typeof BotActions,
+  currentScreen: string,
   userMessage: string,
   contextData?: any
 ): Promise<string> {
-  // Forzamos screenActions al tipo BotScreenActions para permitir la indexación por string
-  const screenActions = BotActions[currentScreen] as BotScreenActions;
+  // Obtener la clave correcta del botActions usando el mapeo
+  const mappedScreen = screenMapper[currentScreen];
+  
+  // Si no hay mapeo para esta pantalla, devolver mensaje de error
+  if (!mappedScreen) {
+    return `I can help you with: ${Object.keys(screenMapper).join(', ')}. Please navigate to one of these screens.`;
+  }
+
+  // Usar la clave mapeada para obtener las acciones
+  const screenActions = botActions[mappedScreen] as BotScreenActions;
   if (!screenActions) return "I can't help you on this screen yet.";
 
   const normalizedMsg = userMessage.toLowerCase();
@@ -29,16 +46,16 @@ export async function getBotAction(
     )
   ) {
     const list = Object.entries(screenActions)
-      .map(([key, action]) => `- ${action.intent?.[0] || key}`)
+      .map(([key, action]) => `- ${action.intent[0]}`)
       .join("\n");
-    return `Here are the available commands for this screen:\n${list}`;
+    return `Available commands for ${currentScreen}:\n${list}`;
   }
 
+  // Buscar y ejecutar el comando correspondiente
   for (const actionKey in screenActions) {
     const action = screenActions[actionKey];
     if (!action.intent || !Array.isArray(action.intent)) continue;
 
-    // Tipamos el parámetro phrase como string
     const matched = action.intent.some((phrase: string) =>
       normalizedMsg.includes(phrase.toLowerCase())
     );
@@ -48,5 +65,5 @@ export async function getBotAction(
     }
   }
 
-  return "Sorry, I didn't understand what you meant.";
+  return `I understand you're in the ${currentScreen} screen. Try asking for "help" to see available commands.`;
 }

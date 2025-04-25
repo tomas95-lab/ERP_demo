@@ -31,6 +31,7 @@ interface CardComponentProps {
   formId?:string
   formAction?:string
   formLoading?:boolean
+  className?: string // Add this line
 }
 
 export default function CardComponent({
@@ -53,6 +54,7 @@ export default function CardComponent({
   formAction,
   formId,
   formLoading = false,
+  className, // Add this line
 }: CardComponentProps) {
   const variantClassMap: Record<string, string> = {
     green: "bg-green-600 hover:bg-green-700 text-white",
@@ -76,7 +78,7 @@ export default function CardComponent({
   const ringClass = active ? `ring-2 ring-offset-2 ${ringClassMap[variant] ?? "ring-primary"}` : ""
 
   return (
-    <Card className="justify-between h-full">
+    <Card className={`justify-between h-full ${className ?? ""}`}>
       <CardHeader>
         <CardTitle className={`${center ? "text-center" : ""}`}>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

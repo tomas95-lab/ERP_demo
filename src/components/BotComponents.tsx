@@ -1,9 +1,9 @@
 import { Bot } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import Message from "./Message";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { getBotAction } from "@/lib/getBotActions";
-import { BotActions } from "@/lib/botActions";
+import { botActions } from "@/lib/botActions";
 import { useScreen } from "./ScreenContext";
 
 export default function BotComponent() {
@@ -13,6 +13,7 @@ export default function BotComponent() {
   const [userMessage, setUserMessage] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const { currentScreen } = useScreen();
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const toggleChat = () => setIsOpen((prev) => !prev);
 
@@ -27,12 +28,22 @@ export default function BotComponent() {
     setMessages((prev) => [...prev, { content: input, role: "user" }]);
     setUserMessage("");
 
-    const reply = await getBotAction(currentScreen as keyof typeof BotActions, input);
+    const reply = await getBotAction(currentScreen as keyof typeof botActions, input);
 
     setTimeout(() => {
       setMessages((prev) => [...prev, { content: reply, role: "bot" }]);
     }, 800);
   };
+
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <>
@@ -45,7 +56,7 @@ export default function BotComponent() {
 
       {isOpen && (
         <div className="h-96 w-80 fixed bg-white right-4 bottom-16 rounded-xl shadow-2xl flex flex-col overflow-hidden z-50">
-          <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+          <div ref={chatContainerRef} className="flex-1 p-4 space-y-4 overflow-y-auto">
             {messages.map((msg, index) => (
               <Message key={index} content={msg.content} role={msg.role} />
             ))}

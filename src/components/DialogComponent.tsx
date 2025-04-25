@@ -16,10 +16,11 @@ interface DialogComponentProps {
   button: boolean,
   full?: boolean
   height?: string
+  className?: string; // Add this line
   children: (onClose: () => void) => ReactNode;
 }
   
-  export function DialogComponent({ trigger, title, description, children, button, full, height }: DialogComponentProps) {
+  export function DialogComponent({ trigger, title, description, children, button, full, height, className }: DialogComponentProps) {
     const [open, setOpen] = useState(false);
   
     return (
@@ -37,4 +38,3 @@ interface DialogComponentProps {
       </Dialog>
     );
   }
-  
