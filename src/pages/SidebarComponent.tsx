@@ -27,7 +27,6 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 
-// Definir las rutas válidas del sistema
 const validRoutes = {
   dashboard: true,
   projects: {
@@ -62,7 +61,6 @@ export default function SideBarComponent({ children }: { children: React.ReactNo
     navigate("/")
   }
 
-  // Función para verificar si una ruta existe
   const isValidRoute = (path: string[]) => {
     let current: any = validRoutes;
     for (const part of path) {
@@ -72,7 +70,6 @@ export default function SideBarComponent({ children }: { children: React.ReactNo
     return true;
   };
 
-  // Función modificada para construir y validar la ruta
   const getBreadcrumbPath = (index: number) => {
     const pathParts = urlParts.slice(0, index + 1);
     if (isValidRoute(pathParts)) {
@@ -81,7 +78,6 @@ export default function SideBarComponent({ children }: { children: React.ReactNo
     return null;
   }
 
-  // Función de navegación segura
   const safeNavigate = (path: string | null) => {
     if (path) {
       navigate(path);
@@ -96,7 +92,7 @@ export default function SideBarComponent({ children }: { children: React.ReactNo
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex w-full h-16 shrink-0 items-center gap-2 border-b px-4">
+        <header className="flex w-full h-16 shrink-0 items-center gap-2 border-b px-4 fixed top-0 bg-white z-50">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
           <div className="flex items-center justify-between w-full">
@@ -149,7 +145,7 @@ export default function SideBarComponent({ children }: { children: React.ReactNo
             </div>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-20">
           {children}
         </div>
       </SidebarInset>
