@@ -20,7 +20,7 @@ interface DialogComponentProps {
   children: (onClose: () => void) => ReactNode;
 }
   
-  export function DialogComponent({ trigger, title, description, children, button, full, height, className }: DialogComponentProps) {
+  export function DialogComponent({ trigger, title, description, children, button, full, height }: DialogComponentProps) {
     const [open, setOpen] = useState(false);
   
     return (

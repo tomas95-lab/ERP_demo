@@ -1,17 +1,16 @@
-// Definimos un tipo para cada acción
+// Type definitions for bot actions and responses
 type BotActionDefinition = {
   intent: string[];
   handler: (contextData?: any) => Promise<string>;
 };
 
-// Tipo para definir las acciones indexadas por string
 type BotScreenActions = {
   [key: string]: BotActionDefinition;
 };
 
 import { botActions } from "./botActions";
 
-// Mapeo de nombres de pantalla a claves de botActions
+// Map screen names to their corresponding action handlers
 const screenMapper: { [key: string]: keyof typeof botActions } = {
   "Dashboard": "Dashboard",
   "Projects": "Projects",
@@ -20,38 +19,41 @@ const screenMapper: { [key: string]: keyof typeof botActions } = {
   "Orders": "Orders",
 };
 
+// Main function to process user messages and return bot responses
 export async function getBotAction(
   currentScreen: string,
   userMessage: string,
   contextData?: any
 ): Promise<string> {
-  // Obtener la clave correcta del botActions usando el mapeo
+  // Map the current screen to its corresponding actions
   const mappedScreen = screenMapper[currentScreen];
   
-  // Si no hay mapeo para esta pantalla, devolver mensaje de error
   if (!mappedScreen) {
+    // Return a message if the screen is not recognized
     return `I can help you with: ${Object.keys(screenMapper).join(', ')}. Please navigate to one of these screens.`;
   }
 
-  // Usar la clave mapeada para obtener las acciones
+  // Retrieve actions for the mapped screen
   const screenActions = botActions[mappedScreen] as BotScreenActions;
   if (!screenActions) return "I can't help you on this screen yet.";
 
+  // Normalize the user message for comparison
   const normalizedMsg = userMessage.toLowerCase();
 
-  // Comando especial: listar comandos disponibles
+  // Check if the user is asking for help or available commands
   if (
     ["help", "commands", "list commands", "what can i do"].some(cmd =>
       normalizedMsg.includes(cmd)
     )
   ) {
+    // Generate a list of available commands for the current screen
     const list = Object.entries(screenActions)
-      .map(([key, action]) => `- ${action.intent[0]}`)
+      .map(([_, action]) => `- ${action.intent[0]}`)
       .join("\n");
     return `Available commands for ${currentScreen}:\n${list}`;
   }
 
-  // Buscar y ejecutar el comando correspondiente
+  // Iterate through actions to find a matching intent
   for (const actionKey in screenActions) {
     const action = screenActions[actionKey];
     if (!action.intent || !Array.isArray(action.intent)) continue;
@@ -61,9 +63,11 @@ export async function getBotAction(
     );
 
     if (matched) {
+      // Execute the handler for the matched intent
       return await action.handler(contextData);
     }
   }
 
+  // Default response if no intent matches
   return `I understand you're in the ${currentScreen} screen. Try asking for "help" to see available commands.`;
 }

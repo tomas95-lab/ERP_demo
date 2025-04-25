@@ -18,19 +18,19 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Layout general del Dashboard */}
+        {/* Dashboard General Layout */}
         <Route path="/" element={<Login />}></Route>
 
         <Route path="/" element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           
-          {/* Rutas intermedias */}
+          {/* Intermediate routes */}
           <Route path="/projects" element={<ModuleOverview />} />
           <Route path="/financials" element={<ModuleOverview />} />
           <Route path="/suppliers" element={<ModuleOverview />} />
           <Route path="/settings" element={<ModuleOverview />} />
           
-          {/* Rutas existentes */}
+          {/* Existing routes */}
           <Route path="/projects/all" element={<Projects />} />
           <Route path="/projects/all/planner" element={<ProjectPlannerView />} />
           <Route path="/financials/expenses" element={<Financials />} />
