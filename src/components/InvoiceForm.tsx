@@ -102,9 +102,9 @@ export function InvoiceForm({
         onChange={e => setNote(e.target.value)}
       />
 
-      <div className="flex justify-end">
-        <Button onClick={handleSave} disabled={loading}>
-          {loading ? "Saving..." : "Save"}
+      <div className="flex w-full">
+        <Button onClick={handleSave} className="w-full" disabled={loading}>
+          {loading ? "Creating..." : "Crreate Invoice"}
         </Button>
       </div>
     </div>

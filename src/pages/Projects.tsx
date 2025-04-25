@@ -3,7 +3,9 @@ import { DialogComponent } from "@/components/DialogComponent";
 import { columns } from "@/components/columns_project";
 import CreateProjectForm from "@/components/createProjectForm";
 import { Button } from "@/components/ui/button";
-import { useEffect,useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
+import { useEffect, useState, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 
 // Define or import the ProjectData type
 interface ProjectData {
@@ -15,15 +17,30 @@ interface ProjectData {
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 import { useScreen } from "@/components/ScreenContext";
 
-
 export function Projects() {
   const { data: projects, loading: loadingProjects } = useFirestoreCollection<ProjectData>("projects");
   const { setScreen } = useScreen();
-  const [formLoading, setFormLoading] = useState(false)
+  const [formLoading, setFormLoading] = useState(false);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     setScreen("Projects");
   }, [setScreen]);
+
+  // Filter projects based on URL status parameter
+  const statusFilter = searchParams.get("status");
+  const filteredProjects = useMemo(() => {
+    if (!statusFilter || !projects) return projects;
+
+    const statusMap: Record<string, string> = {
+      'active': 'Active',
+      'pending': 'Pending',
+      'completed': 'Completed'
+    };
+
+    const normalizedStatus = statusMap[statusFilter.toLowerCase()];
+    return projects.filter(project => project.status === normalizedStatus);
+  }, [projects, searchParams]);
 
   const handleExportCSV = () => {
     if (!projects || projects.length === 0) return;
@@ -49,11 +66,11 @@ export function Projects() {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 p-4">
       <div className="flex items-start justify-between mb-4 flex-wrap gap-y-2">
-        <div>
-          <h1 className="text-xl font-bold">Projects</h1>
-          <p className="text-sm text-muted-foreground mb-4">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold">{statusFilter ? statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1) : ""} Projects</h1>
+          <p className="text-muted-foreground">
             Manage all ongoing, pending, and completed construction projects.
           </p>
         </div>
@@ -66,13 +83,13 @@ export function Projects() {
           >
             {(onClose) => (
               <CreateProjectForm onSuccess={onClose} formLoading={formLoading} setFormLoading={setFormLoading} card></CreateProjectForm>
-              )}
+            )}
           </DialogComponent>
           <Button onClick={handleExportCSV}>Export CSV</Button>
         </div>
       </div>
       {loadingProjects ? (
-        <div className="text-center text-muted-foreground">Loading Projects...</div>
+        <Spinner />
       ) : (
         <>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
@@ -101,7 +118,7 @@ export function Projects() {
           </div>
           <div className="flex flex-col gap-4 items-end">
             <DataTable
-              data={projects}
+              data={filteredProjects}
               columns={columns as any}
               filterPlaceholder="Filter Status..."
               filterColumn="status"

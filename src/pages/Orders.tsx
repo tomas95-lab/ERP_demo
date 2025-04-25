@@ -11,6 +11,7 @@ import { useScreen } from "@/components/ScreenContext"
 import { useEffect } from "react"
 import { ColumnDef } from "@tanstack/react-table"
 import { DocumentData } from "firebase/firestore"
+import { Spinner } from "@/components/ui/spinner";
 
 export function Orders() {
   const { data: purchaseOrders = [], loading: loadingPurchase } = useFirestoreCollection("orders/purchaseOrders/items")
@@ -71,11 +72,11 @@ export function Orders() {
   }));
   
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 p-4">
       <div className="flex justify-between flex-wrap items-center">
-        <div>
-          <h1 className="text-xl font-bold">Orders</h1>
-          <p className="text-sm text-muted-foreground">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold">Orders</h1>
+          <p className="text-muted-foreground">
             View and manage all purchase orders issued to suppliers, including their status, delivery progress, and fulfillment details.
           </p>
         </div>
@@ -92,7 +93,7 @@ export function Orders() {
       </div>
 
       {loading ? (
-        <div className="text-center text-muted-foreground">Loading Orders...</div>
+        <Spinner />
       ) : (
         <>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

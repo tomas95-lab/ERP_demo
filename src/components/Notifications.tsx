@@ -51,7 +51,7 @@ export function Notifications() {
   });
 
   return (
-    <div className="flex flex-col gap-4 w-full max-h-[240px] overflow-y-auto bg-white shadow rounded-xl p-4">
+    <div className="flex flex-col gap-4 w-full max-h-[358px] overflow-y-auto bg-white rounded-xl p-4">
       {notifications.length > 0 ? (
         notifications.map((n, i) => (
           <div key={i} className="flex items-start gap-3 border-b last:border-b-0 pb-3">

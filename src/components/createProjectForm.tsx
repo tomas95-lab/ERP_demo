@@ -17,7 +17,7 @@ import {
 
 interface CreateProjectFormProps {
   onSuccess: () => void;
-  formLoading: boolean; // si quieres manejarlo desde el padre
+  formLoading: boolean;
   setFormLoading: (loading: boolean) => void;
   card: boolean;
 }
@@ -44,10 +44,7 @@ export default function CreateProjectForm({
       });
       return;
     }
-
-    // Activa el loading antes de hacer la llamada asíncrona
     setLoading(true);
-    // Si deseas que el componente padre conozca el estado, haz:
     setFormLoading(true);
 
     try {
@@ -65,7 +62,6 @@ export default function CreateProjectForm({
         description: `${name} created by ${supervisor}`,
       });
 
-      // Limpia los campos del formulario
       setName("");
       setSupervisor("");
       setStatus("");
@@ -79,7 +75,6 @@ export default function CreateProjectForm({
         description: "Something went wrong. Try again.",
       });
     } finally {
-      // Desactiva el loading al final
       setLoading(false);
       setFormLoading(false);
     }

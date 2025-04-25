@@ -14,10 +14,10 @@ import {
 } from "@/components/ui/card"
 import { DialogComponent } from "@/components/DialogComponent"
 import CreateSupplier from "@/components/createSupplierForm"
+import { Spinner } from "@/components/ui/spinner"
 
 import { format } from "date-fns"
 import { useScreen } from "@/components/ScreenContext"
-
 
 export function Suppliers() {
   const { setScreen } = useScreen();
@@ -70,14 +70,14 @@ export function Suppliers() {
   }))
   
   return (
-    <div className="flex flex-col gap-2">
-      <h1 className="text-xl font-bold">Supplier Overview</h1>
-      <p className="text-sm text-muted-foreground mb-4">
+    <div className="flex flex-col gap-2 p-4">
+      <h1 className="text-2xl font-bold">Supplier Overview</h1>
+      <p className="text-muted-foreground">
         Get a quick overview of all registered suppliers, their current status, recent activity, and performance trends.
       </p>
 
       {loading ? (
-        <div className="text-center text-muted-foreground">Loading supplier data...</div>
+        <Spinner />
       ) : (
         <>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

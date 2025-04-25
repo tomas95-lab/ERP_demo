@@ -126,11 +126,11 @@ export default function ProjectPlannerView() {
     setPostingComment(false);
   };
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2  p-4">
       <div className="flex justify-between flex-wrap items-center">
         <div>
-          <h1 className="text-xl font-bold">Project Planner</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-2xl font-bold">Project Planner</h1>
+          <p className="text-muted-foreground">
             Manage the full lifecycle of this project: define phases, assign tasks, upload design files, and collaborate with your team in real time.
           </p>
         </div>

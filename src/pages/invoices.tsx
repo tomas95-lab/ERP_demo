@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import { useScreen } from "@/components/ScreenContext";
 import { InvoiceForm } from "@/components/InvoiceForm";
 import { DialogComponent } from "@/components/DialogComponent";
+import { Spinner } from "@/components/ui/spinner";
 
 export type Invoice = {
   project: string;
@@ -122,11 +123,11 @@ export function Invoices() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 p-4">
       <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-xl font-bold">Invoices & Payments</h1>
-          <p className="text-sm text-muted-foreground mb-4">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold">Invoices & Payments</h1>
+          <p className="text-muted-foreground">
             Monitor and manage invoices and payments across all active and completed projects.
           </p>
         </div>
@@ -140,8 +141,8 @@ export function Invoices() {
         </DialogComponent>
       </div>
 
-      {(dataLoading) ? (
-        <div className="text-center text-muted-foreground">Loading Invoices...</div>
+      {dataLoading ? (
+        <Spinner />
       ) : (
         <div className="flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">

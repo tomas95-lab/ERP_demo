@@ -81,7 +81,7 @@ export default function CardComponent({
         <CardTitle className={`${center ? "text-center" : ""}`}>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent>{children}</CardContent>
+      <CardContent className="h-full flex flex-col justify-center">{children}</CardContent>
       <CardFooter className="flex justify-end">
         {path ? (
           <Link className={`${full ? "w-full" : ""} h-[40px]`} to={path}>

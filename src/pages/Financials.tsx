@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button"
 import { DialogComponent } from "@/components/DialogComponent"
 import CreateExpenseForm from "@/components/createExpenseForm"
 import { useScreen } from "@/components/ScreenContext"
+import { Spinner } from "@/components/ui/spinner"
 
 interface Expense {
   category: string
@@ -171,11 +172,11 @@ export function Financials() {
     .slice(0, 5)
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 p-4">
       <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-xl font-bold">Expense Tracking</h1>
-          <p className="text-sm text-muted-foreground mb-4">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold">Expense Tracking</h1>
+          <p className="text-muted-foreground">
             Monitor and manage expenses across all active and completed
             projects.
           </p>
@@ -193,9 +194,7 @@ export function Financials() {
       </div>
 
       {loading ? (
-        <div className="text-center text-muted-foreground">
-          Loading Expenses...
-        </div>
+        <Spinner />
       ) : (
         <>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-6 mb-6">

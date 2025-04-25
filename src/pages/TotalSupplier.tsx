@@ -33,11 +33,11 @@ export function TotalSupplier() {
   }, [suppliersData, statusFilter, urlFilter, loadingSuppliers]);
 
   return (
-    <div className="flex flex-col gap-2">
-      <h1 className="text-xl font-bold">
+    <div className="flex flex-col gap-2 p-4">
+      <h1 className="text-2xl font-bold">
         {urlFilter ? `${urlFilter.charAt(0).toUpperCase() + urlFilter.slice(1)} Suppliers` : "All Suppliers"}
       </h1>
-      <p className="text-sm text-muted-foreground mb-4">
+      <p className="text-muted-foreground">
         Get a detailed view of your suppliers, filter them by status, and analyze their latest activity and contribution to ongoing projects.
       </p>
 

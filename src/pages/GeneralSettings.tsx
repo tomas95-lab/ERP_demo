@@ -61,7 +61,7 @@ export const GeneralSettings = () => {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 p-4">
       <h1 className="text-xl font-bold">General Settings</h1>
       <p className="text-sm text-muted-foreground mb-4">
         Configure core system preferences such as company information, default values, and regional settings.

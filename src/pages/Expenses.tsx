@@ -7,6 +7,7 @@ import { DialogComponent } from "@/components/DialogComponent";
 import CreateExpenseForm from "@/components/createExpenseForm";
 import { useScreen } from "@/components/ScreenContext";
 import type { ExpenseData } from "@/components/columns_total_expenses";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Expenses() {
   const { data: expenseData = [], loading: expenseLoading } = useFirestoreCollection<ExpenseData>(
@@ -31,13 +32,13 @@ export default function Expenses() {
   );
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 p-4">
       <div className="flex justify-between">
-        <div className="space-y-2">
-          <h1 className="text-xl font-bold">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold">
             {statusFilter === "pending" ? "Pending" : "All"} expenses
           </h1>
-          <p className="text-sm text-muted-foreground mb-4">
+          <p className="text-muted-foreground">
             Monitor and manage expenses across all active and completed projects.
           </p>
         </div>
@@ -54,7 +55,7 @@ export default function Expenses() {
       </div>
 
       {expenseLoading ? (
-        <div className="text-center text-muted-foreground">Loading Expenses...</div>
+        <Spinner />
       ) : (
         <DataTable<ExpenseData>
           columns={columns}
