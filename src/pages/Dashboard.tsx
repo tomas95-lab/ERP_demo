@@ -6,7 +6,7 @@ import { DataTable } from "@/components/DataTable";
 import { columns } from "@/components/columns";
 import { ReusableChart } from "@/components/ReusableChart";
 import { Badge } from "@/components/ui/badge";
-import { Briefcase, Receipt, FileText, Plus } from "lucide-react";
+import { Receipt, FileText, Plus } from "lucide-react";
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 import CreateProjectForm from "@/components/createProjectForm";
 import { useScreen } from "@/components/ScreenContext";
@@ -72,7 +72,7 @@ export default function Dashboard() {
 
   const totalProjects = projects.length;
   const completedProjects = projects.filter((p) => p.status === "Completed").length;
-  const pendingTasks = projects.reduce((sum, p) => sum + (p.pendingTasksCount || 0), 0);
+  // const pendingTasks = projects.reduce((sum, p) => sum + (p.pendingTasksCount || 0), 0);
 
   const loading = costLoading || barLoading || projectsLoading;
 
