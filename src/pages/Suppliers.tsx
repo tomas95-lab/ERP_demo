@@ -80,7 +80,7 @@ export function Suppliers() {
         <Spinner />
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4">
             <CardComponent title="Total Suppliers" description="Number of suppliers currently registered in the platform." action="View All" full path="/suppliers/all/table">
               <div className="flex flex-col items-center justify-center space-y-2">
                 <Users size={28} className="text-blue-600" />
