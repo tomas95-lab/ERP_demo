@@ -10,7 +10,6 @@ import { Briefcase } from "lucide-react";
 import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 import CreateProjectForm from "@/components/createProjectForm";
 import { useScreen } from "@/components/ScreenContext";
-import { Button } from "@/components/ui/button";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { DialogComponent } from "@/components/DialogComponent";
 import CreateExpenseForm from "@/components/createExpenseForm";
@@ -39,8 +38,6 @@ export default function Dashboard() {
   const { data: costData } = useFirestoreCollection("costs");
   const { data: barData } = useFirestoreCollection("yearChart");
   const { data: projects } = useFirestoreCollection<{ status: string, firestoreId: string }>("projects");
-  const { data: notifications } = useFirestoreCollection("notifications");
-  const { data: recentActivities } = useFirestoreCollection("activities");
 
   const [allTasks, setAllTasks] = useState<DocumentData[]>([]);
 
@@ -63,7 +60,6 @@ export default function Dashboard() {
     }
   }, [projects]);
 
-  const hasNotifications = notifications.length > 0;
   const [formLoading, setFormLoading] = useState(false);
   const [formKey, setFormKey] = useState(0); // Force re-render after project creation
 
@@ -74,7 +70,6 @@ export default function Dashboard() {
   const totalProjects = projects.length;
   const completedProjects = projects.filter((project) => project.status === "Completed").length;
   const pendingTasks = allTasks.filter((task) => task.progress < 100).length;
-  const activities = recentActivities.map((activity) => activity.description);
 
   return (
     <div className="flex flex-col gap-4 p-4">
