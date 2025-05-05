@@ -97,7 +97,7 @@ export default function Login() {
                   />
                 </div>
               </form>
-              <div className="flex items-center justify-between flex-wrap gap-3 text-base font-semibold">
+              {/* <div className="flex items-center justify-between flex-wrap gap-3 text-base font-semibold">
                 <div></div>
                 <a
                   href="{{asset('')}}/metronic8/demo1/authentication/layouts/corporate/reset-password.html"
@@ -105,7 +105,7 @@ export default function Login() {
                 >
                   Forgot Password ?
                 </a>
-              </div>
+              </div> */}
               <div className="text-center mt-5">
                 <Button
                   type="submit"
