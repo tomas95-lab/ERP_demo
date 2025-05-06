@@ -18,12 +18,14 @@ import CreateExpenseForm from "@/components/createExpenseForm"
 import { useScreen } from "@/components/ScreenContext"
 import { Spinner } from "@/components/ui/spinner"
 
-interface Expense {
+export interface Expense {
   category: string
   amount: number
   project: string
   date?: string
   status: string
+  id?: string
+  firestoreId?: string
 }
 
 interface Project {
@@ -364,7 +366,7 @@ export function Financials() {
                 data={[...ExpenseData]
                   .sort((a, b) => b.amount - a.amount)
                   .slice(0, 5)}
-                columns={columns}
+                  columns={columns}
                 filterPlaceholder="Filter Category..."
                 filterColumn="category"
               />

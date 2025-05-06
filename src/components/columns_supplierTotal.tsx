@@ -131,10 +131,9 @@ export const columns: ColumnDef<SupplierData>[] = [
                   onClick={async () => {
                     try {
                       await deleteDoc(doc(db, "suppliers", supplier.firestoreId));
-                      toast.success("Supplier deleted successfully.");
-                      toast("Supplier has been removed.");
+                      toast.success(`Supplier ${supplier.name} has been deleted successfully`);
                     } catch (error) {
-                      toast.error("Failed to delete supplier.");
+                      toast.error("Error: Unable to delete supplier");
                     }
                   }}
                 >

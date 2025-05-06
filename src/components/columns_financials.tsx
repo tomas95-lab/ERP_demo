@@ -1,9 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import type { Invoice } from "@/pages/invoices"; // Import the Invoice type
+import type { Invoice } from "@/pages/invoices";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { toast } from "sonner";
+import type { Expense } from "@/pages/Financials";
 import { Trash } from "lucide-react";
 import {
   AlertDialog,
@@ -25,15 +26,7 @@ export type InvoinceData = {
   id: string;
 };
 
-export type ExpenseData = {
-  category: string;
-  amount: number;
-  project: string;
-  id: string;
-  firestoreId: string;
-};
-
-export const columns: ColumnDef<ExpenseData>[] = [
+export const columns: ColumnDef<Expense>[] = [
   {
     accessorKey: "category",
     header: "Category",
@@ -81,10 +74,15 @@ export const columns: ColumnDef<ExpenseData>[] = [
                 <AlertDialogAction
                   onClick={async () => {
                     try {
-                      await deleteDoc(doc(db, "financials/expense/items", record.firestoreId));
-                      toast.success("Record deleted successfully" + record.firestoreId);
+                      if (record.firestoreId) {
+                        await deleteDoc(doc(db, "financials/expense/items", record.firestoreId));
+                        toast.success(`Expense ${record.category} has been deleted successfully`);
+                      } else {
+                        toast.error("Error: Missing Firestore ID for the expense record");
+                      }
+                      toast.success(`Expense ${record.category} has been deleted successfully`);
                     } catch (error) {
-                      toast.error("Failed to delete record.");
+                      toast.error("Error: Unable to delete expense record");
                     }
                   }}
                 >
