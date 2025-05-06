@@ -2,10 +2,24 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { DialogComponent } from "./DialogComponent";
 import { EditProjectForm } from "./EditProjectForm";
-import { Eye, LayoutDashboard, Pencil } from "lucide-react";
+import { Eye, LayoutDashboard, Pencil, Trash } from "lucide-react";
 import ProjectView from "./ProjectView";
 import { Link } from "react-router-dom";
+import { deleteDoc, doc } from "firebase/firestore"
+import { toast } from "sonner";
+import { db } from "@/firebaseConfig"
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 export type ProjectData = {
   id: string;
   name: string;
@@ -103,6 +117,31 @@ export const columns: ColumnDef<ProjectData>[] = [
           <Link to={`/projects/all/planner?id=${project.firestoreId}`}>
             <LayoutDashboard size={18} className="cursor-pointer"></LayoutDashboard>
           </Link>
+          
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Trash className="cursor-pointer text-red-600" size={18} />
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete the supplier and remove its data.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={async () => {
+                    await deleteDoc(doc(db, "orders/purchaseOrders/items", String(project.id)))
+                    toast.success("Order deleted");
+                  }}
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       );
     },
