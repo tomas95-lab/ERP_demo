@@ -30,6 +30,7 @@ export type ExpenseData = {
   amount: number;
   project: string;
   id: string;
+  firestoreId: string;
 };
 
 export const columns: ColumnDef<ExpenseData>[] = [
@@ -80,8 +81,8 @@ export const columns: ColumnDef<ExpenseData>[] = [
                 <AlertDialogAction
                   onClick={async () => {
                     try {
-                      await deleteDoc(doc(db, "financials/expense/items", record.id));
-                      toast.success("Record deleted successfully.");
+                      await deleteDoc(doc(db, "financials/expense/items", record.firestoreId));
+                      toast.success("Record deleted successfully" + record.firestoreId);
                     } catch (error) {
                       toast.error("Failed to delete record.");
                     }
