@@ -129,11 +129,16 @@ export const columns: ColumnDef<SupplierData>[] = [
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={async () => {
-                    await deleteDoc(doc(db, "suppliers", supplier.firestoreId))
-                    toast.success("Supplier deleted");
+                    try {
+                      await deleteDoc(doc(db, "suppliers", supplier.firestoreId));
+                      toast.success("Supplier deleted successfully.");
+                      toast("Supplier has been removed.");
+                    } catch (error) {
+                      toast.error("Failed to delete supplier.");
+                    }
                   }}
                 >
-                  Continue
+                  Delete
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

@@ -95,11 +95,15 @@ export const columns: ColumnDef<OrdersData>[] = [
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={async () => {
-                    await deleteDoc(doc(db, "orders/purchaseOrders/items", String(order.id)))
-                    toast.success("Order deleted");
+                    try {
+                      await deleteDoc(doc(db, "orders/purchaseOrders/items", order.id));
+                      toast.success("Order deleted successfully.");
+                    } catch (error) {
+                      toast.error("Failed to delete order.");
+                    }
                   }}
                 >
-                  Continue
+                  Delete
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

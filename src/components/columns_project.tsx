@@ -126,18 +126,22 @@ export const columns: ColumnDef<ProjectData>[] = [
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete the supplier and remove its data.
+                  This action cannot be undone. This will permanently delete the project and remove its data.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={async () => {
-                    await deleteDoc(doc(db, "orders/purchaseOrders/items", String(project.id)))
-                    toast.success("Order deleted");
+                    try {
+                      await deleteDoc(doc(db, "projects", project.firestoreId));
+                      toast.success("Project deleted successfully.");
+                    } catch (error) {
+                      toast.error("Failed to delete project.");
+                    }
                   }}
                 >
-                  Continue
+                  Delete
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
